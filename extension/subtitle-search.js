@@ -1,0 +1,29 @@
+// Search URL construction is shared by the popup and the overlay through the worker.
+const SubtitleSearch = (() => {
+  const defaultUrl = 'https://www.opensubtitles.org/en/search2/sublanguageid-{language3}/moviename-{title}/movieyear-{year}';
+  const languages = {en:'eng',ar:'ara',de:'ger',fr:'fre',es:'spa',it:'ita',pt:'por','pt-br':'pob',nl:'dut',pl:'pol',tr:'tur',ru:'rus',uk:'ukr',he:'heb',fa:'per',zh:'chi',ja:'jpn',ko:'kor',hi:'hin',sv:'swe',da:'dan',fi:'fin',no:'nor',el:'ell',ro:'rum',hu:'hun',cs:'cze',sk:'slo',id:'ind',th:'tha',vi:'vie',bg:'bul',hr:'hrv',sr:'scc'};
+  function query(input) {
+    const title=String(input.query ?? input.title ?? '').trim();
+    const language=String(input.language || 'en').trim().toLowerCase();
+    const year=String(input.year || '').trim();
+    if (!title || title.length>200) throw new Error('Enter a film title.');
+    if (!/^[a-z]{2,3}(?:-[a-z0-9]{2,8})*$/.test(language) || language.length>40) throw new Error('Enter a language code, such as en or ar.');
+    if (year && !/^(18|19|20|21)\d{2}$/.test(year)) throw new Error('Enter a valid year.');
+    return {title,language,year};
+  }
+  function template(value) {
+    if (typeof value!=='string' || value.length>2000 || !value.includes('{title}')) throw new Error('The search link must include {title}.');
+    const url=new URL(value.replace(/\{(title|language|language3|year)\}/g,'test'));
+    if (url.protocol!=='https:' || url.username || url.password || !['opensubtitles.org','opensubtitles.com'].some(host=>url.hostname===host || url.hostname.endsWith('.'+host))) throw new Error('Use an HTTPS OpenSubtitles search link.');
+    if (/\{[^}]*\}/.test(value.replace(/\{(title|language|language3|year)\}/g,''))) throw new Error('Use {title}, {language}, {language3}, or {year}.');
+    return value;
+  }
+  function website(value, input) {
+    const current=query(input);
+    const language3=languages[current.language] || languages[current.language.split('-')[0]] || (current.language.length===3 ? current.language : 'all');
+    const fields={...current,language3};
+    return template(value).replace(/\{(title|language|language3|year)\}/g,(_,key)=>encodeURIComponent(fields[key])).replace(/\/movieyear-(?=\/|$)/g,'');
+  }
+  return {defaultUrl,query,template,website};
+})();
+if (typeof module!=='undefined') module.exports=SubtitleSearch;

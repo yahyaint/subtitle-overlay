@@ -1,0 +1,14 @@
+{
+  "tracks": [
+    {
+      "title": "Example Film",
+      "year": 2026,
+      "language": "ar-eg",
+      "name": "example-film-ar-eg.m4a",
+      "url": "https://example.com/audio/example-film-ar-eg.m4a",
+      "sourceUrl": "https://example.com/catalog/example-film",
+      "duration": 5400,
+      "size": 86000000
+    }
+  ]
+}

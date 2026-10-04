@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Subtitle Overlay</title><link rel="stylesheet" href="popup.css"></head>
+<body>
+  <header><img class="logo" src="logo.svg" width="36" height="36" alt=""><div><h1>Subtitle Overlay</h1><p>Read. Sync. Watch.</p></div></header>
+  <main>
+    <div class="actions"><button id="attach" class="primary">Open controls</button><label class="file">Load file<input id="file" type="file" accept=".srt,.vtt,.sub,.ass,.ssa,.zip,.gz" aria-label="Load subtitle file"></label></div>
+    <select id="localTracks" aria-label="Choose a subtitle file from the archive" hidden></select>
+    <p id="player" class="hint player">Start a film. Then open the controls.</p>
+    <nav class="tabs" role="tablist" aria-label="Subtitle tools"><button id="tab-find" role="tab" aria-selected="true" aria-controls="view-find" tabindex="0">Find</button><button id="tab-saved" role="tab" aria-selected="false" aria-controls="view-saved" tabindex="-1">Saved <span id="savedCount" class="count">0</span></button><button id="tab-settings" role="tab" aria-selected="false" aria-controls="view-settings" tabindex="-1">Settings</button></nav>
+    <section id="view-find" role="tabpanel" aria-labelledby="tab-find">
+      <form id="search"><label for="query">Film title</label><input id="query" placeholder="Enter a film title" required maxlength="200"><p id="filmSuggestion" class="hint" hidden></p>
+        <div class="row"><div><label for="language">Language</label><input id="language" value="en" placeholder="en, ar, de…" maxlength="12" aria-describedby="languageHint"></div><div><label for="year">Year <span class="muted">(optional)</span></label><input id="year" type="number" placeholder="2004" min="1880" max="2100"></div></div>
+        <p id="languageHint" class="hint">Use a language code: en, ar, de, fr, es.</p><div class="search-method"><label for="searchMode">Search with</label><select id="searchMode"><option value="website">Website</option><option value="api">API</option></select></div><button id="searchButton" type="submit" class="primary">Open OpenSubtitles</button>
+      </form><div id="results"></div><p class="provider-note"><span id="searchHint">Website search needs no extension API key.</span> <button id="setupLink" class="text-button">API setup</button></p>
+    </section>
+    <section id="view-saved" role="tabpanel" aria-labelledby="tab-saved" hidden><label for="savedFilm">Film</label><select id="savedFilm"></select><div id="library"></div><p id="libraryHint" class="hint">Downloads are saved here.</p></section>
+    <section id="view-settings" role="tabpanel" aria-labelledby="tab-settings" hidden>
+      <details id="websiteSetup"><summary>Website search link</summary><form id="websiteForm"><label for="searchUrl">Search URL</label><input id="searchUrl" type="url" required maxlength="2000"><p class="hint">Use {title}, {language}, {language3}, and {year}. The link must include {title}.</p><div class="row"><button type="submit">Save link</button><button id="resetSearchUrl" type="button">Reset link</button></div></form></details>
+      <details id="providerSetup"><summary>OpenSubtitles account</summary><p class="hint">Search sends the title and language to OpenSubtitles. The key stays on this device. Login lasts for this browser session.</p>
+        <label for="key">API key</label><input id="key" type="password" autocomplete="off" placeholder="Enter your API key"><button id="saveKey">Save key</button>
+        <form id="login"><label for="username">Username</label><input id="username" autocomplete="username"><label for="password">Password</label><input id="password" type="password" autocomplete="current-password"><button type="submit">Log in</button></form>
+        <button id="forget" class="quiet">Remove account access</button>
+      </details>
+      <details><summary>File settings</summary><label for="encoding">File encoding</label><select id="encoding"><option value="utf-8">Automatic (UTF-8 / UTF-16)</option><option value="windows-1256">Arabic (Windows-1256)</option><option value="windows-1252">Western (Windows-1252)</option><option value="utf-16le">UTF-16 LE</option></select><p class="hint">Change this if the file shows incorrect letters.</p><label for="fileFps">SUB FPS (if needed)</label><input id="fileFps" type="number" min="1" max="120" step=".001" placeholder="23.976"><p class="hint">Use the FPS listed for a frame-based SUB file.</p></details>
+      <p class="hint">Local files do not need an account. Use the video controls to change the font, color, size, and timing.</p>
+      <details id="playerCheck"><summary>Player check</summary><p class="hint">Save a timing report to Downloads → Subtitle Overlay. Used to check the video clock.</p><button id="savePlayerReport">Save player report</button></details>
+    </section>
+    <div class="status-area"><p id="status" role="status" aria-live="polite">Ready.</p><button id="saveFile" class="quiet" hidden>Save SRT copy</button></div>
+    <button id="dubLibrary" class="footer-link">Find dub audio <span aria-hidden="true">↗</span></button>
+  </main><script src="popup.js"></script>
+</body></html>

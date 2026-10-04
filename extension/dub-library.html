@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Find Dub Audio</title><link rel="stylesheet" href="dub-library.css"></head>
+<body><main>
+  <header><img class="logo" src="logo.svg" width="44" height="44" alt=""><div><p class="eyebrow">Subtitle Overlay</p><h1>Find dub audio</h1></div></header>
+  <p class="intro">Find a separate audio file for your film.</p>
+  <div class="layout"><section class="search-area">
+    <form id="searchForm" class="box">
+      <label for="title">Film title</label><input id="title" required maxlength="200" placeholder="Enter a film title">
+      <div class="row"><label>Language or dialect<input id="language" required maxlength="40" value="en" placeholder="en, ar, ar-eg…"></label><label>Year <span class="muted">(optional)</span><input id="year" type="number" min="1880" max="2199" placeholder="2004"></label></div>
+      <p class="hint">Use a code: en, ar, ar-eg, de, fr, es.</p>
+      <label for="source">Audio source</label><select id="source"></select>
+      <details class="search-options"><summary>Search options</summary><label class="check"><input id="includeUnknown" type="checkbox">Include files with no language label</label></details>
+      <div class="row search-actions"><button id="searchButton" class="primary" type="submit">Find audio files</button><button id="webSearch" type="button">Search the web</button></div>
+      <p id="status" role="status" aria-live="polite">Ready. Select a source to search.</p>
+    </form>
+    <div id="results"></div>
+    <details class="box" id="directSettings"><summary>Download from a link</summary><form id="directForm"><label>Audio file URL<input id="directUrl" type="url" placeholder="https://example.com/film-ar.m4a" required maxlength="2000"></label><button type="submit">Download audio</button></form><p class="hint">Use a direct audio file link.</p></details>
+  </section><aside>
+    <section class="box info"><h2>Check the audio</h2><p>Check the language, duration, and film version before you use a file.</p><p class="hint">This extension finds audio. It does not play or sync external audio with Disney+ yet.</p></section>
+    <details class="box" id="sourceSettings"><summary>Manage sources</summary><div id="providers"></div><p class="hint">Catalog search uses Internet Archive and your saved JSON catalogs. Website sources open their own search page.</p></details>
+    <details class="box" id="addSourceSettings"><summary>Add a source</summary>
+      <form id="sourceForm"><label>Name<input id="sourceName" required maxlength="80" placeholder="My audio catalog"></label>
+        <label>Source type<select id="sourceKind"><option value="json">Audio catalog (JSON)</option><option value="website">Website search</option></select></label>
+        <label>Source URL<input id="sourceUrl" type="url" required maxlength="2000" placeholder="https://example.com/audio.json"></label>
+        <p class="hint">For website search, include {title}. You can also use {language}, {languageName}, and {year}.</p>
+        <label id="tokenLabel">API token <span class="muted">(optional)</span><input id="sourceToken" type="password" autocomplete="off" maxlength="2000"></label>
+        <p class="hint">The token lasts for this browser session.</p><button type="submit">Save source</button>
+      </form><a href="audio-catalog-example.json" download>Save example catalog</a>
+    </details>
+  </aside></div>
+</main><script src="dub-sources.js"></script><script src="dub-library.js"></script></body></html>
