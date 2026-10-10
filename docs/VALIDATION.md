@@ -29,8 +29,8 @@ Version: 0.7.9 preview. Date: October 5, 2026.
 
 ## Still needed
 
-The GitHub Actions workflow is prepared but has not run on GitHub. Live signed-in Disney+ playback, real Vivaldi seek behavior, and authenticated OpenSubtitles delivery remain unconfirmed for this version.
+GitHub Actions runs the tests after each push. The website test fixtures attach before the first search-page navigation to support both Windows and Linux. Live signed-in Disney+ playback, real Vivaldi seek behavior, and authenticated OpenSubtitles delivery remain unconfirmed for this version.
 
-A fresh profile must still be tested through the installed store package before public release. The publisher must create the public support and privacy URLs and complete the store contact and disclosure fields.
+The store installation must still be checked in a fresh profile after upload. Public support is available through GitHub Issues. The publisher must host the privacy page and complete the store contact and disclosure fields.
 
 Raw local reports and browser profiles stay in `.test-artifacts`. They are excluded from Git and distribution archives.

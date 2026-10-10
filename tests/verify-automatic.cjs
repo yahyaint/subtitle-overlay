@@ -110,7 +110,7 @@ const srt='1\n00:00:00,000 --> 00:10:00,000\nAutomatic subtitle';
     assert.equal(suggested.title,'The Lion King 1½');assert.equal(suggested.year,'2004');
     await worker.evaluate(({compressed,multiple,srt,utf16zip,gzip})=>{
       globalThis.savedDownloads=[];globalThis.nativeDownload=chrome.downloads.download;
-      globalThis.nativeWindow=chrome.windows.create;globalThis.createdWindows=[];chrome.windows.create=async options=>{createdWindows.push(options);return nativeWindow(options);};
+      globalThis.nativeWindow=chrome.windows.create;globalThis.createdWindows=[];chrome.windows.create=async options=>{createdWindows.push(options);return nativeWindow(options.url.startsWith('https://') ? {...options,url:'about:blank'} : options);};
       chrome.downloads.download=async options=>{savedDownloads.push(options);return savedDownloads.length;};
       globalThis.realFetch=fetch;
       globalThis.fetch=async url=>{
@@ -118,7 +118,7 @@ const srt='1\n00:00:00,000 --> 00:10:00,000\nAutomatic subtitle';
         const response=new Response(bytes,{headers:{'Content-Type':'application/octet-stream','Content-Disposition':'attachment; filename="'+(String(url).endsWith('.zip')?'captions.zip':'captions.srt')+'"'}});Object.defineProperty(response,'url',{value:/\/subtitleserve\/sub\/(step|blank)$/.test(String(url)) ? 'https://www.opensubtitles.org/en/download/'+String(url).split('/').pop() : String(url)});return response;
       };
     },{compressed:[...compressed],multiple:[...multiple],srt,utf16zip:[...utf16zip],gzip:[...gzip]});
-    const open=browser.waitForEvent('page');await fixture.locator('#subtitle-overlay-root #overlaySearchButton').click();const website=await open;await website.waitForURL('https://www.opensubtitles.org/**');await website.waitForLoadState();
+    const open=browser.waitForEvent('page');await fixture.locator('#subtitle-overlay-root #overlaySearchButton').click();const website=await open;await website.goto(await worker.evaluate(()=>createdWindows.at(-1).url));
     assert.equal(await popup.evaluate(async id=>(await chrome.windows.get((await chrome.tabs.get(id)).windowId)).type,await popup.evaluate(async url=>(await chrome.tabs.query({})).find(tab=>tab.url===url).id,website.url())),'popup');
     assert.equal(await worker.evaluate(()=>createdWindows.at(-1).width),820);
     const websiteTabId=await popup.evaluate(async url=>(await chrome.tabs.query({})).find(tab=>tab.url===url).id,website.url());

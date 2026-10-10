@@ -76,10 +76,11 @@ const manifest=JSON.parse(fs.readFileSync(path.join(root,'manifest.json')));mani
     pass('Popup file picker imports SSA through the real local import pipeline');
     await worker.evaluate(({ass,ssa,mixed})=>{
       globalThis.realFetch=fetch;globalThis.realDownload=chrome.downloads.download;globalThis.written=[];
+      globalThis.realWindow=chrome.windows.create;chrome.windows.create=async options=>{globalThis.fixtureWebsiteUrl=options.url;return realWindow({...options,url:'about:blank'});};
       fetch=async url=>{const bytes=String(url).endsWith('.zip') ? new Uint8Array(mixed) : new TextEncoder().encode(ass);const response=new Response(bytes,{headers:{'Content-Type':'application/octet-stream','Content-Disposition':'attachment; filename="'+(String(url).endsWith('.zip') ? 'captions.zip' : 'captions.ass')+'"'}});Object.defineProperty(response,'url',{value:String(url)});return response;};
       chrome.downloads.download=async options=>{written.push(options.filename);return written.length;};
     },{ass,ssa,mixed:[...mixed]});
-    await film.locator('#subtitle-overlay-root #tab-find').click();const opened=browser.waitForEvent('page');await film.locator('#subtitle-overlay-root #overlaySearchButton').click();const website=await opened;await website.waitForURL('https://www.opensubtitles.org/**');
+    await film.locator('#subtitle-overlay-root #tab-find').click();const opened=browser.waitForEvent('page');await film.locator('#subtitle-overlay-root #overlaySearchButton').click();const website=await opened;await website.goto(await worker.evaluate(()=>fixtureWebsiteUrl));
     await website.locator('#ass').click();await website.waitForFunction(()=>document.querySelector('#subtitle-overlay-download-notice')?.textContent.includes('ASS/SSA text and timing only'));
     assert.equal(await film.locator('#subtitle-overlay-root #filename').textContent(),'captions.srt');assert.deepEqual(await worker.evaluate(()=>written),['Subtitle Overlay/captions.srt']);
     await website.locator('#zip').click();await website.waitForFunction(()=>document.querySelector('#subtitle-overlay-download-notice')?.textContent.includes('2 subtitle files saved'));
@@ -89,7 +90,7 @@ const manifest=JSON.parse(fs.readFileSync(path.join(root,'manifest.json')));mani
     const gzip=zlib.gzipSync(Buffer.from(ass));
     const gzipResult=await worker.evaluate(async bytes=>{const files=await SubtitleDownload.extract(new Uint8Array(bytes),'captions.ass.gz');return SubtitleCore.parse(SubtitleCore.prepare(SubtitleCore.decode(files[0].bytes)).text).length;},[...gzip]);assert.equal(gzipResult,3);
     pass('Website ASS and mixed ZIP save SRT and load/list tracks; native ASS/SSA detection and gzip ASS extraction work');
-    await worker.evaluate(()=>{fetch=realFetch;chrome.downloads.download=realDownload;});
+    await worker.evaluate(()=>{fetch=realFetch;chrome.downloads.download=realDownload;chrome.windows.create=realWindow;});
   }finally{await browser.close();}
   fs.writeFileSync(path.resolve('.test-artifacts/ass-verification.txt'),checks.map(value=>'PASS '+value).join('\n')+'\n\nBrowser tests use local fixtures and mock provider/disk transport. ASS/SSA support converts text/timing to SRT; it does not render original ASS styles, effects, positions, fonts or vector drawings.\n');
 })().catch(error=>{console.error(error);process.exitCode=1;});
