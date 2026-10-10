@@ -1,6 +1,6 @@
 # Get help
 
-After the repository is published, use [GitHub Issues](https://github.com/yahyaint/subtitle-overlay/issues) for help.
+Use [GitHub Issues](https://github.com/yahyaint/subtitle-overlay/issues) for help.
 
 Include the extension version, browser version, file format, and steps that show the problem. State whether the problem occurs after a seek.
 

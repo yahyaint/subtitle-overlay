@@ -1,5 +1,13 @@
 # Local validation
 
+## 0.7.10 tip update — October 10, 2026
+
+The popup adds an optional Tip link to `https://yahyanabil.com/support`. It adds no permission and no paid feature gate. Subtitle rendering, parsing, downloads, and sync logic are unchanged from 0.7.9.
+
+The static checks and real-UI store asset render pass. The support URL returns HTTP 200. A full local test rerun hit system memory limits. The prior six-suite results below remain the baseline; they are not a claim that the full rerun passed for 0.7.10. GitHub Actions runs the full suite from the published source.
+
+## 0.7.9 baseline
+
 Version: 0.7.9 preview. Date: October 5, 2026.
 
 ## Passed

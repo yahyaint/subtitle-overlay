@@ -16,4 +16,4 @@ ASS and SSA files use their text and timing. File styles and effects are not ren
 
 To update: replace these files in the same folder, select **Reload** in the browser's extension page, then refresh the video tab.
 
-Version 0.7.9 is a preview. Live Disney+ playback and authenticated OpenSubtitles delivery still need confirmation.
+Version 0.7.10 is a preview. Live Disney+ playback and authenticated OpenSubtitles delivery still need confirmation.

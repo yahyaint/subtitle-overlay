@@ -1,6 +1,6 @@
 # Data and permission notes
 
-These notes describe version 0.7.9 from its source. They are inputs for the publisher's dashboard answers. They do not claim store acceptance or assign dashboard data categories.
+These notes describe version 0.7.10 from its source. They are inputs for the publisher's dashboard answers. They do not claim store acceptance or assign dashboard data categories.
 
 ## Purpose
 

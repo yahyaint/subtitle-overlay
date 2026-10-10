@@ -1,6 +1,6 @@
 # Subtitle Overlay privacy notice
 
-Version: 0.7.9. Updated: October 5, 2026. Publisher: yahyaint.
+Version: 0.7.10. Updated: October 10, 2026. Publisher: yahyaint.
 
 ## Data on this device
 
@@ -24,6 +24,10 @@ Audio search sends your search fields to the source you select, such as Internet
 
 These services receive normal network information, such as your IP address. This notice describes the extension's behavior. It does not describe what those services do with data they receive.
 
+## Optional tips
+
+The **Tip** link opens `https://yahyanabil.com/support` in a new browser tab. It sends no subtitle text, film title, or extension credentials to that page. Tip payments, if offered there, take place on that website. The extension does not process payments or unlock paid features.
+
 ## Downloads and reports
 
 The extension uses browser download events and matching download records to find the subtitle you select in its managed search window. It keeps the search window, selected link, download ID, and film-tab association in session storage. It does not upload download history to a developer server.
@@ -44,4 +48,4 @@ Uninstall the extension to remove its remaining extension storage. Files already
 
 ## Contact
 
-After publication, use [the project's issue page](https://github.com/yahyaint/subtitle-overlay/issues) for privacy questions. Do not include passwords or tokens in a public issue.
+Use [the project's issue page](https://github.com/yahyaint/subtitle-overlay/issues) for privacy questions. Do not include passwords or tokens in a public issue.

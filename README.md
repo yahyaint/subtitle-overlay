@@ -54,7 +54,7 @@ The library stays on this device. Deleting a library item does not delete files 
 - ASS and SSA text and timing are supported. Embedded styles and effects are not rendered.
 - Image subtitles, RAR files, encrypted ZIP files, and archives over the 2 MB limit are not supported.
 - Audio tools find sources and download direct audio files. They do not replace or sync the stream's audio.
-- Live Disney+ playback and authenticated OpenSubtitles delivery still need confirmation for version 0.7.9.
+- Live Disney+ playback and authenticated OpenSubtitles delivery still need confirmation for version 0.7.10.
 
 ## Update an unpacked install
 
@@ -72,8 +72,12 @@ npm run build
 
 The extension has no runtime npm dependencies. Tests use Playwright and local fixtures. The build creates a Chrome Web Store ZIP with `manifest.json` at its root. See [development](docs/DEVELOPMENT.md) and [release preparation](docs/RELEASE.md).
 
+## Support development
+
+The extension is free to use. Select **Tip** in the popup, or visit [the support page](https://yahyanabil.com/support). Tips are optional.
+
 ## Project links
 
 [Privacy](docs/PRIVACY.md) · [Support](SUPPORT.md) · [Changes](CHANGELOG.md) · [Contribute](CONTRIBUTING.md)
 
-Publisher: `yahyaint`. Planned repository: `yahyaint/subtitle-overlay`. These public links become available after the repository is created. A project license has not been selected.
+Publisher: `yahyaint`. Repository: [`yahyaint/subtitle-overlay`](https://github.com/yahyaint/subtitle-overlay). A project license has not been selected.

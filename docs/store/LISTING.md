@@ -43,7 +43,9 @@ Some players do not expose a readable film clock. If asked, show the player's ow
 
 This is an independent extension. It is not affiliated with Disney+, OpenSubtitles, or the audio sources it links to.
 
-Version 0.7.9 is a preview. Live player compatibility and provider delivery can vary.
+The extension is free to use. The optional Tip link opens https://yahyanabil.com/support. A tip is not needed to use any feature.
+
+Version 0.7.10 is a preview. Live player compatibility and provider delivery can vary.
 
 ## URLs and publisher
 

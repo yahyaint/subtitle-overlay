@@ -1,5 +1,11 @@
 # Changes
 
+## 0.7.10 — preview
+
+- Add a Tip link in the popup. It opens `https://yahyanabil.com/support`.
+- Keep all extension features available without a tip.
+- Update the store and release packages.
+
 ## 0.7.9 — preview
 
 - Read public playback timelines inside sibling and nested open shadow roots.

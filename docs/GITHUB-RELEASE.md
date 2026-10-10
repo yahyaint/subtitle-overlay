@@ -1,4 +1,4 @@
-# Subtitle Overlay 0.7.9 preview
+# Subtitle Overlay 0.7.10 preview
 
 Add external subtitles to browser video. Find files through OpenSubtitles, adjust their timing with one to three sentences, and save your text settings with each subtitle.
 
@@ -6,7 +6,7 @@ This preview improves film-clock reading on players with public timelines inside
 
 ## Install
 
-Download `subtitle-overlay-0.7.9-release.zip`. Extract it. In `chrome://extensions`, turn on **Developer mode**, select **Load unpacked**, and select its `extension` folder.
+Download `subtitle-overlay-0.7.10-release.zip`. Extract it. In `chrome://extensions`, turn on **Developer mode**, select **Load unpacked**, and select its `extension` folder.
 
 For an existing unpacked install, replace files in the same folder, select **Reload**, then refresh the film tab. Keep the same folder to retain the library.
 
