@@ -1,21 +1,20 @@
-# Subtitle Overlay 0.7.12 preview
+# Subtitle Overlay 0.7.13 preview
 
-Load subtitle files from player tracks that have no readable lines. This fixes the empty SRT tracks found on Cinejoy. Open **Find → Player subtitles** in the popup or video controls.
+Import readable player subtitle style and position with the subtitle text. Change the appearance in the overlay. In **Text style**, select **Restore player style** to restore the captured appearance. Timing and sentence-sync points stay the same.
 
-- **Use player** keeps the original player display.
-- **Import** loads the selected subtitle file if the track is empty, or copies loaded text and timing into the overlay. Delay, timing scale, one-, two-, and three-sentence sync, text style, background, shadow, and Save are available.
-- **Restore player** restores caption choices changed by the extension. Later choices made through the site are preserved.
+- Copy font, weight, italic, size, colors, background opacity, one shadow, spacing, and video-relative position from supported page caption renderers.
+- Change top or bottom position, horizontal position, alignment, width, and spacing in Text style.
+- Save the original player style with your current settings. Restore remains available after loading the saved subtitle.
+- Keep the existing selected-file loader, one-, two-, and three-sentence sync, and film clock.
 
-## Install
+Download `subtitle-overlay-0.7.13-release.zip`. Extract it. In `chrome://extensions`, turn on **Developer mode**, select **Load unpacked**, and select its `extension` folder.
 
-Download `subtitle-overlay-0.7.12-release.zip`. Extract it. In `chrome://extensions`, turn on **Developer mode**, select **Load unpacked**, and select its `extension` folder.
+For an existing installation, reload the extension and refresh each film tab. Store upload uses the separate `subtitle-overlay-0.7.13-chrome-web-store.zip`.
 
-For an existing unpacked install, replace files in the same folder, select **Reload**, then refresh the film tab. Keep the same folder to retain the library.
+## Limits
 
-## Checks and limits
+Some players expose no readable caption style. Native browser cues expose position but not their drawn font style. The import message explains what was copied. Missing fonts use the browser fallback. Multiple shadows, animations, per-line styles, vertical writing, and image effects are not copied. ASS and SSA files still import text and timing; embedded effects are not rendered.
 
-Player subtitle detection uses public browser text tracks. Some sites expose none. Selected file requests use normal browser access and send no credentials. Blocked files report an error. Streaming tracks may expose only loaded lines. Importing again creates a new copy and resets its timing. Imported copies use plain text; original styling is kept with **Use player**. The extension does not intercept streaming requests or retrieve protected caption data.
+Use the site's caption menu when **Use player** cannot display a custom player track. Subtitle files use normal browser access with no credentials. Protected data is not retrieved. No permissions were added. Store submission remains a separate step.
 
-The publisher confirmed Disney+ playback, seeking, and sentence sync in Vivaldi on Windows with 0.7.10. The new player-subtitle import still needs a live Disney+ check. Authenticated OpenSubtitles delivery also needs confirmation. Audio discovery does not replace or sync film audio. ASS and SSA use text and timing only.
-
-See the [validation notes](https://github.com/yahyaint/subtitle-overlay/blob/main/docs/VALIDATION.md). Archive hashes are in `SHA256SUMS.txt`. The [MIT license](https://github.com/yahyaint/subtitle-overlay/blob/main/LICENSE) is included in each release archive.
+See `docs/VALIDATION.md` for validation evidence.

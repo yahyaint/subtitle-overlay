@@ -14,7 +14,7 @@ Use **Load file** for a local subtitle. For frame-based SUB files, enter the FPS
 
 Open **Find → Player subtitles** in the popup or video controls. The list follows the selected video. It excludes metadata and chapter tracks.
 
-Select **Use player** to show the chosen track in its original player display. Overlay timing and style controls are disabled in this mode. Select **Import** to load its file if the track has no readable lines, or to copy loaded lines into the overlay. Delay, timing scale, sentence sync, text style, background, shadow, and Save are then available.
+Select **Use player** to show the chosen track in its original player display. Overlay timing and style controls are disabled in this mode. Select **Import** to load its file if the track has no readable lines, or to copy loaded lines into the overlay. Import also copies readable font, weight, italic, colors, background opacity, shadow, spacing, and position from the player. Delay, timing scale, sentence sync, text style, and Save are then available.
 
 Select **Restore player** to restore the caption modes changed by the extension. Importing a file, loading a saved subtitle, changing film, or removing the overlay also restores those modes. Choices made later through the site's caption controls are preserved.
 
@@ -34,7 +34,11 @@ If the clock shows `--:--:--`, show the player's own controls. Wait for a readab
 
 ## Text style
 
-Open **Text style** to set the font, size, text color, background color, background opacity, and height. Open **Shadow** inside this section to set shadow color, opacity, blur, and offset.
+Open **Text style** to change font, weight, italic, size, colors, and background opacity. Open **Position** to set the top or bottom edge, distance, horizontal position, text alignment, and width. Open **Shadow** for its color, opacity, blur, and offsets. Open **Spacing** for line height, padding, and corner radius.
+
+Select **Restore player style** to restore the appearance captured on Import. Delay, timing scale, sentence mode, and sync points stay the same. Save keeps your changes and the captured original style. Restore stays available when you load that saved subtitle.
+
+Some players expose only native text cues. Their drawn font style is not readable. The import message tells you when only position is copied or no style is available. Unavailable fonts use the browser fallback. Multiple shadows, animations, per-line styles, vertical writing, and image effects are not copied.
 
 ASS and SSA file styles do not apply. These text controls apply to their converted subtitle text.
 

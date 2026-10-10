@@ -1,5 +1,13 @@
 # Changes
 
+## 0.7.13 — October 11, 2026
+
+- Import readable player caption appearance and position with subtitle lines.
+- Add Restore player style inside Text style. Keep timing and sentence-sync points.
+- Save the captured original appearance with the subtitle settings.
+- Add weight, italic, position, alignment, spacing, and horizontal shadow controls.
+- Report when native browser font style is not readable.
+
 ## 0.7.12 â€” preview
 
 - Load the selected player subtitle file when its browser track has no readable lines.

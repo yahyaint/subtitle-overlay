@@ -1,5 +1,15 @@
 # Local validation
 
+## 0.7.13 player appearance — October 11, 2026
+
+The supplied Cinejoy episode imported 641 English lines and its public caption appearance: Inter at 28.8 px, white text, a black background at 50% opacity, a 2 px shadow offset with 4 px blur, padding, and video-relative position. The check used an isolated Chromium window with media requests blocked. It checks subtitle loading and appearance capture, not full live playback or the user's Vivaldi window.
+
+The player-track suite checks a hidden custom caption renderer, copied font and background alpha, shadow, spacing, top and bottom positioning, rendered geometry, Save/reload of the original appearance, and Restore player style. Restore retains delay, timing scale, sentence mode, and all three sync points. It also checks native cue position with an unreadable-font message, malformed style rejection, old presets, failed-import preservation, and original renderer visibility restoration.
+
+All eight local integration suites pass. A focused native-track check also verifies position capture after a disabled track loads and restoration of its original mode. Static package checks and store asset generation pass.
+
+Clock and sentence-sync algorithms were not changed. No permissions were added. Native drawn fonts, per-line effects, and animations remain outside this feature.
+
 ## 0.7.12 lazy player files â€” October 11, 2026
 
 A browser check of the supplied Cinejoy episode found 91 public HTML caption tracks with empty cue lists. Its selected file was SRT. The fixed loader imported 641 English lines through normal browser CORS access while the native track still had zero cues. Video and media requests were blocked during this check. This checks the subtitle loader on the live page, not full live playback.

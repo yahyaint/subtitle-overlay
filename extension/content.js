@@ -10,7 +10,7 @@
   let manualCueSelection=null;
   let pageClock=null,clockToken='',clockBridgeError='';
   let clockSample=null,clockLastNative=null,clockTimelineElement=null,clockNeedsPosition=false,timelineElements=[],timelineChecked=-Infinity;
-  const state = {cues: [], ends: [], delay: 0, rate: 1, size: 30, font: 'system-ui, sans-serif', shadow:true, shadowColor:'#000000', shadowOpacity:100, shadowBlur:3, shadowOffset:2, color: '#edf0fb', background: '#000000', opacity: 72, bottom: 10, enabled: true, name: '', libraryId:null, browserFullscreen:false, video: null, href: location.href};
+  const state = {cues: [], ends: [], delay: 0, rate: 1, size: 30, font: 'system-ui, sans-serif', shadow:true, shadowColor:'#000000', shadowOpacity:100, shadowBlur:3, shadowOffset:2, color: '#edf0fb', background: '#000000', opacity: 72, bottom: 10, horizontal:50,width:94,positionEdge:'bottom',align:'center',weight:600,italic:false,lineHeight:1.35,paddingX:12,paddingY:3.6,radius:5,shadowX:0,originalStyle:null,enabled: true, name: '', libraryId:null, browserFullscreen:false, video: null, href: location.href};
   const host = document.createElement('div'); host.id = 'subtitle-overlay-root'; host.dir='ltr'; host.lang='en';
   host.style.cssText = 'all:initial!important;position:fixed!important;inset:0!important;z-index:2147483647!important;pointer-events:none!important;direction:ltr!important;unicode-bidi:isolate!important;';
   const shadow = host.attachShadow({mode: 'open'});
@@ -54,11 +54,11 @@
     <label for="delay">Delay (seconds)</label><div class="delay-row"><button id="earlier" title="Show subtitles 0.25 seconds earlier" aria-label="Show subtitles earlier">−</button><input id="delay" type="number" value="0" step="0.25" min="-86400" max="86400"><button id="later" title="Show subtitles 0.25 seconds later" aria-label="Show subtitles later">+</button><button id="reset" title="Reset timing">Reset</button></div>
     <p class="hint">A positive delay shows subtitles later.</p>
     <details id="syncSettings"><summary>Sentence sync</summary><label for="syncMode">Use</label><select id="syncMode"><option value="one">One sentence</option><option value="two">Two sentences</option><option value="three">Three sentences</option></select><p id="syncHint" class="hint">The current line is selected as the film plays. Pause when you hear a line start. Check the selected line, then click Sync.</p><label for="filter">Words you hear</label><input id="filter" placeholder="Enter part of the line" maxlength="200"><select id="cues" aria-label="Subtitle line to sync"></select><button id="sync">Sync to now</button><div id="pairSync" hidden><p id="anchorStatus" class="hint">No sync points set.</p><button id="markFirst">Set first point</button><button id="syncSecond" disabled>Sync second point</button><button id="syncThird" hidden disabled>Sync third point</button><button id="clearAnchors">Clear points</button></div></details>
-    <details id="textSettings"><summary>Text style</summary><div class="grid"><label>Font<select id="font"><option value="system-ui, sans-serif">System</option><option value="Arial, sans-serif">Arial</option><option value="Verdana, sans-serif">Verdana</option><option value="Tahoma, sans-serif">Tahoma</option><option value="Georgia, serif">Georgia</option><option value="'Courier New', monospace">Courier New</option></select></label><label>Color<input id="color" type="color" value="#edf0fb"></label></div><div class="swatches"><label>Background<input id="backgroundColor" type="color" value="#000000" aria-label="Subtitle background color"></label><label>Opacity <span id="opacityLabel">72%</span><input id="backgroundOpacity" type="range" min="0" max="100" value="72" aria-label="Subtitle background opacity"></label></div><p class="hint">0% is clear. 100% is solid.</p><details id="shadowSettings" class="shadow-options"><summary>Shadow</summary><label class="enabled"><input id="shadowEnabled" type="checkbox" checked>Show shadow</label><div class="fields"><label>Color<input id="shadowColor" type="color" value="#000000"></label><label>Opacity<input id="shadowOpacity" type="range" min="0" max="100" value="100"></label><label>Blur (px)<input id="shadowBlur" type="number" min="0" max="20" value="3"></label><label>Offset (px)<input id="shadowOffset" type="number" min="0" max="20" value="2"></label></div></details><label>Size <span id="sizeLabel">30px</span></label><div class="row"><input id="size" type="range" min="12" max="96" value="30" aria-label="Subtitle size slider"><input id="sizeNumber" type="number" min="12" max="96" value="30" aria-label="Subtitle size in pixels"></div><label>Height <span id="bottomLabel">10%</span><input id="bottom" type="range" min="2" max="65" value="10"></label></details>
+    <details id="textSettings"><summary>Text style</summary><button id="restorePlayerStyle" disabled>Restore player style</button><p id="playerStyleHint" class="hint" hidden></p><div class="grid"><label>Font<select id="font"><option value="system-ui, sans-serif">System</option><option value="Arial, sans-serif">Arial</option><option value="Verdana, sans-serif">Verdana</option><option value="Tahoma, sans-serif">Tahoma</option><option value="Georgia, serif">Georgia</option><option value="'Courier New', monospace">Courier New</option></select></label><label>Color<input id="color" type="color" value="#edf0fb"></label></div><div class="fields"><label>Weight<input id="weight" type="number" min="100" max="900" step="100" value="600"></label><label class="enabled"><input id="italic" type="checkbox">Italic</label></div><div class="swatches"><label>Background<input id="backgroundColor" type="color" value="#000000" aria-label="Subtitle background color"></label><label>Opacity <span id="opacityLabel">72%</span><input id="backgroundOpacity" type="range" min="0" max="100" value="72" aria-label="Subtitle background opacity"></label></div><p class="hint">0% is clear. 100% is solid.</p><details id="shadowSettings" class="shadow-options"><summary>Shadow</summary><label class="enabled"><input id="shadowEnabled" type="checkbox" checked>Show shadow</label><div class="fields"><label>Color<input id="shadowColor" type="color" value="#000000"></label><label>Opacity<input id="shadowOpacity" type="range" min="0" max="100" value="100"></label><label>Blur (px)<input id="shadowBlur" type="number" min="0" max="20" value="3"></label><label>Offset (px)<input id="shadowOffset" type="number" min="-20" max="20" value="2"></label><label>Horizontal offset (px)<input id="shadowX" type="number" min="-20" max="20" value="0"></label></div></details><label>Size <span id="sizeLabel">30px</span></label><div class="row"><input id="size" type="range" min="12" max="96" value="30" aria-label="Subtitle size slider"><input id="sizeNumber" type="number" min="12" max="96" value="30" aria-label="Subtitle size in pixels"></div><details class="shadow-options"><summary>Position</summary><div class="fields"><label>Edge<select id="positionEdge"><option value="bottom">Bottom</option><option value="top">Top</option></select></label><label>Text align<select id="align"><option value="center">Center</option><option value="left">Left</option><option value="right">Right</option><option value="start">Start</option><option value="end">End</option></select></label></div><label>Distance from edge <span id="bottomLabel">10%</span><input id="bottom" type="range" min="0" max="100" step="0.1" value="10"></label><label>Horizontal position<input id="horizontal" type="range" min="0" max="100" step="0.1" value="50"></label><label>Maximum width<input id="width" type="range" min="1" max="100" value="94"></label></details><details class="shadow-options"><summary>Spacing</summary><div class="fields"><label>Line height<input id="lineHeight" type="number" min="0.5" max="4" step="0.05" value="1.35"></label><label>Corner radius (px)<input id="radius" type="number" min="0" max="96" value="5"></label><label>Side padding (px)<input id="paddingX" type="number" min="0" max="96" step="0.1" value="12"></label><label>Vertical padding (px)<input id="paddingY" type="number" min="0" max="96" step="0.1" value="3.6"></label></div></details></details>
     <details id="advancedSettings"><summary>More settings</summary><label for="rate">Timing scale (%)</label><input id="rate" type="number" value="100" step="0.1" min="50" max="200"><p class="hint">Use 100 for normal timing. Increase this if subtitles gradually appear too early.</p><label class="file">Load subtitle file<input id="file" type="file" accept=".srt,.vtt,.sub,.ass,.ssa,.zip,.gz"></label><select id="localTracks" aria-label="Choose a subtitle file from the archive" hidden></select><label>File encoding<select id="encoding"><option value="utf-8">Automatic (UTF-8 / UTF-16)</option><option value="windows-1256">Arabic (Windows-1256)</option><option value="windows-1252">Western (Windows-1252)</option><option value="utf-16le">UTF-16 LE</option></select></label><label for="fileFps">SUB FPS (if needed)</label><input id="fileFps" type="number" min="1" max="120" step=".001" placeholder="23.976"><p class="hint">Use the FPS listed for a frame-based SUB file.</p><p class="hint">Alt+Shift+O: show controls.<br>Alt+Shift+Left/Right: change delay.</p><button id="remove">Remove overlay</button></details>
     </div>
     <div id="view-find" role="tabpanel" aria-labelledby="tab-find" hidden>
-      <details id="playerTracksSettings"><summary>Player subtitles <span id="playerTrackCount">0</span></summary><select id="playerTracks" aria-label="Subtitle track from this player"></select><p id="playerTracksHint" class="hint">No readable tracks. Select a subtitle language in the player, then refresh.</p><div class="row"><button id="usePlayerTrack" disabled>Use player</button><button id="importPlayerTrack" disabled>Import</button></div><div class="row"><button id="refreshPlayerTracks">Refresh</button><button id="restorePlayerTracks">Restore player</button></div><p class="hint">Use player keeps its display. Import loads lines for timing, style, and saving.</p></details>
+      <details id="playerTracksSettings"><summary>Player subtitles <span id="playerTrackCount">0</span></summary><select id="playerTracks" aria-label="Subtitle track from this player"></select><p id="playerTracksHint" class="hint">No readable tracks. Select a subtitle language in the player, then refresh.</p><div class="row"><button id="usePlayerTrack" disabled>Use player</button><button id="importPlayerTrack" disabled>Import</button></div><div class="row"><button id="refreshPlayerTracks">Refresh</button><button id="restorePlayerTracks">Restore player</button></div><p class="hint">Use player keeps its display. Import copies lines, readable text style, and position. Save keeps your changes.</p></details>
       <form id="overlaySearch"><p id="filmSuggestion" class="hint" hidden></p><label for="overlayQuery">Film title</label><input id="overlayQuery" required maxlength="200" placeholder="Enter a film title"><div class="fields"><label>Language<input id="overlayLanguage" value="en" maxlength="40" placeholder="en, ar, de…"></label><label>Year (optional)<input id="overlayYear" type="number" min="1880" max="2199" placeholder="2004"></label></div><div class="search-method"><label for="overlaySearchMode">Search with</label><select id="overlaySearchMode"><option value="website">Website</option><option value="api">API</option></select></div><button id="overlaySearchButton" type="submit">Open OpenSubtitles</button></form>
       <p id="overlaySearchHint" class="hint">Website search needs no extension API key.</p><div id="overlayResults"></div>
       <details id="searchLinkSettings"><summary>Edit search link</summary><label for="overlaySearchUrl">Search URL</label><input id="overlaySearchUrl" type="url" maxlength="2000"><p class="hint">Use {title}, {language}, {language3}, and {year}.</p><button id="saveSearchLink">Save link</button></details>
@@ -98,9 +98,11 @@
     if(action==='restore'){playerTracks.restore();setNativeSubtitleMode(false);message('Player subtitle choices restored.');}
     else if(action==='original'){playerTracks.use(id);nativeSubtitleId=id;setNativeSubtitleMode(true);view('controls');message('Player subtitles shown. Import to change timing or style.');}
     else if(action==='import'){
-      const snapshot=await playerTracks.read(id);load(snapshot.text,snapshot.name);playerTracks.hide();
+      const snapshot=await playerTracks.read(id);load(snapshot.text,snapshot.name);
+      if(snapshot.style){applySettings({...currentSettings(),...snapshot.style,originalStyle:settingsCore.appearance({...currentSettings(),...snapshot.style})});}
+      playerTracks.hide();
       state.enabled=true;$('enabled').checked=true;if(snapshot.language)$('overlayLanguage').value=snapshot.language;
-      message(snapshot.count+' loaded lines imported. Timing, text style, and Save are available. Import again if the player loads more lines.');
+      message(snapshot.count+' loaded lines imported. '+(snapshot.styleSource==='player' ? 'Player text style and position copied.' : snapshot.styleSource==='position' ? 'Position copied. Player font style is not readable.' : 'Player style is not readable. Current text style kept.')+' Change timing or style, then Save.');
     }else throw new Error('Choose Use player, Import, or Restore player.');
     if(action!=='restore')show();refreshPlayerTracks(true);draw();return {count:state.cues.length,tracks:playerTracks.list()};
     } finally {playerTrackBusy=false;refreshPlayerTracks(true);}
@@ -239,7 +241,7 @@
     playerTracks?.restore();setNativeSubtitleMode(false);
     clockToken=crypto.randomUUID();pageClock=null;clockSample=null;clockLastNative=null;clockTimelineElement=null;clockNeedsPosition=false;manualCueSelection=null;lastControlSnapshot=null;
     observedVideo?.setAttribute('data-subtitle-overlay-clock',clockToken);
-    sourceText='';savedSettings='';anchors=[];localChoices=[];lastCueIndex=-1;lastSyncTime=null;
+    state.originalStyle=null;sourceText='';savedSettings='';anchors=[];localChoices=[];lastCueIndex=-1;lastSyncTime=null;
     $('localTracks').hidden=true;state.cues=[];state.ends=[];state.name='';state.libraryId=null;
     state.delay=0;state.rate=1;$('delay').value='0';$('rate').value='100';$('filter').value='';
     $('filename').textContent='No subtitle file';$('text').textContent='';$('saveSubtitle').disabled=true;$('broken').disabled=true;
@@ -452,15 +454,18 @@
     const video = state.video;
     if (!video?.isConnected) { $('text').textContent = ''; return; }
     const rect = video.getBoundingClientRect();
-    const bottom = rect.bottom - rect.height * state.bottom / 100;
-    $('captions').style.cssText = `left:${rect.left}px;top:${rect.top}px;width:${rect.width}px;height:${Math.max(0, bottom - rect.top)}px;`;
+    $('captions').style.cssText = `left:${rect.left}px;top:${rect.top}px;width:${rect.width}px;height:${rect.height}px;padding:0;`;
+    const textStyle=$('text').style;
+    textStyle.position='absolute';textStyle.left=state.horizontal+'%';textStyle.transform='translateX(-50%)';textStyle.maxWidth=state.width+'%';
+    textStyle.top=state.positionEdge==='top' ? state.bottom+'%' : 'auto';textStyle.bottom=state.positionEdge==='bottom' ? state.bottom+'%' : 'auto';
+    textStyle.textAlign=state.align;textStyle.fontWeight=String(state.weight);textStyle.fontStyle=state.italic ? 'italic' : 'normal';textStyle.lineHeight=String(state.lineHeight);textStyle.padding=state.paddingY+'px '+state.paddingX+'px';textStyle.borderRadius=state.radius+'px';
     $('text').style.fontSize = `${state.size}px`;
     $('text').style.fontFamily = state.font;
     $('text').style.color = state.color;
     const rgb=[1,3,5].map(at=>parseInt(state.background.slice(at,at+2),16));
     $('text').style.backgroundColor='rgba('+rgb.join(',')+','+(state.opacity/100)+')';
     const shadowRgb=[1,3,5].map(at=>parseInt(state.shadowColor.slice(at,at+2),16));
-    $('text').style.textShadow=state.shadow ? '0 '+state.shadowOffset+'px '+state.shadowBlur+'px rgba('+shadowRgb.join(',')+','+(state.shadowOpacity/100)+')' : 'none';
+    $('text').style.textShadow=state.shadow ? state.shadowX+'px '+state.shadowOffset+'px '+state.shadowBlur+'px rgba('+shadowRgb.join(',')+','+(state.shadowOpacity/100)+')' : 'none';
     const clock=playbackClock(),time=clock.time;
     const text = state.enabled && !nativeSubtitleMode ? core.active(state.cues, state.ends, time, state.delay, state.rate) : '';
     if ($('text').textContent !== text) $('text').textContent = text;
@@ -519,7 +524,7 @@
     const settings=preset ? settingsCore.validate(preset,cues) : null;
     playerTracks?.restore();setNativeSubtitleMode(false);
     sourceText=text;savedSettings='';anchors=[];lastCueIndex=-1;lastSyncTime=null;manualCueSelection=null;localChoices=[];$('localTracks').hidden=true;
-    state.cues = cues; state.ends = core.createIndex(cues); state.name = String(name || 'Subtitles').slice(0, 250);
+    state.originalStyle=null;state.cues = cues; state.ends = core.createIndex(cues); state.name = String(name || 'Subtitles').slice(0, 250);
     state.libraryId=libraryId; $('saveSubtitle').disabled=false; $('broken').disabled=!libraryId;
     state.delay = 0; state.rate = 1; $('delay').value = '0'; $('rate').value = '100'; $('filter').value = '';
     if(settings){applySettings(settings);savedSettings=JSON.stringify(currentSettings());}else{$('syncMode').value='one';syncMode();}
@@ -530,12 +535,14 @@
   function clearSaved(id) {
     if(state.libraryId!==id) return;
     playerTracks?.restore();setNativeSubtitleMode(false);
-    sourceText='';savedSettings='';anchors=[];localChoices=[];$('localTracks').hidden=true;state.cues=[];state.ends=[];state.name='';state.libraryId=null; $('filename').textContent='No subtitle file';$('saveSubtitle').disabled=true;$('broken').disabled=true;renderCues();draw();message('Subtitle deleted. Choose another file.');
+    state.originalStyle=null;sourceText='';savedSettings='';anchors=[];localChoices=[];$('localTracks').hidden=true;state.cues=[];state.ends=[];state.name='';state.libraryId=null; $('filename').textContent='No subtitle file';$('saveSubtitle').disabled=true;$('broken').disabled=true;renderCues();draw();message('Subtitle deleted. Choose another file.');
   }
   function currentSettings(){
     return {...Object.fromEntries(Object.keys(settingsCore.defaults).filter(key=>key in state).map(key=>[key,state[key]])),encoding:$('encoding').value,syncMode:$('syncMode').value,anchors};
   }
   function updateSaveIcon(){
+    $('restorePlayerStyle').disabled=nativeSubtitleMode || !state.originalStyle;
+    $('playerStyleHint').hidden=!state.originalStyle;
     $('saveSubtitle').disabled=nativeSubtitleMode || !state.cues.length || savingPreset;
     const saved=Boolean(savedSettings && savedSettings===JSON.stringify(currentSettings()));
     $('saveSubtitle').setAttribute('aria-pressed',String(saved));$('saveSubtitle').style.borderColor=saved ? '#216aa3' : '';
@@ -543,8 +550,10 @@
   }
   function applySettings(settings){
     const clean=settingsCore.validate(settings,state.cues);Object.assign(state,Object.fromEntries(Object.entries(clean).filter(([key])=>key in state)));
+    if(!Array.from($('font').options).some(option=>option.value===state.font)){const option=document.createElement('option');option.value=state.font;option.textContent=state.font;$('font').append(option);}
     anchors=clean.anchors;$('encoding').value=clean.encoding;$('syncMode').value=clean.syncMode;
-    for(const [id,key] of [['delay','delay'],['font','font'],['color','color'],['backgroundColor','background'],['backgroundOpacity','opacity'],['bottom','bottom'],['shadowColor','shadowColor'],['shadowOpacity','shadowOpacity'],['shadowBlur','shadowBlur'],['shadowOffset','shadowOffset']])$(id).value=String(key==='delay' ? Math.round(state.delay*1000)/1000 : state[key]);
+    for(const [id,key] of [['weight','weight'],['positionEdge','positionEdge'],['align','align'],['horizontal','horizontal'],['width','width'],['lineHeight','lineHeight'],['paddingX','paddingX'],['paddingY','paddingY'],['radius','radius'],['shadowX','shadowX'],['delay','delay'],['font','font'],['color','color'],['backgroundColor','background'],['backgroundOpacity','opacity'],['bottom','bottom'],['shadowColor','shadowColor'],['shadowOpacity','shadowOpacity'],['shadowBlur','shadowBlur'],['shadowOffset','shadowOffset']])$(id).value=String(key==='delay' ? Math.round(state.delay*1000)/1000 : state[key]);
+    $('italic').checked=state.italic;$('playerStyleHint').hidden=!state.originalStyle;$('playerStyleHint').textContent=state.originalStyle ? 'Restore the appearance captured on Import. Timing stays the same.' : '';
     $('rate').value=String(state.rate*100);$('enabled').checked=state.enabled;$('shadowEnabled').checked=state.shadow;
     $('opacityLabel').textContent=state.opacity+'%';$('bottomLabel').textContent=state.bottom+'%';setSize(state.size);syncMode();
   }
@@ -592,16 +601,20 @@
     const time=playbackTime(),now=Number.isFinite(time) ? time : 0, subtitleTime = (now - state.delay) / state.rate;
     state.rate = value / 100; setDelay(now - subtitleTime * state.rate);
   };
+  $('restorePlayerStyle').onclick=event=>{if(event.isTrusted && state.originalStyle){applySettings({...currentSettings(),...state.originalStyle});draw();message('Player text style and position restored. Timing kept.');}};
+  $('italic').onchange=()=>{state.italic=$('italic').checked;draw();};
+  for(const key of ['positionEdge','align'])$(key).onchange=()=>{state[key]=$(key).value;draw();};
+  for(const [key,min,max] of [['weight',100,900],['horizontal',0,100],['width',1,100],['lineHeight',.5,4],['paddingX',0,96],['paddingY',0,96],['radius',0,96]])$(key).oninput=()=>{const value=Number($(key).value);if($(key).value && Number.isFinite(value) && value>=min && value<=max){state[key]=value;draw();}};
   $('font').onchange = () => { state.font = $('font').value; draw(); };
   $('color').oninput = () => { state.color = $('color').value; draw(); };
   $('shadowEnabled').onchange=()=>{state.shadow=$('shadowEnabled').checked;draw();};
   $('shadowColor').oninput=()=>{state.shadowColor=$('shadowColor').value;draw();};
-  for(const [id,key,max] of [['shadowOpacity','shadowOpacity',100],['shadowBlur','shadowBlur',20],['shadowOffset','shadowOffset',20]]) $(id).oninput=()=>{state[key]=Math.max(0,Math.min(max,Number($(id).value)||0));draw();};
+  for(const [id,key,max] of [['shadowOpacity','shadowOpacity',100],['shadowBlur','shadowBlur',20],['shadowOffset','shadowOffset',20],['shadowX','shadowX',20]]) $(id).oninput=()=>{state[key]=Math.max(['shadowOffset','shadowX'].includes(key) ? -20 : 0,Math.min(max,Number($(id).value)||0));draw();};
   $('backgroundColor').oninput=()=>{state.background=$('backgroundColor').value;draw();};
   $('backgroundOpacity').oninput=()=>{state.opacity=Number($('backgroundOpacity').value);$('opacityLabel').textContent=state.opacity+'%';draw();};
   function setSize(value) {
     if (!Number.isFinite(value) || value < 12 || value > 96) return;
-    state.size = Math.round(value); $('size').value = String(state.size); $('sizeNumber').value = String(state.size);
+    state.size = Math.round(value*100)/100; $('size').value = String(state.size); $('sizeNumber').value = String(state.size);
     $('sizeLabel').textContent = `${state.size}px`; draw();
   }
   $('size').oninput = () => setSize(Number($('size').value));

@@ -26,6 +26,8 @@ Set the timing:
 - Sync with one, two, or three sentences.
 - Use two or three sentences to correct steady timing drift.
 
+Import readable player text style and position. Restore the captured appearance in Text style without changing timing. Save keeps the original appearance with your settings. Some player styles are not readable.
+
 Set the text style:
 - Change the font, size, color, and height.
 - Change the background color and opacity.

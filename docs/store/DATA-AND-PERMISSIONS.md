@@ -1,6 +1,6 @@
 # Data and permission notes
 
-These notes describe version 0.7.12 from its source. They are inputs for the publisher's dashboard answers. They do not claim store acceptance or assign dashboard data categories.
+These notes describe version 0.7.13 from its source. They are inputs for the publisher's dashboard answers. They do not claim store acceptance or assign dashboard data categories.
 
 ## Purpose
 
@@ -29,7 +29,7 @@ The broad optional declaration remains because catalogs can use a user-selected 
 | --- | --- |
 | Film metadata, video state, public clock controls | Read on the attached page to suggest titles and sync captions. |
 | Page address and selected provider/download URLs | Used locally to route a selected file to the film tab and match provider downloads. |
-| Subtitle text, film labels, language, sync and text settings | Kept in extension-local storage. Exported copies go to the browser's download folder. |
+| Subtitle text, film labels, language, sync and text settings, captured player appearance | Kept in extension-local storage. Exported copies go to the browser's download folder. |
 | Search title, language, optional year | Sent to the provider or source selected by the user. |
 | API key | Stored locally; sent to OpenSubtitles API. |
 | Username and password | Sent to OpenSubtitles when the user logs in. Not saved by extension code. |
