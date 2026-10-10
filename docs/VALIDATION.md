@@ -4,7 +4,9 @@
 
 The popup adds an optional Tip link to `https://yahyanabil.com/support`. It adds no permission and no paid feature gate. Subtitle rendering, parsing, downloads, and sync logic are unchanged from 0.7.9.
 
-The static checks and real-UI store asset render pass. The support URL returns HTTP 200. A full local test rerun hit system memory limits. The prior six-suite results below remain the baseline; they are not a claim that the full rerun passed for 0.7.10. GitHub Actions runs the full suite from the published source.
+The static checks and real-UI store asset render pass. The support URL returns HTTP 200. The focused Tip test passes: the new tab has no window opener, referrer, credentials, or extra permission. The popup fits its width and height.
+
+The first rerun used Playwright's page-creator reference to test window security. Formatting that failed object assertion exhausted memory. The corrected test reads `window.opener` in the destination page. The prior six-suite results below remain the baseline. GitHub Actions runs the full updated suite from the published source.
 
 ## 0.7.9 baseline
 

@@ -93,7 +93,7 @@ const server = http.createServer((req, res) => {res.writeHead(200, {'Content-Typ
     assert.equal(await tip.getAttribute('rel'),'noopener noreferrer');assert.equal(await tip.getAttribute('target'),'_blank');
     await context.route('https://yahyanabil.com/support',route=>route.fulfill({contentType:'text/html',body:'<title>Support</title><p>Support development</p>'}));
     const [supportTab]=await Promise.all([context.waitForEvent('page'),tip.click()]);await supportTab.waitForURL('https://yahyanabil.com/support');
-    assert.equal(await supportTab.opener(),null);await supportTab.close();await popup.bringToFront();
+    assert.equal(await supportTab.evaluate(()=>window.opener===null),true);await supportTab.close();await popup.bringToFront();
     passed('Tip opens the exact support URL in a separate tab without an opener; no new permission or paid feature gate');
     await popup.locator('body').screenshot({path:path.resolve(__dirname,'../.test-artifacts/subtitle-popup-preview.png')});
     // Use the actual extension APIs and isolated world injection targeting our fixture tab.

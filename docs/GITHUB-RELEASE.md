@@ -1,8 +1,8 @@
 # Subtitle Overlay 0.7.10 preview
 
-Add external subtitles to browser video. Find files through OpenSubtitles, adjust their timing with one to three sentences, and save your text settings with each subtitle.
+Adds an optional Tip link in the popup. It opens https://yahyanabil.com/support in a new tab. All extension features remain free to use.
 
-This preview improves film-clock reading on players with public timelines inside open shadow roots. Captions and sentence-sync controls use the same time. Hidden controls keep their last time mapping. A seek or clock reset asks for a fresh timeline when needed.
+Find subtitles through OpenSubtitles, adjust their timing with one to three sentences, and save text settings with each subtitle. This release keeps the 0.7.9 film-clock reader for public timelines inside open shadow roots. Caption and sentence-sync logic is unchanged by the Tip update.
 
 ## Install
 

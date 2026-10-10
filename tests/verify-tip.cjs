@@ -10,7 +10,7 @@ const {chromium}=require('playwright');
   assert.equal(await link.getAttribute('href'),'https://yahyanabil.com/support');
   const received=[];await context.route('https://yahyanabil.com/support',async route=>{received.push({url:route.request().url(),headers:await route.request().allHeaders()});await route.fulfill({contentType:'text/html',body:'<title>Support development</title>'});});
   const [destination]=await Promise.all([context.waitForEvent('page'),link.click()]);await destination.waitForURL('https://yahyanabil.com/support');
-  assert.equal(await destination.opener(),null);assert.equal(received.length,1);assert.equal(received[0].headers.referer,undefined);assert.equal(received[0].headers.authorization,undefined);
+  assert.equal(await destination.evaluate(()=>window.opener===null),true);assert.equal(received.length,1);assert.equal(received[0].headers.referer,undefined);assert.equal(received[0].headers.authorization,undefined);
   assert.deepEqual((await page.evaluate(()=>chrome.runtime.getManifest())).permissions,['activeTab','scripting','storage','downloads']);
   assert(await page.locator('body').evaluate(body=>body.scrollHeight<600));assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
   await destination.close();await page.bringToFront();await page.locator('body').screenshot({path:path.join(artifacts,'tip-popup.png')});assert.deepEqual(errors,[]);
