@@ -33,4 +33,4 @@ Open **Find dub audio**. Add a website search link or a JSON audio catalog. Sear
 
 When a player uses a segment clock, a public playback timeline can supply the film time. Show the player controls if asked. Players that expose neither cannot be synced reliably. The extension does not access closed shadow roots or inaccessible frame internals.
 
-Local fixture tests passed before packaging. Live signed-in Disney+ and authenticated OpenSubtitles delivery remain unconfirmed for this preview.
+All seven local-fixture integration suites passed on GitHub. The publisher also confirmed Disney+ playback, seeking, and sentence sync in Vivaldi on Windows with version 0.7.10. Other player and browser combinations and authenticated OpenSubtitles delivery still need confirmation. See the [validation notes](../VALIDATION.md).

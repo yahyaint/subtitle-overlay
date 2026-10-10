@@ -12,6 +12,8 @@ For an existing unpacked install, replace files in the same folder, select **Rel
 
 ## Checks and limits
 
-Local Chromium tests cover formats, saved settings, download routing, seeking, and all three sentence-sync modes. Live signed-in Disney+ playback and authenticated OpenSubtitles delivery still need confirmation. Audio discovery does not replace or sync film audio. ASS and SSA use text and timing only.
+The publisher confirmed Disney+ playback, seeking, and sentence sync in Vivaldi on Windows with version 0.7.10. All seven automated integration suites also pass. They use local Chromium fixtures for formats, saved settings, download routing, seeking, and all three sentence-sync modes. See the [validation notes](https://github.com/yahyaint/subtitle-overlay/blob/main/docs/VALIDATION.md).
+
+Other player and browser combinations and authenticated OpenSubtitles delivery still need confirmation. Audio discovery does not replace or sync film audio. ASS and SSA use text and timing only.
 
 The archive hashes are in `SHA256SUMS.txt`.

@@ -8,6 +8,14 @@ The static checks and real-UI store asset render pass. The support URL returns H
 
 The first rerun used Playwright's page-creator reference to test window security. Formatting that failed object assertion exhausted memory. The corrected test reads `window.opener` in the destination page. The prior six-suite results below remain the baseline. GitHub Actions runs the full updated suite from the published source.
 
+All seven integration suites, static checks, and package builds passed on GitHub Linux for version 0.7.10. See the [completed checks](https://github.com/yahyaint/subtitle-overlay/actions/runs/38077867401). The clock tests replay the Disney+ player report and cover seeking and one-, two-, and three-sentence sync. These tests use local fixtures.
+
+## Live Disney+ check — October 10, 2026
+
+The publisher confirmed that Disney+ works in Vivaldi on Windows with version 0.7.10. The check includes playback, seeking with the video controls, and sentence sync. This is a publisher-reported live check. The automated tests above use local fixtures.
+
+This confirmation applies to the tested setup. Other player and browser combinations still need testing.
+
 ## 0.7.9 baseline
 
 Version: 0.7.9 preview. Date: October 5, 2026.
@@ -29,7 +37,7 @@ Version: 0.7.9 preview. Date: October 5, 2026.
 
 ## Still needed
 
-GitHub Actions runs the tests after each push. The website test fixtures attach before the first search-page navigation to support both Windows and Linux. Live signed-in Disney+ playback, real Vivaldi seek behavior, and authenticated OpenSubtitles delivery remain unconfirmed for this version.
+GitHub Actions runs the tests after each push. The website test fixtures attach before the first search-page navigation to support both Windows and Linux. Authenticated OpenSubtitles delivery remains unconfirmed for this version.
 
 The store installation must still be checked in a fresh profile after upload. Public support is available through GitHub Issues. The publisher must host the privacy page and complete the store contact and disclosure fields.
 

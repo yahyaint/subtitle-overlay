@@ -27,7 +27,7 @@ This version is a preview. A Chrome Web Store listing is not available yet.
 5. Open a video page. Select the extension, then **Open controls**.
 6. Select **Load file**, or use **Find** to search for a subtitle.
 
-Chrome is the main target. Edge and Vivaldi use the same extension format. Their live player and download behavior still needs testing.
+Chrome is the main target. Edge and Vivaldi use the same extension format. The publisher confirmed Disney+ playback, seeking, and sentence sync in Vivaldi on Windows with version 0.7.10. Other player and browser combinations still need testing.
 
 ## Sync a subtitle
 
@@ -54,7 +54,7 @@ The library stays on this device. Deleting a library item does not delete files 
 - ASS and SSA text and timing are supported. Embedded styles and effects are not rendered.
 - Image subtitles, RAR files, encrypted ZIP files, and archives over the 2 MB limit are not supported.
 - Audio tools find sources and download direct audio files. They do not replace or sync the stream's audio.
-- Live Disney+ playback and authenticated OpenSubtitles delivery still need confirmation for version 0.7.10.
+- Authenticated OpenSubtitles delivery still needs confirmation for version 0.7.10.
 
 ## Update an unpacked install
 
