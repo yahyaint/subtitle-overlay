@@ -1,5 +1,13 @@
 # Changes
 
+## 0.7.12 — preview
+
+- Load the selected player subtitle file when its browser track has no readable lines.
+- Parse SRT, WebVTT, ASS, and SSA text through the existing importer.
+- Fetch one selected file after Import. Keep parsed lines in memory and show their count.
+- Cancel or reject an import if the film, track, or source changes. Keep current subtitles and settings when loading fails.
+- Check lazy SRT loading, Arabic text, sentence sync, Save, source changes, and failed-load recovery.
+
 ## 0.7.11 — preview
 
 - Detect readable subtitle and caption tracks in the selected video.

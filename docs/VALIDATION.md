@@ -1,5 +1,13 @@
 # Local validation
 
+## 0.7.12 lazy player files — October 11, 2026
+
+A browser check of the supplied Cinejoy episode found 91 public HTML caption tracks with empty cue lists. Its selected file was SRT. The fixed loader imported 641 English lines through normal browser CORS access while the native track still had zero cues. Video and media requests were blocked during this check. This checks the subtitle loader on the live page, not full live playback.
+
+The player-track integration suite also checks empty SRT source tracks, no file requests during discovery, selected-file loading, cached counts, Arabic text, full-file film timestamps with a segmented native clock, three-sentence sync, Save, bad responses, changed source URLs, and ASS conversion. No new permissions or player-clock changes were added.
+
+All eight local integration suites pass across the combined run and focused reruns. The first combined run timed out while opening the provider permission window; its focused rerun passed. The final file-timestamp change also passed the player-track suite. Static checks and store asset generation pass.
+
 ## 0.7.11 player subtitles — October 11, 2026
 
 Player detection reads subtitle and caption track labels from the selected video. It leaves track modes unchanged until the user selects Use player or Import. Import reads loaded public cues, maps their times to the film clock, and uses the existing subtitle settings and local Save path. No new permissions were added.

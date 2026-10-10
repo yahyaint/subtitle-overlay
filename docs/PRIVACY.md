@@ -1,6 +1,6 @@
 # Subtitle Overlay privacy notice
 
-Version: 0.7.11. Updated: October 11, 2026. Publisher: yahyaint.
+Version: 0.7.12. Updated: October 11, 2026. Publisher: yahyaint.
 
 ## Data on this device
 
@@ -14,11 +14,13 @@ Provider credentials and saved subtitle storage are restricted to trusted extens
 
 When you open the extension on a video page, it reads film metadata, video state, public timing controls, and public subtitle-track labels to suggest a title and detect player subtitles. It checks title changes on the attached page. It does not send a film search until you start one.
 
-Player track detection does not change caption choices. **Use player** selects the chosen track for display. **Import** reads its currently loaded caption text and timing into the overlay. The copied text stays on this device; **Save** stores it with the selected timing and text settings. The extension does not intercept streaming requests or retrieve protected caption data.
+Player track detection does not change caption choices. **Use player** selects the chosen track for display. **Import** reads its loaded caption text and timing. If the track is empty and exposes a file URL, Import requests that selected file through normal browser access. It does not send cookies, authorization headers, API keys, or account tokens with this request. Parsed player-file lines stay in memory until the page is closed. The copied text stays on this device; **Save** stores it with the selected timing and text settings. The extension does not intercept streaming requests or retrieve protected caption data.
 
 The current page address is used locally to keep a subtitle attached to the correct film tab. Public page information can appear in title suggestions.
 
 ## Data sent to services
+
+A selected player subtitle file request contacts its file host. That host receives normal network information, such as your IP address and the browser's normal referrer information. The extension does not request player subtitle files during track discovery.
 
 OpenSubtitles receives the title, language, year if entered, and requests needed to find or download a subtitle. API requests also send your key and session token when present. Website search opens the provider website. Its browser session can use the provider's existing cookies. Website file retrieval can include provider cookies.
 

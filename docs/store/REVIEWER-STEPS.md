@@ -21,8 +21,9 @@ No API key or provider account is needed for local files. The local sample is sh
 2. Open **Player subtitles** in the popup, or **Find → Player subtitles** in the video controls.
 3. Check that only tracks from the selected video appear. Detection must not change caption choices.
 4. Select **Use player**. Check the original caption display. Overlay timing and style controls are disabled in this mode.
-5. Select **Import**. Check the copied loaded lines, delay, sentence sync, text style, and Save.
-6. Select **Restore player**. Check that the caption choices changed by the extension are restored.
+5. Select **Import**. Check the loaded lines, delay, sentence sync, text style, and Save.
+6. Test an empty HTML track with an SRT file URL. It must show **not loaded** before Import, request only the selected file after Import, and show its imported line count.
+7. Select **Restore player**. Check that the caption choices changed by the extension are restored.
 
 Some players expose no readable tracks. Streaming tracks may expose only loaded lines. The new import feature has not yet been checked live on Disney+.
 

@@ -61,6 +61,35 @@ const checks=[],pass=text=>{checks.push(text);console.log('PASS '+text);};
   assert.equal(await film.evaluate(()=>Array.from(document.querySelector('#film').textTracks).find(track=>track.label==='Unavailable').mode),'disabled');
   const after=await popup.evaluate(id=>chrome.tabs.sendMessage(id,{type:'GET_SUBTITLE_SNAPSHOT'}),tabId);assert.equal(after.text,before.text);assert.deepEqual(after.settings,before.settings);
   pass('An unavailable track restores its temporary mode and preserves the current subtitle and saved adjustments');
+  let fileRequests=0,blockFile=false;
+  await film.route('https://subtitle-fixture.test/*',async route=>{
+   if(route.request().resourceType()!=='fetch'){await route.abort();return;}
+   fileRequests++;const url=route.request().url();
+   const body=url.endsWith('/bad.srt') ? '<html>Download page</html>' : url.endsWith('/style.ass') ? '[Script Info]\nScriptType: v4.00+\n[Events]\nFormat: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text\nDialogue: 0,0:00:01.00,0:00:05.00,Default,,0,0,0,,{\\b1}مرحبا\\NASS line' : '1\n00:01:40,000 --> 00:01:44,000\nمرحبا &amp; أهلا\n\n2\n00:01:50,000 --> 00:01:54,000\nالسطر الثاني\n\n3\n00:02:00,000 --> 00:02:04,000\nالسطر الثالث';
+   if(blockFile)await new Promise(resolve=>setTimeout(resolve,700));
+   await route.fulfill({status:200,headers:{'Content-Type':'text/plain; charset=utf-8','Access-Control-Allow-Origin':'*'},body});
+  });
+  await film.evaluate(()=>{const element=document.createElement('track');element.kind='subtitles';element.label='Lazy SRT';element.srclang='ar';element.src='https://subtitle-fixture.test/lazy.srt';document.querySelector('#film').append(element);globalThis.lazyElement=element;document.querySelector('[role=slider]').setAttribute('aria-valuenow','101');});
+  await film.waitForFunction(()=>document.querySelector('#subtitle-overlay-root').shadowRoot.querySelector('#playerTrackCount').textContent==='5');assert.equal(fileRequests,0);
+  await ui('playerTracks').selectOption({label:'Lazy SRT · ar · not loaded'});await ui('importPlayerTrack').click();await film.waitForFunction(()=>document.querySelector('#subtitle-overlay-root').shadowRoot.querySelector('#message').textContent.includes('3 loaded lines imported'));
+  assert.equal(fileRequests,1);assert.equal(await film.evaluate(()=>lazyElement.track.cues?.length || 0),0);
+  const lazySnapshot=await popup.evaluate(id=>chrome.tabs.sendMessage(id,{type:'GET_SUBTITLE_SNAPSHOT'}),tabId);assert.match(lazySnapshot.text,/00:01:40,000 --> 00:01:44,000/);assert.match(lazySnapshot.text,/مرحبا &amp; أهلا/);assert.equal(await ui('text').textContent(),'مرحبا & أهلا');
+  await ui('tab-find').click();await ui('importPlayerTrack').click();await film.waitForFunction(()=>document.querySelector('#subtitle-overlay-root').shadowRoot.querySelector('#tab-controls').getAttribute('aria-selected')==='true');assert.equal(fileRequests,1);
+  pass('Empty HTML SRT tracks fetch only the selected file on Import, cache parsed lines, preserve Arabic, and keep full-file film timestamps while the native clock is segmented');
+  await ui('syncSettings').locator('summary').click();await ui('syncMode').selectOption('three');
+  for(const [button,time,text] of [['markFirst',101,'مرحبا'],['syncSecond',113,'السطر الثاني'],['syncThird',125,'السطر الثالث']]){
+   await film.evaluate(time=>document.querySelector('[role=slider]').setAttribute('aria-valuenow',String(time)),time);await film.waitForFunction(value=>document.querySelector('#subtitle-overlay-root').shadowRoot.querySelector('#time').textContent===value,'00:'+String(Math.floor(time/60)).padStart(2,'0')+':'+String(time%60).padStart(2,'0'));await ui('filter').fill(text);await ui('cues').selectOption({index:0});await ui(button).click();
+  }
+  assert.equal(Number(await ui('rate').inputValue()),120);await ui('saveSubtitle').click();await film.waitForFunction(()=>document.querySelector('#subtitle-overlay-root').shadowRoot.querySelector('#saveSubtitle').getAttribute('aria-pressed')==='true');
+  const sourceSaved=await popup.evaluate(()=>chrome.runtime.sendMessage({type:'LIBRARY_LIST'}));assert.equal(sourceSaved.entries[0].settings.anchors.length,3);
+  pass('Source-file imports support three-sentence sync and Save through the same overlay path');
+  const stable=await popup.evaluate(id=>chrome.tabs.sendMessage(id,{type:'GET_SUBTITLE_SNAPSHOT'}),tabId);
+  await film.evaluate(()=>lazyElement.src='https://subtitle-fixture.test/bad.srt');await ui('tab-find').click();await ui('importPlayerTrack').click();await film.waitForFunction(()=>document.querySelector('#subtitle-overlay-root').shadowRoot.querySelector('#message').textContent.includes('page instead of subtitles'));
+  const failed=await popup.evaluate(id=>chrome.tabs.sendMessage(id,{type:'GET_SUBTITLE_SNAPSHOT'}),tabId);assert.equal(failed.text,stable.text);assert.deepEqual(failed.settings,stable.settings);assert.equal(await film.evaluate(()=>lazyElement.track.mode),'disabled');
+  blockFile=true;await film.evaluate(()=>lazyElement.src='https://subtitle-fixture.test/change.srt');await ui('importPlayerTrack').click();await film.waitForFunction(()=>lazyElement.track.mode==='hidden');await film.evaluate(()=>lazyElement.src='https://subtitle-fixture.test/style.ass');await film.waitForFunction(()=>document.querySelector('#subtitle-overlay-root').shadowRoot.querySelector('#message').textContent.includes('track changed'));blockFile=false;
+  assert.equal((await popup.evaluate(id=>chrome.tabs.sendMessage(id,{type:'GET_SUBTITLE_SNAPSHOT'}),tabId)).text,stable.text);
+  await ui('importPlayerTrack').click();await film.waitForFunction(()=>document.querySelector('#subtitle-overlay-root').shadowRoot.querySelector('#message').textContent.includes('1 loaded lines imported'));assert.match((await popup.evaluate(id=>chrome.tabs.sendMessage(id,{type:'GET_SUBTITLE_SNAPSHOT'}),tabId)).text,/مرحبا\nASS line/);
+  pass('Bad responses and changed sources preserve current subtitles/settings; changed URLs reload and ASS text imports correctly');
   await ui('tab-controls').click();await ui('advancedSettings').locator('summary').click();await ui('remove').click();assert(!await film.locator('#subtitle-overlay-root').count());assert.equal(await film.evaluate(()=>english.mode),'disabled');assert.deepEqual(errors,[]);
   pass('Removing the overlay restores owned caption modes and causes no page errors');
   await popup.locator('body').screenshot({path:path.resolve('.test-artifacts/player-tracks-popup.png')});

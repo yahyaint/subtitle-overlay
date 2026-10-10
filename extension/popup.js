@@ -63,7 +63,7 @@ async function refreshPlayerTracks() {
   $('playerTracks').value=tracks.some(track=>track.id===previous) ? previous : (tracks.find(track=>track.mode==='showing') || tracks[0])?.id || '';
   $('playerTrackCount').textContent=String(tracks.length);$('playerTracks').disabled=!tracks.length;
   $('usePlayerTrack').disabled=!tracks.length;$('importPlayerTrack').disabled=!tracks.length;
-  $('playerTracksHint').textContent=tracks.length ? 'Select a track. Import copies the lines the player exposes.' : 'No readable tracks. Select a language in the player, then refresh.';
+  $('playerTracksHint').textContent=tracks.length ? 'Select a track. Import loads its file or copies readable lines.' : 'No readable tracks. Select a language in the player, then refresh.';
 }
 for(const [id,action] of [['usePlayerTrack','original'],['importPlayerTrack','import'],['restorePlayerTracks','restore']])$(id).onclick=()=>task($(id),async()=>{
   playerTrackBusy=true;

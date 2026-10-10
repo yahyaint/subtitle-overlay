@@ -19,7 +19,7 @@ Find and load:
 - Open subtitle files inside ZIP and gzip archives.
 - Search OpenSubtitles through its website or API.
 - Get an editable film title suggestion from the player.
-- Detect readable player subtitle tracks. Keep the player display or import loaded lines for overlay adjustments and saving.
+- Detect readable player subtitle tracks. Keep the player display or load their subtitle files or import readable lines for overlay adjustments and saving.
 
 Set the timing:
 - Move subtitles earlier or later.

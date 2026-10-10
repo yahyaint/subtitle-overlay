@@ -1,6 +1,6 @@
 # Data and permission notes
 
-These notes describe version 0.7.11 from its source. They are inputs for the publisher's dashboard answers. They do not claim store acceptance or assign dashboard data categories.
+These notes describe version 0.7.12 from its source. They are inputs for the publisher's dashboard answers. They do not claim store acceptance or assign dashboard data categories.
 
 ## Purpose
 
@@ -48,3 +48,5 @@ SoundCloud preview opens a third-party iframe only after the user selects Previe
 ## Final disclosure task
 
 The publisher must map these facts to the current dashboard questions, confirm the published privacy URL, and complete the required attestations. Service-governing policy and terms review is excluded under the active Terms Privacy Guard.
+
+Player-file import requests only the selected public track URL, after Import. It uses normal page CORS access and sends no cookies or authorization headers. Parsed text stays in page memory until saved. This adds no permission and does not intercept network traffic.
