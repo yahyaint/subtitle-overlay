@@ -80,4 +80,4 @@ The extension is free to use. Select **Tip** in the popup, or visit [the support
 
 [Privacy](docs/PRIVACY.md) · [Support](SUPPORT.md) · [Changes](CHANGELOG.md) · [Contribute](CONTRIBUTING.md)
 
-Publisher: `yahyaint`. Repository: [`yahyaint/subtitle-overlay`](https://github.com/yahyaint/subtitle-overlay). A project license has not been selected.
+Publisher: `yahyaint`. Repository: [`yahyaint/subtitle-overlay`](https://github.com/yahyaint/subtitle-overlay). License: [MIT](LICENSE).

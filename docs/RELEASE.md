@@ -12,7 +12,7 @@ Prepared project: `yahyaint/subtitle-overlay`. Current version: `0.7.10` preview
 
 ## Before public release
 
-1. Select a project license. This preparation does not assign one.
+1. Include the project's MIT license in each release archive.
 2. Confirm publisher identity and a private security contact.
 3. Check version 0.7.10 in the existing signed-in player. Test pause, forward seek, backward seek, hidden controls, and all three sentence-sync modes.
 4. Test a live OpenSubtitles download through its follow-up page. Confirm Save, ZIP import, load, and reload.

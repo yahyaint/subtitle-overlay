@@ -10,4 +10,4 @@ Use local fixtures for tests. Do not commit account data, API keys, browser prof
 
 Describe the problem, the new behavior, and the checks you ran. Include a screenshot for a visible change.
 
-The owner must select the project license before accepting outside code contributions.
+Contributions use the project's [MIT license](LICENSE).

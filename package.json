@@ -4,6 +4,7 @@
   "private": true,
   "description": "Find, save, style, and sync subtitles over browser video.",
   "author": "yahyaint",
+  "license": "MIT",
   "repository": {"type": "git", "url": "https://github.com/yahyaint/subtitle-overlay.git"},
   "engines": {"node": ">=22"},
   "scripts": {

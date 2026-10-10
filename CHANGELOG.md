@@ -5,6 +5,7 @@
 - Add a Tip link in the popup. It opens `https://yahyanabil.com/support`.
 - Keep all extension features available without a tip.
 - Update the store and release packages.
+- Add the MIT license to the repository and release packages.
 
 ## 0.7.9 — preview
 

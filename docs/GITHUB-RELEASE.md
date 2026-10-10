@@ -17,3 +17,5 @@ The publisher confirmed Disney+ playback, seeking, and sentence sync in Vivaldi 
 Other player and browser combinations and authenticated OpenSubtitles delivery still need confirmation. Audio discovery does not replace or sync film audio. ASS and SSA use text and timing only.
 
 The archive hashes are in `SHA256SUMS.txt`.
+
+The project uses the [MIT license](https://github.com/yahyaint/subtitle-overlay/blob/main/LICENSE). Each release archive includes the license notice.

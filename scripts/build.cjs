@@ -5,6 +5,7 @@ const version=JSON.parse(fs.readFileSync(path.join(root,'manifest.json'))).versi
 // Keep packaging independent of local files and browser-generated artifacts.
 const include=['audio-catalog-example.json','audio-leads.json','background.js','content.js','download-folder.js','dub-library.css','dub-library.html','dub-library.js','dub-sources.js','film-detection.js','icon-128.png','icon-16.png','icon-32.png','icon-48.png','logo.svg','manifest.json','player-clock-bridge.js','popup.css','popup.html','popup.js','sample.srt','subtitle-download.js','subtitle-search.js','subtitle-settings.js','subtitles.js','website-bridge.js','website-permission.html','website-permission.js'];
 const source=include.map(name=>[name,fs.readFileSync(path.join(root,name))]);
+const license=fs.readFileSync(path.join(project,'LICENSE'));
 function verifiedZip(filename,entries){
  const bytes=zipFiles(entries),end=bytes.length-22;
  assert.equal(bytes.readUInt32LE(end),0x06054b50);assert.equal(bytes.readUInt16LE(end+10),entries.length);
@@ -21,15 +22,16 @@ function verifiedZip(filename,entries){
  fs.writeFileSync(path.join(out,filename),bytes);return [filename,bytes];
 }
 const packages=[];
-packages.push(verifiedZip('subtitle-overlay-'+version+'-chrome-web-store.zip',source));
+packages.push(verifiedZip('subtitle-overlay-'+version+'-chrome-web-store.zip',[...source,['LICENSE',license]]));
 packages.push(verifiedZip('subtitle-overlay-'+version+'-release.zip',[
  ...source.map(([name,data])=>['extension/'+name,data]),
  ['extension/README.md',fs.readFileSync(path.join(root,'README.md'))],
+ ['LICENSE',license],
  ['INSTALL.md',Buffer.from('# Subtitle Overlay '+version+'\n\nExtract this ZIP. Open chrome://extensions. Turn on Developer mode. Select Load unpacked, then select the extension folder.\n\nFor an update, replace files in the same installed folder, select Reload, then refresh the film tab.\n')],
  ['PRIVACY.md',fs.readFileSync(path.join(project,'docs/PRIVACY.md'))]
 ]));
 const allowedRoots=['extension','scripts','tests','docs','site','.github'];
-const rootFiles=['.gitignore','.gitattributes','.editorconfig','package.json','package-lock.json','README.md','CHANGELOG.md','CONTRIBUTING.md','SECURITY.md','SUPPORT.md'];
+const rootFiles=['.gitignore','.gitattributes','.editorconfig','package.json','package-lock.json','README.md','LICENSE','CHANGELOG.md','CONTRIBUTING.md','SECURITY.md','SUPPORT.md'];
 function walk(relative){
  return fs.readdirSync(path.join(project,relative),{withFileTypes:true}).sort((a,b)=>a.name.localeCompare(b.name)).flatMap(entry=>{
   const name=relative+'/'+entry.name;return entry.isDirectory()?walk(name):[[name,fs.readFileSync(path.join(project,name))]];
@@ -38,7 +40,7 @@ function walk(relative){
 const publicFiles=[...rootFiles.map(name=>[name,fs.readFileSync(path.join(project,name))]),...allowedRoots.flatMap(walk)].sort(([a],[b])=>a.localeCompare(b));
 packages.push(verifiedZip('subtitle-overlay-'+version+'-source.zip',publicFiles.map(([name,data])=>['subtitle-overlay/'+name,data])));
 fs.writeFileSync(path.join(out,'SHA256SUMS.txt'),packages.map(([name,data])=>crypto.createHash('sha256').update(data).digest('hex')+'  '+name).join('\n')+'\n');
-const manifest={version,extensionFiles:include,packages:packages.map(([name,bytes])=>({name,bytes:bytes.length,sha256:crypto.createHash('sha256').update(bytes).digest('hex')}))};
+const manifest={version,extensionFiles:[...include,'LICENSE'],packages:packages.map(([name,bytes])=>({name,bytes:bytes.length,sha256:crypto.createHash('sha256').update(bytes).digest('hex')}))};
 fs.writeFileSync(path.join(out,'build-report.json'),JSON.stringify(manifest,null,2)+'\n');
 console.log('PASS verified packages, manifest at store ZIP root, and SHA-256 hashes.');
 for(const [name,bytes] of packages)console.log(name+' ('+bytes.length+' bytes)');

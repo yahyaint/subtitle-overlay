@@ -15,4 +15,4 @@ Use the prepared README for the repository home page. Enable Issues for the plan
 
 The local Git identity uses `yahyaint` and the account's GitHub no-reply address. It does not use a personal email address. The local `origin` URL points to this repository.
 
-A project license has not been selected. A private security contact and the store account's contact fields still need completion.
+The project uses the [MIT license](../LICENSE). A private security contact and the store account's contact fields still need completion.
