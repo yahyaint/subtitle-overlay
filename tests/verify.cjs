@@ -99,7 +99,7 @@ const server = http.createServer((req, res) => {res.writeHead(200, {'Content-Typ
     // Use the actual extension APIs and isolated world injection targeting our fixture tab.
     const tabId = await popup.evaluate(async (url) => (await chrome.tabs.query({})).find(tab=>tab.url===url).id, page.url());
     await popup.evaluate(async id => {
-      await chrome.scripting.executeScript({target:{tabId:id},files:['subtitles.js','subtitle-settings.js','film-detection.js','content.js']});
+      await chrome.scripting.executeScript({target:{tabId:id},files:['subtitles.js','subtitle-settings.js','film-detection.js','player-subtitles.js','content.js']});
     }, tabId);
     await page.locator('#subtitle-overlay-root').waitFor();
     await page.waitForFunction(()=>!document.querySelector('#subtitle-overlay-root').shadowRoot.querySelector('#view-find').hidden);
@@ -235,7 +235,7 @@ const server = http.createServer((req, res) => {res.writeHead(200, {'Content-Typ
     await page.locator('#subtitle-overlay-root #delay').fill('5');
     await page.waitForFunction(()=>document.querySelector('#subtitle-overlay-root').shadowRoot.querySelector('#saveSubtitle').getAttribute('aria-pressed')==='false');
     // Reload the page, reattach and restore the local file through the real offline library.
-    await page.reload();await popup.evaluate(async id=>chrome.scripting.executeScript({target:{tabId:id},files:['subtitles.js','subtitle-settings.js','film-detection.js','content.js']}),tabId);
+    await page.reload();await popup.evaluate(async id=>chrome.scripting.executeScript({target:{tabId:id},files:['subtitles.js','subtitle-settings.js','film-detection.js','player-subtitles.js','content.js']}),tabId);
     const restored=await popup.evaluate(({id,tabId})=>chrome.runtime.sendMessage({type:'LIBRARY_LOAD',id,tabId}),{id:local.id,tabId});assert.equal(restored.ok,true);
     assert.equal(await page.locator('#subtitle-overlay-root #font').inputValue(),'Verdana, sans-serif');assert.equal(await page.locator('#subtitle-overlay-root #sizeNumber').inputValue(),'36');assert.equal(await page.locator('#subtitle-overlay-root #backgroundColor').inputValue(),'#142c4a');assert.equal(await page.locator('#subtitle-overlay-root #syncMode').inputValue(),'two');assert(Math.abs(Number(await page.locator('#subtitle-overlay-root #rate').inputValue())-120)<.01);
     await popup.reload();await popup.locator('#tab-saved').click();await popup.locator('.saved-track .rating svg').waitFor();

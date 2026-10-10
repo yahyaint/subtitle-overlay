@@ -53,7 +53,7 @@ const manifest=JSON.parse(fs.readFileSync(path.join(root,'manifest.json')));mani
     const popup=await browser.newPage();await popup.goto('chrome-extension://'+id+'/popup.html');
     const film=await browser.newPage();await film.goto('http://127.0.0.1/ass');
     const tabId=await popup.evaluate(async url=>(await chrome.tabs.query({})).find(tab=>tab.url===url).id,film.url());
-    await popup.evaluate(id=>chrome.scripting.executeScript({target:{tabId:id},files:['subtitles.js','subtitle-settings.js','film-detection.js','content.js']}),tabId);
+    await popup.evaluate(id=>chrome.scripting.executeScript({target:{tabId:id},files:['subtitles.js','subtitle-settings.js','film-detection.js','player-subtitles.js','content.js']}),tabId);
     await film.waitForFunction(()=>!document.querySelector('#subtitle-overlay-root').shadowRoot.querySelector('#view-find').hidden);
     await film.locator('#subtitle-overlay-root #tab-controls').click();await film.locator('#subtitle-overlay-root #advancedSettings summary').click();
     assert.match(await popup.locator('#file').getAttribute('accept'),/\.ass,\.ssa/);

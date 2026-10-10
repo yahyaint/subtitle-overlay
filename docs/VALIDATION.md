@@ -1,5 +1,13 @@
 # Local validation
 
+## 0.7.11 player subtitles — October 11, 2026
+
+Player detection reads subtitle and caption track labels from the selected video. It leaves track modes unchanged until the user selects Use player or Import. Import reads loaded public cues, maps their times to the film clock, and uses the existing subtitle settings and local Save path. No new permissions were added.
+
+The new browser suite uses real TextTrack and VTTCue objects, lazy-loaded WebVTT, Arabic text, and a segment/film-clock fixture. Live player-subtitle import on Disney+ remains unconfirmed. The publisher's live playback/seek/sentence-sync check below applies to 0.7.10.
+
+All eight local integration suites pass. The player-track suite checks detection without caption changes, original display, Arabic import, film-clock mapping, sentence sync, saved timing and text style, late tracks, failed-import recovery, and restoration on removal. The popup layout, file formats, download routing, seeking, clock bridge, and shadow-root clock suites also pass. Static checks, real-UI store asset generation, and archive build checks pass.
+
 ## 0.7.10 tip update — October 10, 2026
 
 The popup adds an optional Tip link to `https://yahyanabil.com/support`. It adds no permission and no paid feature gate. Subtitle rendering, parsing, downloads, and sync logic are unchanged from 0.7.9.

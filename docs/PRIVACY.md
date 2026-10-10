@@ -1,6 +1,6 @@
 # Subtitle Overlay privacy notice
 
-Version: 0.7.10. Updated: October 10, 2026. Publisher: yahyaint.
+Version: 0.7.11. Updated: October 11, 2026. Publisher: yahyaint.
 
 ## Data on this device
 
@@ -12,7 +12,9 @@ Provider credentials and saved subtitle storage are restricted to trusted extens
 
 ## Data used on a video page
 
-When you open the extension on a video page, it can read film metadata to suggest a title. After you open the controls, it reads video state and public timing controls to display and sync subtitles. It checks title changes on the attached page. It does not send a film search until you start one.
+When you open the extension on a video page, it reads film metadata, video state, public timing controls, and public subtitle-track labels to suggest a title and detect player subtitles. It checks title changes on the attached page. It does not send a film search until you start one.
+
+Player track detection does not change caption choices. **Use player** selects the chosen track for display. **Import** reads its currently loaded caption text and timing into the overlay. The copied text stays on this device; **Save** stores it with the selected timing and text settings. The extension does not intercept streaming requests or retrieve protected caption data.
 
 The current page address is used locally to keep a subtitle attached to the correct film tab. Public page information can appear in title suggestions.
 

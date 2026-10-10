@@ -16,4 +16,6 @@ ASS and SSA files use their text and timing. File styles and effects are not ren
 
 To update: replace these files in the same folder, select **Reload** in the browser's extension page, then refresh the video tab.
 
-Version 0.7.10 is a preview. The publisher confirmed Disney+ playback, seeking, and sentence sync in Vivaldi on Windows. Authenticated OpenSubtitles delivery still needs confirmation.
+In **Find → Player subtitles**, select **Use player** to keep the original display, or **Import** to copy loaded lines for overlay timing, text style, and Save. **Restore player** restores caption choices changed by the extension. Only public, readable tracks are listed; some players expose none.
+
+Version 0.7.11 is a preview. The publisher confirmed Disney+ playback, seeking, and sentence sync in Vivaldi on Windows with 0.7.10. The new player-subtitle import still needs a live Disney+ check. Authenticated OpenSubtitles delivery still needs confirmation.

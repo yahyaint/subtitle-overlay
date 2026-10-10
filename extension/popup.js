@@ -3,6 +3,7 @@ let tabId, lastDownload;
 let savedEntries=[];
 let activeLibraryId=null;
 let localChoices=[];
+let playerTrackBusy=false;
 const saveIcon='<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M4 3h13l4 4v14H3V3h1Z"/><path d="M7 3v6h10V3M7 21v-8h10v8"/></svg>';
 let defaultSearchUrl;
 function searchMode() {
@@ -43,14 +44,33 @@ async function provider(message) {
   if (!reply?.ok) throw new Error(reply?.error || 'Extension unavailable. Reload the extension.');
   return reply;
 }
-async function attach() {
+async function attach(show=true) {
   if (!tabId) throw new Error('Open a film in a normal browser tab first.');
-  await chrome.scripting.executeScript({target: {tabId}, files: ['subtitles.js','subtitle-settings.js','film-detection.js', 'content.js']});
-  const reply = await chrome.tabs.sendMessage(tabId, {type: 'SHOW_PANEL'});
+  await chrome.scripting.executeScript({target:{tabId},func:hidden=>{globalThis.__subtitleOverlayStartHidden=hidden;},args:[!show]});
+  await chrome.scripting.executeScript({target: {tabId}, files: ['subtitles.js','subtitle-settings.js','film-detection.js','player-subtitles.js', 'content.js']});
+  const reply = await chrome.tabs.sendMessage(tabId, {type: show ? 'SHOW_PANEL' : 'GET_STATUS'});
   if (!reply?.ok) throw new Error('Could not attach overlay.');
   $('player').textContent = reply.player ? 'Video connected. Controls are on the video.' : 'Start the film to connect the video.';
   return reply;
 }
+async function refreshPlayerTracks() {
+  if(playerTrackBusy)return;
+  const reply=await chrome.tabs.sendMessage(tabId,{type:'GET_PLAYER_TRACKS'});
+  if(!reply?.ok)throw new Error(reply?.error || 'Open controls to connect the video.');
+  const previous=$('playerTracks').value,tracks=reply.tracks;
+  $('playerTracks').replaceChildren();
+  for(const track of tracks){const option=document.createElement('option');option.value=track.id;option.textContent=track.label+(track.language && track.language!==track.label ? ' · '+track.language : '')+' · '+(track.count===null ? 'not loaded' : track.count+' lines');$('playerTracks').append(option);}
+  $('playerTracks').value=tracks.some(track=>track.id===previous) ? previous : (tracks.find(track=>track.mode==='showing') || tracks[0])?.id || '';
+  $('playerTrackCount').textContent=String(tracks.length);$('playerTracks').disabled=!tracks.length;
+  $('usePlayerTrack').disabled=!tracks.length;$('importPlayerTrack').disabled=!tracks.length;
+  $('playerTracksHint').textContent=tracks.length ? 'Select a track. Import copies the lines the player exposes.' : 'No readable tracks. Select a language in the player, then refresh.';
+}
+for(const [id,action] of [['usePlayerTrack','original'],['importPlayerTrack','import'],['restorePlayerTracks','restore']])$(id).onclick=()=>task($(id),async()=>{
+  playerTrackBusy=true;
+  try{await attach(false);const reply=await chrome.tabs.sendMessage(tabId,{type:'PLAYER_TRACK_ACTION',action,id:$('playerTracks').value});if(!reply?.ok)throw new Error(reply?.error || 'Track load failed.');status(action==='import' ? reply.count+' loaded lines imported. Use video controls for timing, style, and Save.' : action==='original' ? 'Player subtitles shown. Import to change timing or style.' : 'Player subtitle choices restored.');}
+  finally{playerTrackBusy=false;await refreshPlayerTracks();}
+});
+$('refreshPlayerTracks').onclick=()=>task($('refreshPlayerTracks'),async()=>{await attach(false);await refreshPlayerTracks();});
 async function task(button, action) {
   button.disabled = true;
   try { await action(); } catch (error) { status(error.message, true); }
@@ -174,7 +194,8 @@ $('saveFile').onclick = () => {
   await refreshLibrary();
   if (settings.loggedIn) status('Provider logged in. Ready.');
   try {
-    const reply = await chrome.tabs.sendMessage(tabId, {type: 'GET_STATUS'});
+    const reply = await attach(false);await refreshPlayerTracks();
     if (reply?.ok) $('player').textContent = `${reply.player ? 'Video found' : 'Waiting for video'}${reply.name ? ` · ${reply.name}` : ''}`;
-  } catch { /* Not attached yet. */ }
+  } catch { /* Browser pages may not allow video access. */ }
+  setInterval(()=>refreshPlayerTracks().catch(()=>{}),1500);
 })().catch(error => status(error.message, true));

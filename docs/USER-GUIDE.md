@@ -10,6 +10,16 @@ Select **API** to search in the extension. Add an OpenSubtitles API key in **Set
 
 Use **Load file** for a local subtitle. For frame-based SUB files, enter the FPS shown by the source if the file does not declare it. Do not guess the FPS.
 
+## Player subtitles
+
+Open **Find → Player subtitles** in the popup or video controls. The list follows the selected video. It excludes metadata and chapter tracks.
+
+Select **Use player** to show the chosen track in its original player display. Overlay timing and style controls are disabled in this mode. Select **Import** to copy the loaded subtitle lines into the overlay. Delay, timing scale, sentence sync, text style, background, shadow, and Save are then available.
+
+Select **Restore player** to restore the caption modes changed by the extension. Importing a file, loading a saved subtitle, changing film, or removing the overlay also restores those modes. Choices made later through the site's caption controls are preserved.
+
+If no track appears, select a subtitle language in the player and select **Refresh**. A player may expose no readable tracks. Streaming tracks may expose only loaded lines; importing again creates a new copy and resets its timing. If the site uses its own caption renderer and both captions appear, turn off captions in that site's controls.
+
 ## Sync
 
 A positive delay shows subtitles later. A negative delay shows them earlier.

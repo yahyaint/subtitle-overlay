@@ -15,6 +15,17 @@
 
 No API key or provider account is needed for local files. The local sample is short; use a longer local track to test widely spaced sync points.
 
+## Player-subtitle path
+
+1. Open a test video with public subtitle or caption tracks.
+2. Open **Player subtitles** in the popup, or **Find → Player subtitles** in the video controls.
+3. Check that only tracks from the selected video appear. Detection must not change caption choices.
+4. Select **Use player**. Check the original caption display. Overlay timing and style controls are disabled in this mode.
+5. Select **Import**. Check the copied loaded lines, delay, sentence sync, text style, and Save.
+6. Select **Restore player**. Check that the caption choices changed by the extension are restored.
+
+Some players expose no readable tracks. Streaming tracks may expose only loaded lines. The new import feature has not yet been checked live on Disney+.
+
 ## Website path
 
 1. Open **Find**. Enter a film title and language. Select **Website**.
@@ -33,4 +44,4 @@ Open **Find dub audio**. Add a website search link or a JSON audio catalog. Sear
 
 When a player uses a segment clock, a public playback timeline can supply the film time. Show the player controls if asked. Players that expose neither cannot be synced reliably. The extension does not access closed shadow roots or inaccessible frame internals.
 
-All seven local-fixture integration suites passed on GitHub. The publisher also confirmed Disney+ playback, seeking, and sentence sync in Vivaldi on Windows with version 0.7.10. Other player and browser combinations and authenticated OpenSubtitles delivery still need confirmation. See the [validation notes](../VALIDATION.md).
+For 0.7.10, all seven local-fixture integration suites passed on GitHub. The publisher confirmed Disney+ playback, seeking, and sentence sync in Vivaldi on Windows with that version. Version 0.7.11 adds a player-track integration suite. Live Disney+ player-subtitle import, other player and browser combinations, and authenticated OpenSubtitles delivery still need confirmation. See the [validation notes](../VALIDATION.md).

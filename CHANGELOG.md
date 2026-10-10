@@ -1,5 +1,13 @@
 # Changes
 
+## 0.7.11 — preview
+
+- Detect readable subtitle and caption tracks in the selected video.
+- Keep the original player display, or import loaded text and timing into the overlay.
+- Map imported cue times to the film clock. Reuse delay, timing scale, sentence sync, text style, background, shadow, and Save.
+- Restore caption choices changed by the extension. Preserve later choices made through the player.
+- Add browser tests for player-track detection, original display, lazy WebVTT loading, import, clock mapping, and saved settings.
+
 ## 0.7.10 — preview
 
 - Add a Tip link in the popup. It opens `https://yahyanabil.com/support`.
