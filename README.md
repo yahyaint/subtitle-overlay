@@ -57,13 +57,13 @@ The library stays on this device. Deleting a library item does not delete files 
 - ASS and SSA text and timing are supported. Embedded styles and effects are not rendered.
 - Image subtitles, RAR files, encrypted ZIP files, and archives over the 2 MB limit are not supported.
 - Audio tools find sources and download direct audio files. They do not replace or sync the stream's audio.
-- Authenticated OpenSubtitles delivery still needs confirmation for version 0.7.15.
+- Authenticated OpenSubtitles delivery still needs confirmation for version 0.7.16.
 
-## Use player subtitles
+## Import player subtitles
 
-Open **Find → Player subtitles**. Select a language. **Use player** keeps the player's subtitle display. **Import** loads its subtitle file if no lines are readable, or copies loaded text and timing into the overlay. You can then change timing and text style, sync with sentences, and save the result. **Restore player** restores the subtitle choices changed by the extension.
+Open **Find → Player subtitles**. Select a language. **Import** loads its subtitle file if no lines are readable, or copies loaded text and timing into the overlay. You can then change timing and text style, sync with sentences, and save the result.
 
-Only public subtitle or caption tracks are listed. A track can say **not loaded** until you select **Import**. The extension then requests its file URL through normal browser access. SRT, WebVTT, ASS, and SSA text are supported. A blocked file reports an error; select another track or load a local file. Some players use a separate caption renderer and expose no readable tracks. Select a language in the player, then **Refresh**. Streaming tracks may expose only loaded lines. Import again to make a new copy if more lines load. Import also copies readable player text style and position. In **Text style**, select **Restore player style** to restore the captured appearance without changing timing or sentence-sync points. Save keeps this original style with your settings. Browser-drawn styles, multiple shadows, animations, and per-line effects may not be readable. Use the site caption menu if **Use player** has no native lines to display.
+Only public subtitle or caption tracks are listed. A track can say **not loaded** until you select **Import**. The extension then requests its file URL through normal browser access. SRT, WebVTT, ASS, and SSA text are supported. A blocked file reports an error; select another track or load a local file. Some players use a separate caption renderer and expose no readable tracks. Select a language in the player, then **Refresh**. Streaming tracks may expose only loaded lines. Import again to make a new copy if more lines load. Import also copies readable player text style and position. In **Text style**, select **Restore player style** to restore the captured appearance without changing timing or sentence-sync points. Save keeps this original style with your settings. Browser-drawn styles, multiple shadows, animations, and per-line effects may not be readable.
 
 ## Update an unpacked install
 

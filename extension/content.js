@@ -6,7 +6,7 @@
   let sourceText='',savedSettings='',anchors=[],lastCueIndex=-1,lastSyncTime=null,savingPreset=false,localChoices=[];
   let cueWindowSource=null,cueWindowFilter=null,cueWindowStart=-1,cueWindowMatches=[];
   let observedVideo=null;
-  let nativeSubtitleMode=false,nativeSubtitleId='',playerTracksSignature='',playerTrackBusy=false;
+  let playerTracksSignature='',playerTrackBusy=false;
   let manualCueSelection=null;
   let pageClock=null,clockToken='',clockBridgeError='';
   let clockSample=null,clockLastNative=null,clockTimelineElement=null,clockNeedsPosition=false,timelineElements=[],timelineChecked=-Infinity;
@@ -58,7 +58,7 @@
     <details id="advancedSettings"><summary>More settings</summary><label for="rate">Timing scale (%)</label><input id="rate" type="number" value="100" step="0.1" min="50" max="200"><p class="hint">Use 100 for normal timing. Increase this if subtitles gradually appear too early.</p><label class="file">Load subtitle file<input id="file" type="file" accept=".srt,.vtt,.sub,.ass,.ssa,.zip,.gz"></label><select id="localTracks" aria-label="Choose a subtitle file from the archive" hidden></select><label>File encoding<select id="encoding"><option value="utf-8">Automatic (UTF-8 / UTF-16)</option><option value="windows-1256">Arabic (Windows-1256)</option><option value="windows-1252">Western (Windows-1252)</option><option value="utf-16le">UTF-16 LE</option></select></label><label for="fileFps">SUB FPS (if needed)</label><input id="fileFps" type="number" min="1" max="120" step=".001" placeholder="23.976"><p class="hint">Use the FPS listed for a frame-based SUB file.</p><p class="hint">Alt+Shift+O: show controls.<br>Alt+Shift+Left/Right: change delay.</p><button id="remove">Remove overlay</button></details>
     </div>
     <div id="view-find" role="tabpanel" aria-labelledby="tab-find" hidden>
-      <details id="playerTracksSettings"><summary>Player subtitles <span id="playerTrackCount">0</span></summary><label>Language<select id="playerLanguage" aria-label="Player subtitle language"><option value="*">All languages</option></select></label><label>Track<select id="playerTracks" aria-label="Subtitle track from this player"></select></label><p id="playerTracksHint" class="hint">No readable tracks. Select a subtitle language in the player, then refresh.</p><div class="row"><button id="usePlayerTrack" disabled>Use player</button><button id="importPlayerTrack" disabled>Import</button></div><div class="row"><button id="refreshPlayerTracks">Refresh</button><button id="restorePlayerTracks">Restore player</button></div><p class="hint">Use player keeps its display. Import copies lines, readable text style, and position. Save keeps your changes.</p></details>
+      <details id="playerTracksSettings"><summary>Player subtitles <span id="playerTrackCount">0</span></summary><label>Language<select id="playerLanguage" aria-label="Player subtitle language"><option value="*">All languages</option></select></label><label>Track<select id="playerTracks" aria-label="Subtitle track from this player"></select></label><p id="playerTracksHint" class="hint">No readable tracks. Select a subtitle language in the player, then refresh.</p><div class="row"><button id="importPlayerTrack" disabled>Import</button><button id="refreshPlayerTracks">Refresh</button></div><p class="hint">Import copies lines, readable text style, and position. Save keeps your changes.</p></details>
       <form id="overlaySearch"><p id="filmSuggestion" class="hint" hidden></p><label for="overlayQuery">Film or show</label><input id="overlayQuery" required maxlength="200" placeholder="Enter a film or show"><div class="fields"><label>Language<select id="overlayLanguage"><option value="af">Afrikaans</option><option value="sq">Albanian</option><option value="ar">Arabic</option><option value="eu">Basque</option><option value="bn">Bengali</option><option value="bs">Bosnian</option><option value="bg">Bulgarian</option><option value="ca">Catalan</option><option value="zh">Chinese</option><option value="hr">Croatian</option><option value="cs">Czech</option><option value="da">Danish</option><option value="nl">Dutch</option><option value="en">English</option><option value="et">Estonian</option><option value="tl">Filipino</option><option value="fi">Finnish</option><option value="fr">French</option><option value="de">German</option><option value="el">Greek</option><option value="he">Hebrew</option><option value="hi">Hindi</option><option value="hu">Hungarian</option><option value="is">Icelandic</option><option value="id">Indonesian</option><option value="it">Italian</option><option value="ja">Japanese</option><option value="ko">Korean</option><option value="lv">Latvian</option><option value="lt">Lithuanian</option><option value="mk">Macedonian</option><option value="ms">Malay</option><option value="ml">Malayalam</option><option value="no">Norwegian</option><option value="fa">Persian</option><option value="pl">Polish</option><option value="pt">Portuguese</option><option value="pt-br">Portuguese (Brazil)</option><option value="ro">Romanian</option><option value="ru">Russian</option><option value="sr">Serbian</option><option value="sk">Slovak</option><option value="sl">Slovenian</option><option value="es">Spanish</option><option value="sw">Swahili</option><option value="sv">Swedish</option><option value="ta">Tamil</option><option value="te">Telugu</option><option value="th">Thai</option><option value="tr">Turkish</option><option value="uk">Ukrainian</option><option value="ur">Urdu</option><option value="vi">Vietnamese</option></select></label><label>Year (optional)<input id="overlayYear" type="number" min="1880" max="2199" placeholder="2004"></label></div><div class="search-method"><label for="overlaySearchMode">Search with</label><select id="overlaySearchMode"><option value="website">Website</option><option value="api">API</option></select></div><button id="overlaySearchButton" type="submit">Open OpenSubtitles</button></form>
       <p id="overlaySearchHint" class="hint">Website search needs no extension API key.</p><div id="overlayResults"></div>
       <details id="searchLinkSettings"><summary>Edit search link</summary><label for="overlaySearchUrl">Search URL</label><input id="overlaySearchUrl" type="url" maxlength="2000"><p class="hint">Use {title}, {language}, {language3}, and {year}.</p><button id="saveSearchLink">Save link</button></details>
@@ -69,21 +69,12 @@
   const $ = id => shadow.getElementById(id);
   $('panel').hidden=startHidden;
   const playerTracks=globalThis.SubtitlePlayerTracks?.create({getVideo:()=>state.video,getTime:()=>playbackTime(),core});
-  function setNativeSubtitleMode(active) {
-    nativeSubtitleMode=active;if(!active)nativeSubtitleId='';
-    const label=active ? 'Player: '+(playerTracks?.list().find(track=>track.id===nativeSubtitleId)?.label || 'Subtitles') : state.name || 'No subtitle file';
-    $('filename').textContent=label;$('filename').title=label;$('broken').disabled=active || !state.libraryId;
-    for(const id of ['enabled','delay','earlier','later','reset','rate'])$(id).disabled=active;
-    $('textSettings').inert=active;$('syncSettings').inert=active;
-    updateSyncButtons();updateSaveIcon();
-  }
   function refreshPlayerTracks(force=false) {
     const tracks=playerTracks?.list() || [],signature=JSON.stringify(tracks);
-    if(nativeSubtitleMode && !tracks.some(track=>track.id===nativeSubtitleId))setNativeSubtitleMode(false);
     if(!force && signature===playerTracksSignature)return tracks;
     playerTracksSignature=signature;const grouped=globalThis.SubtitlePlayerTracks.renderOptions(tracks,$('playerTracks'),$('playerLanguage'));
     $('playerTrackCount').textContent=String(tracks.length);$('playerTracks').disabled=!tracks.length;
-    $('usePlayerTrack').disabled=playerTrackBusy || !grouped.visible.length;$('importPlayerTrack').disabled=playerTrackBusy || !grouped.visible.length;
+    $('importPlayerTrack').disabled=playerTrackBusy || !grouped.visible.length;
     $('playerTracksHint').textContent=tracks.length ? grouped.languages+' languages. Select a track, then Import.' : 'No readable tracks. Select a subtitle language in the player, then refresh.';
     return tracks;
   }
@@ -92,19 +83,17 @@
     if(playerTrackBusy)throw new Error('Wait for the current track to load.');
     playerTrackBusy=true;
     try {
-    if(action==='restore'){playerTracks.restore();setNativeSubtitleMode(false);message('Player subtitle choices restored.');}
-    else if(action==='original'){playerTracks.use(id);nativeSubtitleId=id;setNativeSubtitleMode(true);view('controls');message('Player subtitles shown. Import to change timing or style.');}
-    else if(action==='import'){
+    if(action==='import'){
       const snapshot=await playerTracks.read(id);load(snapshot.text,snapshot.name);
       if(snapshot.style){applySettings({...currentSettings(),...snapshot.style,originalStyle:settingsCore.appearance({...currentSettings(),...snapshot.style})});}
       playerTracks.hide();
       state.enabled=true;$('enabled').checked=true;if(snapshot.language)setLanguage(snapshot.language);
       message(snapshot.count+' loaded lines imported. '+(snapshot.styleSource==='player' ? 'Player text style and position copied.' : snapshot.styleSource==='position' ? 'Position copied. Player font style is not readable.' : 'Player style is not readable. Current text style kept.')+' Change timing or style, then Save.');
-    }else throw new Error('Choose Use player, Import, or Restore player.');
-    if(action!=='restore')show();refreshPlayerTracks(true);draw();return {count:state.cues.length,tracks:playerTracks.list()};
+    }else throw new Error('Choose Import.');
+    show();refreshPlayerTracks(true);draw();return {count:state.cues.length,tracks:playerTracks.list()};
     } finally {playerTrackBusy=false;refreshPlayerTracks(true);}
   }
-  for(const [id,action] of [['usePlayerTrack','original'],['importPlayerTrack','import'],['restorePlayerTracks','restore']])$(id).onclick=event=>{if(event.isTrusted)task($(id),()=>playerTrackAction(action,$('playerTracks').value));};
+  for(const [id,action] of [['importPlayerTrack','import']])$(id).onclick=event=>{if(event.isTrusted)task($(id),()=>playerTrackAction(action,$('playerTracks').value));};
   $('playerLanguage').onchange=()=>refreshPlayerTracks(true);
   $('refreshPlayerTracks').onclick=event=>{if(event.isTrusted)refreshPlayerTracks(true);};
   // Native details groups keep one settings section open at a time.
@@ -239,7 +228,7 @@
     }catch(error){if(revision===routeRevision)message(error.message,true);}
   }
   function clearFilm() {
-    playerTracks?.restore();setNativeSubtitleMode(false);
+    playerTracks?.restore();
     clockToken=crypto.randomUUID();pageClock=null;clockSample=null;clockLastNative=null;clockTimelineElement=null;clockNeedsPosition=false;manualCueSelection=null;lastControlSnapshot=null;
     observedVideo?.setAttribute('data-subtitle-overlay-clock',clockToken);
     state.originalStyle=null;sourceText='';savedSettings='';anchors=[];localChoices=[];lastCueIndex=-1;lastSyncTime=null;
@@ -468,7 +457,7 @@
     const shadowRgb=[1,3,5].map(at=>parseInt(state.shadowColor.slice(at,at+2),16));
     $('text').style.textShadow=state.shadow ? state.shadowX+'px '+state.shadowOffset+'px '+state.shadowBlur+'px rgba('+shadowRgb.join(',')+','+(state.shadowOpacity/100)+')' : 'none';
     const clock=playbackClock(),time=clock.time;
-    const text = state.enabled && !nativeSubtitleMode ? core.active(state.cues, state.ends, time, state.delay, state.rate) : '';
+    const text = state.enabled ? core.active(state.cues, state.ends, time, state.delay, state.rate) : '';
     if ($('text').textContent !== text) $('text').textContent = text;
     $('time').textContent = Number.isFinite(time) ? core.clock(time) : '--:--:--';$('time').title=clock.source;
     $('videoStatus').textContent=Number.isFinite(time) ? 'Video connected' : clockNeedsPosition ? 'Show video controls to read time.' : 'Wait for the video clock.';
@@ -517,13 +506,13 @@
     updateSyncButtons();
   }
   function updateSyncButtons(){
-    const ready=Boolean(!nativeSubtitleMode && state.video?.isConnected && !state.video.seeking && Number.isFinite(playbackTime()) && $('cues').value && state.cues[Number($('cues').value)]);
+    const ready=Boolean(state.video?.isConnected && !state.video.seeking && Number.isFinite(playbackTime()) && $('cues').value && state.cues[Number($('cues').value)]);
     $('sync').disabled=!ready;$('markFirst').disabled=!ready;$('syncSecond').disabled=!ready || !anchors.length;$('syncThird').disabled=!ready || anchors.length<2;
   }
   function load(text, name, libraryId=null, preset) {
     const cues = core.parse(text); // Parse first: bad imports preserve the current valid track.
     const settings=preset ? settingsCore.validate(preset,cues) : null;
-    playerTracks?.restore();setNativeSubtitleMode(false);
+    playerTracks?.restore();
     sourceText=text;savedSettings='';anchors=[];lastCueIndex=-1;lastSyncTime=null;manualCueSelection=null;localChoices=[];$('localTracks').hidden=true;
     state.originalStyle=null;state.cues = cues; state.ends = core.createIndex(cues); state.name = String(name || 'Subtitles').slice(0, 250);
     state.libraryId=libraryId; $('saveSubtitle').disabled=false; $('broken').disabled=!libraryId;
@@ -535,16 +524,16 @@
   }
   function clearSaved(id) {
     if(state.libraryId!==id) return;
-    playerTracks?.restore();setNativeSubtitleMode(false);
+    playerTracks?.restore();
     state.originalStyle=null;sourceText='';savedSettings='';anchors=[];localChoices=[];$('localTracks').hidden=true;state.cues=[];state.ends=[];state.name='';state.libraryId=null; $('filename').textContent='No subtitle file';$('saveSubtitle').disabled=true;$('broken').disabled=true;renderCues();draw();message('Subtitle deleted. Choose another file.');
   }
   function currentSettings(){
     return {...Object.fromEntries(Object.keys(settingsCore.defaults).filter(key=>key in state).map(key=>[key,state[key]])),encoding:$('encoding').value,syncMode:$('syncMode').value,anchors};
   }
   function updateSaveIcon(){
-    $('restorePlayerStyle').disabled=nativeSubtitleMode || !state.originalStyle;
+    $('restorePlayerStyle').disabled=!state.originalStyle;
     $('playerStyleHint').hidden=!state.originalStyle;
-    $('saveSubtitle').disabled=nativeSubtitleMode || !state.cues.length || savingPreset;
+    $('saveSubtitle').disabled=!state.cues.length || savingPreset;
     const saved=Boolean(savedSettings && savedSettings===JSON.stringify(currentSettings()));
     $('saveSubtitle').setAttribute('aria-pressed',String(saved));$('saveSubtitle').style.borderColor=saved ? '#216aa3' : '';
     $('saveSubtitle').title=saved ? 'Subtitle and current settings saved' : 'Save subtitle and settings';
@@ -650,7 +639,6 @@
     try {
       if(request.type==='GET_PLAYER_TRACKS'){discover();reply({ok:true,tracks:refreshPlayerTracks(true)});return;}
       if(request.type==='PLAYER_TRACK_ACTION'){playerTrackAction(request.action,request.id).then(data=>reply({ok:true,...data})).catch(error=>reply({ok:false,error:error.message}));return true;}
-      if(request.type==='GET_SUBTITLE_SNAPSHOT' && nativeSubtitleMode)throw new Error('Import the player track before saving it.');
       if (request.type === 'LOAD_SUBTITLES') {
         if(request.expectedHref && request.expectedHref!==location.href)throw new Error('The film page changed. Start a new subtitle search.');
         if(request.expectedFilm && request.expectedFilm!==currentFilmIdentity())throw new Error('The film changed. Start a new subtitle search.');

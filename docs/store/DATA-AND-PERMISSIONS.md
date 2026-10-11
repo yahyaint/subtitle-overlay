@@ -1,6 +1,6 @@
 # Data and permission notes
 
-These notes describe version 0.7.15 from its source. They are inputs for the publisher's dashboard answers. They do not claim store acceptance or assign dashboard data categories.
+These notes describe version 0.7.16 from its source. They are inputs for the publisher's dashboard answers. They do not claim store acceptance or assign dashboard data categories.
 
 ## Purpose
 
@@ -53,4 +53,4 @@ Player-file import requests only the selected public track URL, after Import. It
 
 ## Language groups and episode recognition
 
-Version 0.7.15 groups public player track labels by their language codes. It reads public playback and page metadata to suggest the film or episode. Series searches send the show, season, and episode numbers to the selected provider after the user starts a search. There are no new permissions.
+Version 0.7.16 groups public player track labels by their language codes. It reads public playback and page metadata to suggest the film or episode. Series searches send the show, season, and episode numbers to the selected provider after the user starts a search. There are no new permissions.

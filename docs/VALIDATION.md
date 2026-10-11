@@ -1,5 +1,13 @@
 # Local validation
 
+## 0.7.16 simplified player actions - October 11, 2026
+
+Use player and Restore player are removed from the popup and overlay. Import and Refresh remain. The unused native-display action and its disabled-control state are removed. Restore player style remains in Text style.
+
+Caption choices still restore automatically when another file is loaded, the film changes, or the overlay is removed. The player-track test checks both button removals, native cue import without the removed actions, file import, language groups, copied style and position, Save, style restoration, all sync anchors, later site caption choices, and cleanup. The local video fixture now draws a moving marker to avoid recording a static clip with no usable frames.
+
+All eight local integration suites pass, followed by the final player-track checks after the second button removal. Static checks and the four updated store screenshots pass. No permissions or clock and sentence-fit algorithms were changed.
+
 ## 0.7.14 languages and series - October 11, 2026
 
 The popup and overlay group selected-player tracks by their language codes. The popup filters its loaded list immediately without waiting for a tab reply. Browser tests check named groups, counts, language filtering, filter retention on refresh, regional codes, and Unknown language. Discovery still leaves track modes and lazy file loading unchanged.

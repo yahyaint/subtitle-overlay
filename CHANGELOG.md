@@ -1,5 +1,10 @@
 # Changes
 
+## 0.7.16 - October 11, 2026
+
+- Remove Use player and Restore player from the popup and overlay. Use Import for player subtitles.
+- Remove the unused native-display mode. Restore caption choices automatically during file changes and cleanup. Keep Restore player style in Text style, Save, and synchronization.
+
 ## 0.7.15 - October 11, 2026
 
 - Filter the loaded player track list immediately in the popup. Avoid waiting for a tab reply when changing the language.

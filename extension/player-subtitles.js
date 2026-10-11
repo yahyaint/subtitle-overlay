@@ -62,11 +62,6 @@
       if(item.expected!==undefined && track.mode!==item.expected)item.original=track.mode;
       track.mode=value;item.expected=value;owned.set(track,item);
     }
-    function use(id) {
-      const track=find(id);restore();
-      for(const other of selected())if(other!==track && other.mode==='showing')mode(other,'hidden');
-      mode(track,'showing');return list();
-    }
     function hide() {for(const track of selected())if(track.mode==='showing')mode(track,'hidden');
       const caption=lastCaption?.video===video && lastCaption.node.isConnected ? lastCaption.node : null;
       if(caption && !hiddenCaptions.has(caption)){hiddenCaptions.set(caption,{value:caption.style.getPropertyValue('visibility'),priority:caption.style.getPropertyPriority('visibility')});caption.style.setProperty('visibility','hidden','important');}
@@ -188,7 +183,7 @@
         if(temporary && revision===request && item && track.mode===item.expected){track.mode=item.original;owned.delete(track);}
       }
     }
-    return {list,use,hide,read,restore};
+    return {list,hide,read,restore};
   }
   globalThis.SubtitlePlayerTracks={create,groupTracks,renderOptions,languageName};
 })();

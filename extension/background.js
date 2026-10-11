@@ -1,5 +1,5 @@
 const PROVIDER_HOSTS = new Set(['api.opensubtitles.com', 'vip-api.opensubtitles.com']);
-const APP = 'SubtitleOverlay v0.7.15';
+const APP = 'SubtitleOverlay v0.7.16';
 importScripts('dub-sources.js', 'subtitle-search.js','subtitles.js','subtitle-settings.js','download-folder.js','subtitle-download.js');
 const dubSearchCache = new Map();
 let libraryQueue=Promise.resolve();
