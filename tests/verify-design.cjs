@@ -19,7 +19,7 @@ const {chromium}=require('playwright');
   video.on('pageerror',error=>errors.push(error.message));await video.goto('http://127.0.0.1:'+server.address().port);
   const popup=await context.newPage();popup.on('pageerror',error=>errors.push(error.message));await popup.goto(`chrome-extension://${id}/popup.html`);
   const tabId=await popup.evaluate(async url=>(await chrome.tabs.query({})).find(tab=>tab.url===url).id,video.url());
-  await popup.evaluate(tabId=>chrome.scripting.executeScript({target:{tabId},files:['subtitles.js','subtitle-settings.js','film-detection.js','player-subtitles.js','content.js']}),tabId);
+  await popup.evaluate(tabId=>chrome.scripting.executeScript({target:{tabId},files:['subtitles.js','subtitle-settings.js','film-detection.js','player-subtitles.js','saved-library.js','content.js']}),tabId);
   const ui=name=>video.locator('#subtitle-overlay-root #'+name);
   await popup.evaluate(()=>document.fonts.ready);assert(await popup.evaluate(()=>[...document.fonts].some(f=>f.family==='SubtitleOverlayInter' && f.status==='loaded')));
   await video.waitForFunction(()=>[...document.fonts].some(f=>f.family==='SubtitleOverlayInter' && f.status==='loaded'));assert.match(await ui('panel').evaluate(e=>getComputedStyle(e).fontFamily),/SubtitleOverlayInter/);

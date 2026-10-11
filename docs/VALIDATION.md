@@ -1,3 +1,19 @@
+## Version 0.8.8 - October 11, 2026
+
+Saved has separate Films and Shows views in the popup and controller. Shows use show, season, and episode selectors. This is a display change; stored files and settings do not need a migration.
+
+Checks passed:
+
+- Four focused local browser suites: saved-library, design, automatic, and main integration.
+- Current episode selection in both views, older title-only records, episode names, numeric sorting, Specials, and same-episode language/release variants.
+- Selection after refresh, episode load/save with timing settings, single-track deletion, remaining categories, and empty shows.
+- Existing film saves, offline loading, import/archive paths, popup/controller search sharing, sentence sync, and cached settings.
+- Popup/controller screenshots inspected. Store screenshots regenerated. Static resource and syntax checks, ZIP integrity/digests, and installed-file equality pass.
+
+The test command now includes ten suites. The four affected suites were run for this release. The full nine-suite run passed on 0.8.7 before this display change; film-clock code is unchanged.
+
+No new permissions. Live player and provider support can vary.
+
 ## Version 0.8.7 - October 11, 2026
 
 The controller no longer replaces the detected film with a stale saved search. The popup and controller share search fields for the active tab. Player subtitles stays first, with a 20 px gap before online search.

@@ -25,7 +25,7 @@ const server=http.createServer((req,res)=>{res.writeHead(200,{'Content-Type':'te
    for(const world of ['MAIN','ISOLATED'])await chrome.scripting.executeScript({target:{tabId:id},world,func,args:[values]});
   },{id:tabId,values});
   await setPlayer({currentTime:10,paused:true,seeking:false});
-  await popup.evaluate(id=>chrome.scripting.executeScript({target:{tabId:id},files:['subtitles.js','subtitle-settings.js','film-detection.js','player-subtitles.js','content.js']}),tabId);
+  await popup.evaluate(id=>chrome.scripting.executeScript({target:{tabId:id},files:['subtitles.js','subtitle-settings.js','film-detection.js','player-subtitles.js','saved-library.js','content.js']}),tabId);
   const ui=id=>page.locator('#subtitle-overlay-root #'+id);await ui('tab-controls').click();await ui('advancedSettings').locator('summary').click();
   const srt=Array.from({length:20000},(_,i)=>`${i+1}\n${clock(i*2)} --> ${clock(i*2+1)}\nLine ${i}`).join('\n\n');
   await ui('file').setInputFiles({name:'large.srt',mimeType:'text/plain',buffer:Buffer.from(srt)});await ui('syncSettings').locator('summary').click();

@@ -48,7 +48,7 @@ ASS and SSA file styles do not apply. These text controls apply to their convert
 
 Website downloads are cached in **Saved**. The **Save** icon stores the current timing and appearance settings with the subtitle. Local files can also be saved.
 
-Use **Saved** to select a film and load its subtitle. The saved settings return with it. The remove icon deletes the library copy and settings. It also hides a rejected provider subtitle from later results. It leaves downloaded files on disk.
+Use **Saved** to choose **Films** or **Shows**. For a film, select the film. For a show, select the show, season, and episode. Episode names appear when available. Season 0 is **Specials**. Older saved episode titles are recognized automatically. Select a subtitle file to load it. The saved settings return with it. The remove icon deletes the library copy and settings. It also hides a rejected provider subtitle from later results. It leaves downloaded files on disk.
 
 The library is local to this extension installation. It does not sync to another device. Removing the extension can remove its library.
 

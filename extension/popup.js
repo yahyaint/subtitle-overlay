@@ -71,7 +71,7 @@ async function provider(message) {
 async function attach(show=true) {
   if (!tabId) throw new Error('Open a film in a normal browser tab first.');
   await chrome.scripting.executeScript({target:{tabId},func:hidden=>{globalThis.__subtitleOverlayStartHidden=hidden;},args:[!show]});
-  await chrome.scripting.executeScript({target: {tabId}, files: ['subtitles.js','subtitle-settings.js','film-detection.js','player-subtitles.js', 'content.js']});
+  await chrome.scripting.executeScript({target: {tabId}, files: ['subtitles.js','subtitle-settings.js','film-detection.js','player-subtitles.js','saved-library.js', 'content.js']});
   const reply = await chrome.tabs.sendMessage(tabId, {type: show ? 'SHOW_PANEL' : 'GET_STATUS'});
   if (!reply?.ok) throw new Error('Could not attach overlay.');
   $('player').textContent = reply.player ? 'Video connected. Controls are on the video.' : 'Start the film to connect the video.';
@@ -103,9 +103,14 @@ async function task(button, action) {
   try { await action(); } catch (error) { status(error.message, true); }
   finally { button.disabled = false; }
 }
+const savedBrowser=SubtitleLibraryView.create(document,'saved',()=>{
+  const entry=savedBrowser.selected()[0];
+  if(entry){$('query').value=entry.title;$('year').value=entry.year;shareSearch({query:entry.title,year:entry.year});}
+  renderLibrary();
+});
 function renderLibrary() {
   $('library').replaceChildren();
-  const entries=savedEntries.filter(item=>item.filmKey===$('savedFilm').value);
+  const entries=savedBrowser.selected();
   for(const entry of entries) {
     const row=document.createElement('div');row.className='saved-track';
     const load=document.createElement('button');load.className='saved-name';load.textContent=`${entry.language ? `${entry.language} · ` : ''}${entry.name}`;load.title=entry.name;
@@ -116,22 +121,14 @@ function renderLibrary() {
     bad.onclick=()=>task(bad,async()=>{await provider({type:'LIBRARY_RATE',id:entry.id,verdict:'bad',tabId});lastDownload=null;$('saveFile').hidden=true;await refreshLibrary(entry.filmKey);status('Subtitle deleted. This file will not appear in search results.');});
     row.append(load,good,bad);$('library').append(row);
   }
-  $('libraryHint').textContent=savedEntries.length ? 'Load a file. Save keeps its settings. Delete removes it.' : 'No saved subtitles. Downloads are saved here by film.';
+  $('libraryHint').textContent=savedBrowser.hint();
   $('savedCount').textContent=String(savedEntries.length);
 }
 async function refreshLibrary(selected) {
   try{activeLibraryId=(await chrome.tabs.sendMessage(tabId,{type:'GET_STATUS'}))?.libraryId || null;}catch{activeLibraryId=null;}
-  const previous=selected || $('savedFilm').value;
   savedEntries=(await provider({type:'LIBRARY_LIST'})).entries;
-  $('savedFilm').replaceChildren(); const seen=new Set();
-  for(const entry of savedEntries) {
-    if(seen.has(entry.filmKey)) continue;seen.add(entry.filmKey);
-    const option=document.createElement('option');option.value=entry.filmKey;option.textContent=`${entry.title}${entry.year ? ` (${entry.year})` : ''}`;$('savedFilm').append(option);
-  }
-  $('savedFilm').hidden=!savedEntries.length;
-  if(seen.has(previous)) $('savedFilm').value=previous;renderLibrary();
+  savedBrowser.update(savedEntries,selected,$('query').value);renderLibrary();
 }
-$('savedFilm').onchange=()=>{const entry=savedEntries.find(item=>item.filmKey===$('savedFilm').value);if(entry){$('query').value=entry.title;$('year').value=entry.year;shareSearch({query:entry.title,year:entry.year});}renderLibrary();};
 chrome.storage.onChanged.addListener((changes,area)=>{if(area==='local' && changes.subtitleLibrary) refreshLibrary().catch(error=>status(error.message,true));});
 $('attach').onclick = () => task($('attach'), async () => { await attach(); status('Controls opened on the video.'); });
 $('file').onchange = async () => {

@@ -36,7 +36,7 @@ Set the text style:
 Save for later:
 - Keep subtitles in a local library grouped by film.
 - Save timing and text settings with each subtitle.
-- Load saved files without another search.
+- Browse saved Films or Shows. Select a show, season, and episode, then load a saved file.
 
 Start a film, open the extension, and select Open controls. Local files need no account. API search needs your OpenSubtitles key. Website search needs no extension API key.
 
@@ -46,7 +46,7 @@ This is an independent extension. It is not affiliated with Disney+, OpenSubtitl
 
 The extension is free to use. The optional Tip link opens https://yahyanabil.com/support. A tip is not needed to use any feature.
 
-Version 0.8.7 is a preview. Live player compatibility and provider delivery can vary.
+Version 0.8.8 is a preview. Live player compatibility and provider delivery can vary.
 
 ## URLs and publisher
 

@@ -4,7 +4,7 @@ const project=path.resolve(__dirname,'..'),root=path.join(project,'extension'),o
 const version=JSON.parse(fs.readFileSync(path.join(root,'manifest.json'))).version;
 // Keep packaging independent of local files and browser-generated artifacts.
 const include=['background.js','content.js','download-folder.js','film-detection.js','icon-128.png','icon-16.png','icon-32.png','icon-48.png','logo.svg','manifest.json','player-clock-bridge.js','popup.css','popup.html','popup.js','sample.srt','subtitle-download.js','subtitle-search.js','subtitle-settings.js','subtitles.js','website-bridge.js','website-permission.css','website-permission.html','website-permission.js'];
-include.push('player-sources-bridge.js','player-subtitles.js','app-font.css','inter-variable.woff2','INTER-LICENSE.txt');
+include.push('saved-library.js','player-sources-bridge.js','player-subtitles.js','app-font.css','inter-variable.woff2','INTER-LICENSE.txt');
 const source=include.map(name=>[name,fs.readFileSync(path.join(root,name))]);
 const license=fs.readFileSync(path.join(project,'LICENSE'));
 function verifiedZip(filename,entries){

@@ -14,3 +14,5 @@ body>header,.action-dock{flex:none}main{display:flex;flex-direction:column;flex:
 
 /* Separate player tracks from online search in both Find views. */
 #view-find>#playerTracksSettings{margin:0 0 20px}
+
+.saved-kind{display:flex;gap:4px;padding:4px;background:#102234;border-radius:10px;margin:0 0 14px}.saved-kind button{flex:1;min-height:34px;border:0;background:transparent;color:#b0c0d5;font-size:12px;padding:6px 8px}.saved-kind button[aria-pressed=true]{background:#294864;color:#e7edf3}.saved-episode-fields{display:grid;grid-template-columns:100px minmax(0,1fr);gap:10px}.saved-episode-fields>div{min-width:0}

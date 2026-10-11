@@ -1,3 +1,10 @@
+## Version 0.8.8 - October 11, 2026
+
+- Added separate Films and Shows views to Saved in the popup and controller.
+- Added show, season, and episode selectors, episode names, and Specials.
+- Recognized older saved episode titles without changing stored subtitles or settings.
+- Grouped subtitle languages and release variants for the same episode.
+
 ## Version 0.8.7 - October 11, 2026
 
 - Fixed the delayed settings response that replaced the detected film with a saved search.
