@@ -1,6 +1,6 @@
 # Data and permission notes
 
-These notes describe version 0.7.16 from its source. They are inputs for the publisher's dashboard answers. They do not claim store acceptance or assign dashboard data categories.
+These notes describe version 0.7.17 from its source. They are inputs for the publisher's dashboard answers. They do not claim store acceptance or assign dashboard data categories.
 
 ## Purpose
 
@@ -27,7 +27,7 @@ The broad optional declaration remains because catalogs can use a user-selected 
 
 | Data | Where used or stored |
 | --- | --- |
-| Film metadata, video state, public clock controls | Read on the attached page to suggest titles and sync captions. |
+| Film metadata, video state, public player controls | Read on the attached page to suggest titles, sync captions, and avoid visible controls. |
 | Page address and selected provider/download URLs | Used locally to route a selected file to the film tab and match provider downloads. |
 | Subtitle text, film labels, language, sync and text settings, captured player appearance | Kept in extension-local storage. Exported copies go to the browser's download folder. |
 | Search title, language, optional year | Sent to the provider or source selected by the user. |
@@ -53,4 +53,4 @@ Player-file import requests only the selected public track URL, after Import. It
 
 ## Language groups and episode recognition
 
-Version 0.7.16 groups public player track labels by their language codes. It reads public playback and page metadata to suggest the film or episode. Series searches send the show, season, and episode numbers to the selected provider after the user starts a search. There are no new permissions.
+Version 0.7.17 groups public player track labels by their language codes. It reads public playback and page metadata to suggest the film or episode. Series searches send the show, season, and episode numbers to the selected provider after the user starts a search. There are no new permissions.

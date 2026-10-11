@@ -34,9 +34,11 @@ If the clock shows `--:--:--`, show the player's own controls. Wait for a readab
 
 ## Text style
 
-Open **Text style** to change font, weight, italic, size, colors, and background opacity. Open **Position** to set the top or bottom edge, distance, horizontal position, text alignment, and width. Open **Shadow** for its color, opacity, blur, and offsets. Open **Spacing** for line height, padding, and corner radius.
+Open **Text style** to change font, weight, italic, size, colors, and background opacity. Open **Position** to set the top or bottom edge, distance, horizontal position, text alignment, and width. **Avoid player controls** moves bottom subtitles above visible controls, then returns them to your chosen distance. Turn it off to keep a fixed position. Top subtitles stay fixed. Open **Shadow** for its color, opacity, blur, and offsets. Open **Spacing** for line height, padding, and corner radius.
 
 Select **Restore player style** to restore the appearance captured on Import. Delay, timing scale, sentence mode, and sync points stay the same. Save keeps your changes and the captured original style. Restore stays available when you load that saved subtitle.
+
+The lift uses readable page controls. For browser-drawn video controls, it uses recent interaction with the video as a visibility estimate. Players with hidden controls in a closed shadow root or another frame may not support the lift. It does not change timing, sentence-sync points, or the saved distance.
 
 Some players expose only native text cues. Their drawn font style is not readable. The import message tells you when only position is copied or no style is available. Unavailable fonts use the browser fallback. Multiple shadows, animations, per-line styles, vertical writing, and image effects are not copied.
 

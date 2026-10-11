@@ -12,6 +12,9 @@
 8. Repeat with two and three sentences on a longer subtitle file.
 9. Select **Save**. Open **Saved** and reload the subtitle. Check the saved settings.
 10. Seek forward and backward. Check the caption and current sentence.
+11. Show and hide readable video controls. Bottom captions should clear them and return to the selected distance. In **Text style → Position**, turn off **Avoid player controls** and check that the position stays fixed.
+
+Browser-drawn controls use recent interaction as a visibility estimate. Top captions stay fixed.
 
 No API key or provider account is needed for local files. The local sample is short; use a longer local track to test widely spaced sync points.
 

@@ -8,9 +8,10 @@
   let observedVideo=null;
   let playerTracksSignature='',playerTrackBusy=false;
   let manualCueSelection=null;
+  let controlElements=[],controlsChecked=-Infinity,controlsVideo=null,controlsPosition='',nativeControlsAt=-Infinity,nativePointerInside=false;
   let pageClock=null,clockToken='',clockBridgeError='';
   let clockSample=null,clockLastNative=null,clockTimelineElement=null,clockNeedsPosition=false,timelineElements=[],timelineChecked=-Infinity;
-  const state = {cues: [], ends: [], delay: 0, rate: 1, size: 30, font: 'system-ui, sans-serif', shadow:true, shadowColor:'#000000', shadowOpacity:100, shadowBlur:3, shadowOffset:2, color: '#edf0fb', background: '#000000', opacity: 72, bottom: 10, horizontal:50,width:94,positionEdge:'bottom',align:'center',weight:600,italic:false,lineHeight:1.35,paddingX:12,paddingY:3.6,radius:5,shadowX:0,originalStyle:null,enabled: true, name: '', libraryId:null, browserFullscreen:false, video: null, href: location.href};
+  const state = {cues: [], ends: [], delay: 0, rate: 1, size: 30, font: 'system-ui, sans-serif', shadow:true, shadowColor:'#000000', shadowOpacity:100, shadowBlur:3, shadowOffset:2, color: '#edf0fb', background: '#000000', opacity: 72, bottom: 10, horizontal:50,width:94,positionEdge:'bottom',avoidControls:true,align:'center',weight:600,italic:false,lineHeight:1.35,paddingX:12,paddingY:3.6,radius:5,shadowX:0,originalStyle:null,enabled: true, name: '', libraryId:null, browserFullscreen:false, video: null, href: location.href};
   const host = document.createElement('div'); host.id = 'subtitle-overlay-root'; host.dir='ltr'; host.lang='en';
   host.style.cssText = 'all:initial!important;position:fixed!important;inset:0!important;z-index:2147483647!important;pointer-events:none!important;direction:ltr!important;unicode-bidi:isolate!important;';
   const shadow = host.attachShadow({mode: 'open'});
@@ -22,6 +23,7 @@
     *{box-sizing:border-box}[hidden]{display:none!important}button,input,select{font:inherit;color:inherit;min-width:0}button{cursor:pointer}
     #captions{position:fixed;display:flex;align-items:flex-end;justify-content:center;pointer-events:none;padding:0 3%}
     #text{white-space:pre-line;unicode-bidi:plaintext;text-align:center;font-weight:600;line-height:1.35;max-width:100%;background:rgba(0,0,0,.72);padding:.12em .4em;border-radius:5px;text-shadow:0 2px 3px #000;overflow-wrap:anywhere}#text:empty{display:none}
+    #text.controls-motion{transition:bottom .16s ease-out}@media(prefers-reduced-motion:reduce){#text.controls-motion{transition:none}}
     #toggle{position:fixed;top:20px;right:20px;border:1px solid #3a5f7b;background:#102c42d9;color:#79bce9;width:42px;height:38px;border-radius:12px;pointer-events:auto;font-weight:750;opacity:.7}#toggle:hover{opacity:1}
     #panel{position:fixed;right:20px;top:68px;width:304px;max-width:calc(100vw - 40px);max-height:calc(100dvh - 88px);overflow:auto;background:rgba(18,24,32,.98);border:1px solid #344153;border-radius:16px;box-shadow:0 16px 60px #0007;padding:16px;pointer-events:auto}
     header{display:flex;gap:8px;align-items:center;margin-bottom:12px}header svg{width:28px;height:28px;flex:none}h2{font-size:13px;font-weight:650;letter-spacing:-.2px;margin:0;flex:1}
@@ -54,7 +56,7 @@
     <label for="delay">Delay (seconds)</label><div class="delay-row"><button id="earlier" title="Show subtitles 0.25 seconds earlier" aria-label="Show subtitles earlier">−</button><input id="delay" type="number" value="0" step="0.25" min="-86400" max="86400"><button id="later" title="Show subtitles 0.25 seconds later" aria-label="Show subtitles later">+</button><button id="reset" title="Reset timing">Reset</button></div>
     <p class="hint">A positive delay shows subtitles later.</p>
     <details id="syncSettings"><summary>Sentence sync</summary><label for="syncMode">Use</label><select id="syncMode"><option value="one">One sentence</option><option value="two">Two sentences</option><option value="three">Three sentences</option></select><p id="syncHint" class="hint">The current line is selected as the film plays. Pause when you hear a line start. Check the selected line, then click Sync.</p><label for="filter">Words you hear</label><input id="filter" placeholder="Enter part of the line" maxlength="200"><select id="cues" aria-label="Subtitle line to sync"></select><button id="sync">Sync to now</button><div id="pairSync" hidden><p id="anchorStatus" class="hint">No sync points set.</p><button id="markFirst">Set first point</button><button id="syncSecond" disabled>Sync second point</button><button id="syncThird" hidden disabled>Sync third point</button><button id="clearAnchors">Clear points</button></div></details>
-    <details id="textSettings"><summary>Text style</summary><button id="restorePlayerStyle" disabled>Restore player style</button><p id="playerStyleHint" class="hint" hidden></p><div class="grid"><label>Font<select id="font"><option value="system-ui, sans-serif">System</option><option value="Arial, sans-serif">Arial</option><option value="Verdana, sans-serif">Verdana</option><option value="Tahoma, sans-serif">Tahoma</option><option value="Georgia, serif">Georgia</option><option value="'Courier New', monospace">Courier New</option></select></label><label>Color<input id="color" type="color" value="#edf0fb"></label></div><div class="fields"><label>Weight<input id="weight" type="number" min="100" max="900" step="100" value="600"></label><label class="enabled"><input id="italic" type="checkbox">Italic</label></div><div class="swatches"><label>Background<input id="backgroundColor" type="color" value="#000000" aria-label="Subtitle background color"></label><label>Opacity <span id="opacityLabel">72%</span><input id="backgroundOpacity" type="range" min="0" max="100" value="72" aria-label="Subtitle background opacity"></label></div><p class="hint">0% is clear. 100% is solid.</p><details id="shadowSettings" class="shadow-options"><summary>Shadow</summary><label class="enabled"><input id="shadowEnabled" type="checkbox" checked>Show shadow</label><div class="fields"><label>Color<input id="shadowColor" type="color" value="#000000"></label><label>Opacity<input id="shadowOpacity" type="range" min="0" max="100" value="100"></label><label>Blur (px)<input id="shadowBlur" type="number" min="0" max="20" value="3"></label><label>Offset (px)<input id="shadowOffset" type="number" min="-20" max="20" value="2"></label><label>Horizontal offset (px)<input id="shadowX" type="number" min="-20" max="20" value="0"></label></div></details><label>Size <span id="sizeLabel">30px</span></label><div class="row"><input id="size" type="range" min="12" max="96" value="30" aria-label="Subtitle size slider"><input id="sizeNumber" type="number" min="12" max="96" value="30" aria-label="Subtitle size in pixels"></div><details class="shadow-options"><summary>Position</summary><div class="fields"><label>Edge<select id="positionEdge"><option value="bottom">Bottom</option><option value="top">Top</option></select></label><label>Text align<select id="align"><option value="center">Center</option><option value="left">Left</option><option value="right">Right</option><option value="start">Start</option><option value="end">End</option></select></label></div><label>Distance from edge <span id="bottomLabel">10%</span><input id="bottom" type="range" min="0" max="100" step="0.1" value="10"></label><label>Horizontal position<input id="horizontal" type="range" min="0" max="100" step="0.1" value="50"></label><label>Maximum width<input id="width" type="range" min="1" max="100" value="94"></label></details><details class="shadow-options"><summary>Spacing</summary><div class="fields"><label>Line height<input id="lineHeight" type="number" min="0.5" max="4" step="0.05" value="1.35"></label><label>Corner radius (px)<input id="radius" type="number" min="0" max="96" value="5"></label><label>Side padding (px)<input id="paddingX" type="number" min="0" max="96" step="0.1" value="12"></label><label>Vertical padding (px)<input id="paddingY" type="number" min="0" max="96" step="0.1" value="3.6"></label></div></details></details>
+    <details id="textSettings"><summary>Text style</summary><button id="restorePlayerStyle" disabled>Restore player style</button><p id="playerStyleHint" class="hint" hidden></p><div class="grid"><label>Font<select id="font"><option value="system-ui, sans-serif">System</option><option value="Arial, sans-serif">Arial</option><option value="Verdana, sans-serif">Verdana</option><option value="Tahoma, sans-serif">Tahoma</option><option value="Georgia, serif">Georgia</option><option value="'Courier New', monospace">Courier New</option></select></label><label>Color<input id="color" type="color" value="#edf0fb"></label></div><div class="fields"><label>Weight<input id="weight" type="number" min="100" max="900" step="100" value="600"></label><label class="enabled"><input id="italic" type="checkbox">Italic</label></div><div class="swatches"><label>Background<input id="backgroundColor" type="color" value="#000000" aria-label="Subtitle background color"></label><label>Opacity <span id="opacityLabel">72%</span><input id="backgroundOpacity" type="range" min="0" max="100" value="72" aria-label="Subtitle background opacity"></label></div><p class="hint">0% is clear. 100% is solid.</p><details id="shadowSettings" class="shadow-options"><summary>Shadow</summary><label class="enabled"><input id="shadowEnabled" type="checkbox" checked>Show shadow</label><div class="fields"><label>Color<input id="shadowColor" type="color" value="#000000"></label><label>Opacity<input id="shadowOpacity" type="range" min="0" max="100" value="100"></label><label>Blur (px)<input id="shadowBlur" type="number" min="0" max="20" value="3"></label><label>Offset (px)<input id="shadowOffset" type="number" min="-20" max="20" value="2"></label><label>Horizontal offset (px)<input id="shadowX" type="number" min="-20" max="20" value="0"></label></div></details><label>Size <span id="sizeLabel">30px</span></label><div class="row"><input id="size" type="range" min="12" max="96" value="30" aria-label="Subtitle size slider"><input id="sizeNumber" type="number" min="12" max="96" value="30" aria-label="Subtitle size in pixels"></div><details id="positionSettings" class="shadow-options"><summary>Position</summary><label class="enabled"><input id="avoidControls" type="checkbox" checked>Avoid player controls</label><div class="fields"><label>Edge<select id="positionEdge"><option value="bottom">Bottom</option><option value="top">Top</option></select></label><label>Text align<select id="align"><option value="center">Center</option><option value="left">Left</option><option value="right">Right</option><option value="start">Start</option><option value="end">End</option></select></label></div><label>Distance from edge <span id="bottomLabel">10%</span><input id="bottom" type="range" min="0" max="100" step="0.1" value="10"></label><label>Horizontal position<input id="horizontal" type="range" min="0" max="100" step="0.1" value="50"></label><label>Maximum width<input id="width" type="range" min="1" max="100" value="94"></label></details><details class="shadow-options"><summary>Spacing</summary><div class="fields"><label>Line height<input id="lineHeight" type="number" min="0.5" max="4" step="0.05" value="1.35"></label><label>Corner radius (px)<input id="radius" type="number" min="0" max="96" value="5"></label><label>Side padding (px)<input id="paddingX" type="number" min="0" max="96" step="0.1" value="12"></label><label>Vertical padding (px)<input id="paddingY" type="number" min="0" max="96" step="0.1" value="3.6"></label></div></details></details>
     <details id="advancedSettings"><summary>More settings</summary><label for="rate">Timing scale (%)</label><input id="rate" type="number" value="100" step="0.1" min="50" max="200"><p class="hint">Use 100 for normal timing. Increase this if subtitles gradually appear too early.</p><label class="file">Load subtitle file<input id="file" type="file" accept=".srt,.vtt,.sub,.ass,.ssa,.zip,.gz"></label><select id="localTracks" aria-label="Choose a subtitle file from the archive" hidden></select><label>File encoding<select id="encoding"><option value="utf-8">Automatic (UTF-8 / UTF-16)</option><option value="windows-1256">Arabic (Windows-1256)</option><option value="windows-1252">Western (Windows-1252)</option><option value="utf-16le">UTF-16 LE</option></select></label><label for="fileFps">SUB FPS (if needed)</label><input id="fileFps" type="number" min="1" max="120" step=".001" placeholder="23.976"><p class="hint">Use the FPS listed for a frame-based SUB file.</p><p class="hint">Alt+Shift+O: show controls.<br>Alt+Shift+Left/Right: change delay.</p><button id="remove">Remove overlay</button></details>
     </div>
     <div id="view-find" role="tabpanel" aria-labelledby="tab-find" hidden>
@@ -440,6 +442,58 @@
     refreshPlayerTracks();mount(); draw();
   }
   function seekFinished(){lastSyncTime=-1;lastCueIndex=-1;clockNeedsPosition=clockNeedsPosition || Boolean(clockSample);clockSample=null;clockLastNative=null;timelineChecked=-Infinity;}
+  // Control clearance is a render offset, never part of the film clock or saved position.
+  function controlsVisible(element){
+    for(let node=element;node;node=node.parentElement || node.getRootNode()?.host){
+      const style=getComputedStyle(node);
+      if(node.hidden || style.display==='none' || style.visibility==='hidden' || style.visibility==='collapse' || Number(style.opacity)<.05)return false;
+    }
+    return true;
+  }
+  function nativeControlsActivity(event){
+    const video=state.video;
+    if(!video?.controls)return;
+    if(event.composedPath().includes(host) || event.type==='pointerout' && !event.relatedTarget){nativePointerInside=false;return;}
+    if(event.type==='pointerout')return;
+    if(event.type==='keydown' || event.type==='focusin'){
+      if(event.composedPath().includes(video))nativeControlsAt=performance.now();
+      return;
+    }
+    const rect=video.getBoundingClientRect();
+    nativePointerInside=event.clientX>=rect.left && event.clientX<=rect.right && event.clientY>=rect.top && event.clientY<=rect.bottom;
+    if(nativePointerInside)nativeControlsAt=performance.now();
+  }
+  function liftCaptions(video,rect,animate){
+    const text=$('text'),style=text.style,base=rect.height*state.bottom/100;
+    if(controlsVideo!==video){controlsVideo=video;controlsPosition='';controlElements=[];controlsChecked=-Infinity;nativeControlsAt=-Infinity;nativePointerInside=false;}
+    const position=[rect.left,rect.top,rect.width,rect.height,state.bottom,state.positionEdge,state.avoidControls].join(':');
+    text.classList.toggle('controls-motion',animate && controlsPosition===position);controlsPosition=position;
+    if(state.positionEdge!=='bottom'){style.bottom='auto';return;}
+    if(!state.avoidControls || !text.textContent || rect.height<=0){style.bottom=state.bottom+'%';return;}
+    const now=performance.now();
+    if(now-controlsChecked>600){
+      controlsChecked=now;
+      const selector='[role="slider"],input[type="range"],button[aria-label],button[title],[data-testid*="control" i],[class*="controls" i],[class*="control-bar" i],[class*="controlbar" i]';
+      controlElements=publicRoots().flatMap(root=>[...root.querySelectorAll(selector)]).filter(element=>{
+        const hints=[element.className,element.id,element.getAttribute('data-testid'),element.getAttribute('aria-label'),element.getAttribute('title')].join(' ');
+        return !/volume|brightness/i.test(hints) && /controls?|timeline|seek|scrub|progress|play|pause|full.?screen|تشغيل|إيقاف/i.test(hints);
+      }).slice(0,200);
+    }
+    const caption=text.getBoundingClientRect();let controlTop=rect.bottom;
+    for(const element of controlElements){
+      if(!element.isConnected || !controlsVisible(element))continue;
+      const box=element.getBoundingClientRect();
+      // Ignore page toolbars, controls below the video, and full-size player wrappers.
+      if(box.width<=0 || box.height<=0 || box.top<rect.top+rect.height*.6 || box.bottom>rect.bottom+2 || box.height>rect.height*.4 || box.left>=caption.right || box.right<=caption.left)continue;
+      controlTop=Math.min(controlTop,box.top);
+    }
+    // Browser-drawn controls have no public DOM. Use a bounded interaction fallback.
+    const nativeActive=video.controls && (now-nativeControlsAt<2500 || video.paused && nativePointerInside && Number.isFinite(nativeControlsAt));
+    if(nativeActive)controlTop=Math.min(controlTop,rect.bottom-Math.min(72,rect.height*.2));
+    const needed=controlTop<rect.bottom ? rect.bottom-controlTop+12 : base;
+    const bottom=Math.max(base,Math.min(needed,Math.max(0,rect.height-caption.height-8)));
+    style.bottom=bottom>base ? bottom+'px' : state.bottom+'%';
+  }
   function draw() {
     const video = state.video;
     if (!video?.isConnected) { $('text').textContent = ''; return; }
@@ -447,7 +501,7 @@
     $('captions').style.cssText = `left:${rect.left}px;top:${rect.top}px;width:${rect.width}px;height:${rect.height}px;padding:0;`;
     const textStyle=$('text').style;
     textStyle.position='absolute';textStyle.left=state.horizontal+'%';textStyle.transform='translateX(-50%)';textStyle.maxWidth=state.width+'%';
-    textStyle.top=state.positionEdge==='top' ? state.bottom+'%' : 'auto';textStyle.bottom=state.positionEdge==='bottom' ? state.bottom+'%' : 'auto';
+    textStyle.top=state.positionEdge==='top' ? state.bottom+'%' : 'auto';
     textStyle.textAlign=state.align;textStyle.fontWeight=String(state.weight);textStyle.fontStyle=state.italic ? 'italic' : 'normal';textStyle.lineHeight=String(state.lineHeight);textStyle.padding=state.paddingY+'px '+state.paddingX+'px';textStyle.borderRadius=state.radius+'px';
     $('text').style.fontSize = `${state.size}px`;
     $('text').style.fontFamily = state.font;
@@ -458,7 +512,9 @@
     $('text').style.textShadow=state.shadow ? state.shadowX+'px '+state.shadowOffset+'px '+state.shadowBlur+'px rgba('+shadowRgb.join(',')+','+(state.shadowOpacity/100)+')' : 'none';
     const clock=playbackClock(),time=clock.time;
     const text = state.enabled ? core.active(state.cues, state.ends, time, state.delay, state.rate) : '';
+    const startsCaption=!$('text').textContent && Boolean(text);
     if ($('text').textContent !== text) $('text').textContent = text;
+    liftCaptions(video,rect,!startsCaption);
     $('time').textContent = Number.isFinite(time) ? core.clock(time) : '--:--:--';$('time').title=clock.source;
     $('videoStatus').textContent=Number.isFinite(time) ? 'Video connected' : clockNeedsPosition ? 'Show video controls to read time.' : 'Wait for the video clock.';
     updateSyncButtons();
@@ -543,7 +599,7 @@
     if(!Array.from($('font').options).some(option=>option.value===state.font)){const option=document.createElement('option');option.value=state.font;option.textContent=state.font;$('font').append(option);}
     anchors=clean.anchors;$('encoding').value=clean.encoding;$('syncMode').value=clean.syncMode;
     for(const [id,key] of [['weight','weight'],['positionEdge','positionEdge'],['align','align'],['horizontal','horizontal'],['width','width'],['lineHeight','lineHeight'],['paddingX','paddingX'],['paddingY','paddingY'],['radius','radius'],['shadowX','shadowX'],['delay','delay'],['font','font'],['color','color'],['backgroundColor','background'],['backgroundOpacity','opacity'],['bottom','bottom'],['shadowColor','shadowColor'],['shadowOpacity','shadowOpacity'],['shadowBlur','shadowBlur'],['shadowOffset','shadowOffset']])$(id).value=String(key==='delay' ? Math.round(state.delay*1000)/1000 : state[key]);
-    $('italic').checked=state.italic;$('playerStyleHint').hidden=!state.originalStyle;$('playerStyleHint').textContent=state.originalStyle ? 'Restore the appearance captured on Import. Timing stays the same.' : '';
+    $('avoidControls').checked=state.avoidControls;$('italic').checked=state.italic;$('playerStyleHint').hidden=!state.originalStyle;$('playerStyleHint').textContent=state.originalStyle ? 'Restore the appearance captured on Import. Timing stays the same.' : '';
     $('rate').value=String(state.rate*100);$('enabled').checked=state.enabled;$('shadowEnabled').checked=state.shadow;
     $('opacityLabel').textContent=state.opacity+'%';$('bottomLabel').textContent=state.bottom+'%';setSize(state.size);syncMode();
   }
@@ -592,6 +648,7 @@
     state.rate = value / 100; setDelay(now - subtitleTime * state.rate);
   };
   $('restorePlayerStyle').onclick=event=>{if(event.isTrusted && state.originalStyle){applySettings({...currentSettings(),...state.originalStyle});draw();message('Player text style and position restored. Timing kept.');}};
+  $('avoidControls').onchange=()=>{state.avoidControls=$('avoidControls').checked;draw();};
   $('italic').onchange=()=>{state.italic=$('italic').checked;draw();};
   for(const key of ['positionEdge','align'])$(key).onchange=()=>{state[key]=$(key).value;draw();};
   for(const [key,min,max] of [['weight',100,900],['horizontal',0,100],['width',1,100],['lineHeight',.5,4],['paddingX',0,96],['paddingY',0,96],['radius',0,96]])$(key).oninput=()=>{const value=Number($(key).value);if($(key).value && Number.isFinite(value) && value>=min && value<=max){state[key]=value;draw();}};
@@ -665,6 +722,7 @@
   document.addEventListener('fullscreenchange', fullscreenChanged);
   document.addEventListener('pointermove',wakeControls);
   document.addEventListener('pointermove',captureControls);
+  for(const name of ['pointermove','pointerdown','pointerout','keydown','focusin'])document.addEventListener(name,nativeControlsActivity);
   window.addEventListener('resize',browserFullscreenStatus);
   document.addEventListener('keydown', keydown);
   const discoveryTimer = setInterval(discover, 1200), drawTimer = setInterval(draw, 80);
@@ -675,6 +733,7 @@
     clearInterval(discoveryTimer); clearInterval(drawTimer);clearTimeout(idleTimer);clearTimeout(controlCaptureTimer);document.removeEventListener('pointermove',captureControls); chrome.runtime.onMessage.removeListener(receive);
     document.removeEventListener('fullscreenchange', fullscreenChanged); document.removeEventListener('keydown', keydown);document.removeEventListener('pointermove',wakeControls);window.removeEventListener('resize',browserFullscreenStatus);
     host.remove(); delete globalThis.__subtitleOverlay;
+    for(const name of ['pointermove','pointerdown','pointerout','keydown','focusin'])document.removeEventListener(name,nativeControlsActivity);
   };
   globalThis.__subtitleOverlay = {show}; mount(); renderCues(); discover();browserFullscreenStatus();
 })();

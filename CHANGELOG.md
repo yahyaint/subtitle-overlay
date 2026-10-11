@@ -1,5 +1,11 @@
 # Changes
 
+## 0.7.17 - October 11, 2026
+
+- Move bottom subtitles above visible player controls and return them to the selected distance when controls hide.
+- Add Avoid player controls under Text style → Position. Keep saved positions, imported appearance, timing, and sentence-sync points.
+- Read open shadow-root controls and parent visibility. Use an interaction estimate for browser-drawn controls. Respect reduced motion.
+
 ## 0.7.16 - October 11, 2026
 
 - Remove Use player and Restore player from the popup and overlay. Use Import for player subtitles.

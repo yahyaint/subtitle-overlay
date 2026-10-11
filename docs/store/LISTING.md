@@ -12,7 +12,7 @@ Find, save, and sync subtitles over browser video. Change the font, color, size,
 
 Read. Sync. Watch.
 
-Add external subtitles to a video in your browser. Use a local file or search OpenSubtitles. Keep the controls on the video so you can adjust the subtitles while you watch.
+Add external subtitles to a video in your browser. Use a local file or search OpenSubtitles. Keep the controls on the video so you can adjust the subtitles while you watch. Bottom subtitles move above readable player controls, then return to your chosen position.
 
 Find and load:
 - Load SRT, WebVTT, ASS, SSA, or text SUB files.

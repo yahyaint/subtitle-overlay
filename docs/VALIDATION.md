@@ -1,5 +1,13 @@
 # Local validation
 
+## 0.7.17 player-control clearance - October 11, 2026
+
+Bottom captions clear visible lower player controls and return to the configured distance when the controls hide. Avoid player controls is enabled by default under Text style > Position and can be saved with a subtitle. The lift is a temporary render offset. It does not change the saved distance, imported original appearance, delay, rate, or sync points.
+
+The shadow-clock browser fixture checks control bounds in a sibling open shadow root, parent opacity/display/visibility, reduced motion, opt-out, top captions, positions already above controls, and controls below the video. A focused final check also confirms that a new line after a gap appears above visible controls immediately. Native browser controls use a bounded video-interaction estimate because their drawn bounds are not public. Closed shadow roots and cross-frame controls may not be supported.
+
+All eight local integration suites pass. Style import/restore, saved presets, file/download paths, fullscreen, large subtitle tracks, segmented film clocks, forward/backward seeks, and all three sentence-sync modes pass their regression checks. Static checks and updated real-UI store assets pass. The clock and sentence-fit algorithms are unchanged. No new permissions were added. These are isolated local Chromium fixtures; the new clearance behavior still needs a live check in the user's signed-in player.
+
 ## 0.7.16 simplified player actions - October 11, 2026
 
 Use player and Restore player are removed from the popup and overlay. Import and Refresh remain. The unused native-display action and its disabled-control state are removed. Restore player style remains in Text style.
