@@ -60,7 +60,7 @@ Reviewed visual distance: shell/navigation 2, silhouette 2, grouping 1, typograp
 
 Three local concepts were rendered at desktop and 390px widths. Screening Room was integrated, then checked against the previous controller screenshots. The score is 22/26: shell/navigation 6, silhouette 6, grouping 2, typography 1, rhythm 1, component grammar 4, palette/motion 2. The rail, bottom action dock, and timing card change the main layout. The marine identity and native disclosure behavior remain familiar. Inter replaces the system UI typeface.
 
-Text and focus checks use the actual local theme. White on marine actions and silver text on the dark marine shell meet the sampled minimum contrast check; muted gold marks focus and navigation. These checks cover the sampled theme roles, not a full accessibility certification. SVG decoration is hidden from assistive technology. Tabs have names, selected state, and vertical arrow-key navigation. Short windows scroll within the workspace while the header and tool rail remain available.
+Text and focus checks use the actual local theme. White on marine actions and silver text on the dark marine shell meet the sampled minimum contrast check; soft white marks focus and navigation. These checks cover the sampled theme roles, not a full accessibility certification. SVG decoration is hidden from assistive technology. Tabs have names, selected state, and vertical arrow-key navigation. Short windows scroll within the workspace while the header and tool rail remain available.
 
 Tool changes reset workspace scroll to show the view heading. They retain form inputs, playback time, and subtitle settings. Player import sits below the search form in Find. Caption lift and reduced-motion behavior remain in the rendering path.
 
@@ -69,7 +69,7 @@ Tool changes reset workspace scroll to show the view heading. They retain form i
 
 The user requested a new UI font and three main colors, then chose marine as the dominant color. Inter is selected for the app labels and controls. Its [official design notes](https://rsms.me/inter/) describe small-text optical sizing, interface use, and tabular numerals. The variable font is bundled locally, including its upstream copyright notice. No CDN request is made during use. The caption font remains a user setting. Removal releases the controller's font registration.
 
-The final palette adapts [Color Hunt's navy/marine/gold palette](https://colorhunt.co/palette/191d881450a3337ccfffc436). Muted marine `#274c73` is the dominant identity, with deep marine surfaces. Muted gold `#c6b07c` marks selected tools, focus, and timing. Silver `#e7edf3` supports text. Accents occupy small areas; file surfaces stay marine. The original logo is retained. Contrast follows the [W3C minimum-contrast guidance](https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum).
+The final palette adapts [Color Hunt's navy/marine/gold palette](https://colorhunt.co/palette/191d881450a3337ccfffc436). Muted marine `#274c73` is the dominant identity, with deep marine surfaces. Soft white `#dce4ec` marks selected tools, focus, and timing. Silver `#e7edf3` supports text. Accents occupy small areas; file surfaces stay marine. The original logo is retained. Contrast follows the [W3C minimum-contrast guidance](https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum).
 
 Font source: `https://rsms.me/inter/font-files/InterVariable.woff2?v=4.1`.
 Font SHA-256: `693b77d4f32ee9b8bfc995589b5fad5e99adf2832738661f5402f9978429a8e3`.
@@ -91,3 +91,5 @@ The 0.8.2 refinement widens the popup to 440 px, reduces saturation across the a
 Version 0.8.3 sets an intrinsic 440 px popup document/body width. The previous viewport-capped width could shrink in Vivaldi. The header no longer includes the decorative three-bar mark. Narrow-window responsiveness remains on the video controller.
 
 The actual Chrome action popup is measured through its CDP target after chrome.action.openPopup: 440 px content width and a footer contained within the browser-limited height. The main wrapper is a flex column so the workspace absorbs scrolling; the header and file actions stay visible.
+
+Version 0.8.4 replaces the remaining gold UI accents with soft white. Caption colors are unchanged.

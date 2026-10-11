@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.8.4 - October 11, 2026
+
+- Replace gold UI accents with soft white. Keep the marine background and user-selected caption colors.
+
 ## 0.8.3 - October 11, 2026
 
 - Fix popup sizing with an intrinsic 440 px document and body width. Do not cap it to the browser's initial popup viewport.

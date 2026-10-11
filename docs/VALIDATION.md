@@ -1,5 +1,11 @@
 # Local validation
 
+## 0.8.4 soft-white accents - October 11, 2026
+
+Soft white #dce4ec replaces gold #c6b07c in the popup, controller, and subtitle website setup. Marine surfaces and caption colors remain unchanged.
+
+Static and package checks pass. A byte comparison confirms that the three theme files change only this color literal. The upload archive contains the new accent and no old gold accent in these files. Browser-render checks were attempted but Chromium exited with access denied under the current local process sandbox. No new browser-render pass is claimed. The store screenshots remain the real 0.8.3 captures. The earlier popup sizing and behavioral checks remain the baseline.
+
 ## 0.8.3 intrinsic browser popup sizing - October 11, 2026
 
 The popup document and body have an intrinsic 440 px width. The old viewport-capped rule could retain Vivaldi's narrow starting viewport. The three-bar header decoration and its CSS are removed. The document requests 590 px height; the body fits the available height. Main is a flex column so only the workspace scrolls while the header and file-action footer remain visible.
