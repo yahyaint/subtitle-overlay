@@ -8,10 +8,12 @@ Add your own subtitles to browser video. Find a subtitle, set its timing, and ch
 
 ## Features
 
-- Detect readable subtitle tracks in the selected player. Keep the player display or import loaded lines into the overlay.
+- Group player subtitle tracks by language. See each language name and track count. Filter the list before Import.
+- Import readable player lines, text style, and position. Restore player style from Text style.
 - Load SRT, WebVTT, ASS, SSA, and text SUB files. Open ZIP and gzip files.
 - Search OpenSubtitles through its website or API.
-- Get a film title suggestion from the player. Edit it before you search.
+- Get a film or show suggestion from player metadata. For a series, include the season, episode number, and readable episode name. Edit it before you search.
+- Select a subtitle language from a named list.
 - Adjust the delay. Sync with one, two, or three sentences.
 - Change the font, size, color, background, and shadow.
 - Save subtitles and their timing and text settings on this device.
@@ -55,7 +57,7 @@ The library stays on this device. Deleting a library item does not delete files 
 - ASS and SSA text and timing are supported. Embedded styles and effects are not rendered.
 - Image subtitles, RAR files, encrypted ZIP files, and archives over the 2 MB limit are not supported.
 - Audio tools find sources and download direct audio files. They do not replace or sync the stream's audio.
-- Authenticated OpenSubtitles delivery still needs confirmation for version 0.7.13.
+- Authenticated OpenSubtitles delivery still needs confirmation for version 0.7.14.
 
 ## Use player subtitles
 

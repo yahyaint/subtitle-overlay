@@ -1,5 +1,13 @@
 # Changes
 
+## 0.7.14 - October 11, 2026
+
+- Group detected player tracks by named language and show track counts. Filter groups in the popup and overlay.
+- Replace typed search languages with named dropdown lists.
+- Recognize show name, season, episode number, and readable episode name from player and page metadata.
+- Search episodes with season and episode filters. Keep Saved entries separate for each episode.
+- Keep loaded subtitles and sync settings when only episode names or optional metadata change.
+
 ## 0.7.13 — October 11, 2026
 
 - Import readable player caption appearance and position with subtitle lines.

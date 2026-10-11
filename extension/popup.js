@@ -1,3 +1,4 @@
+function setLanguage(value){const select=document.getElementById('language'),code=String(value || 'en').toLowerCase();if(/^[a-z]{2,3}(?:-[a-z0-9]{2,8})*$/.test(code) && !Array.from(select.options).some(item=>item.value===code)){const option=document.createElement('option');option.value=code;option.textContent=code;select.append(option);}select.value=code;if(!select.value)select.value='en';}
 const $ = id => document.getElementById(id);
 let tabId, lastDownload;
 let savedEntries=[];
@@ -57,19 +58,17 @@ async function refreshPlayerTracks() {
   if(playerTrackBusy)return;
   const reply=await chrome.tabs.sendMessage(tabId,{type:'GET_PLAYER_TRACKS'});
   if(!reply?.ok)throw new Error(reply?.error || 'Open controls to connect the video.');
-  const previous=$('playerTracks').value,tracks=reply.tracks;
-  $('playerTracks').replaceChildren();
-  for(const track of tracks){const option=document.createElement('option');option.value=track.id;option.textContent=track.label+(track.language && track.language!==track.label ? ' · '+track.language : '')+' · '+(track.count===null ? 'not loaded' : track.count+' lines');$('playerTracks').append(option);}
-  $('playerTracks').value=tracks.some(track=>track.id===previous) ? previous : (tracks.find(track=>track.mode==='showing') || tracks[0])?.id || '';
-  $('playerTrackCount').textContent=String(tracks.length);$('playerTracks').disabled=!tracks.length;
-  $('usePlayerTrack').disabled=!tracks.length;$('importPlayerTrack').disabled=!tracks.length;
-  $('playerTracksHint').textContent=tracks.length ? 'Select a track. Import loads its file or copies readable lines.' : 'No readable tracks. Select a language in the player, then refresh.';
+  const tracks=reply.tracks,grouped=globalThis.SubtitlePlayerTracks.renderOptions(tracks,$('playerTracks'),$('playerLanguage'));
+  $('playerTrackCount').textContent=String(tracks.length);
+  $('usePlayerTrack').disabled=!grouped.visible.length;$('importPlayerTrack').disabled=!grouped.visible.length;
+  $('playerTracksHint').textContent=tracks.length ? grouped.languages+' languages. Select a track, then Import.' : 'No readable tracks. Select a language in the player, then refresh.';
 }
 for(const [id,action] of [['usePlayerTrack','original'],['importPlayerTrack','import'],['restorePlayerTracks','restore']])$(id).onclick=()=>task($(id),async()=>{
   playerTrackBusy=true;
   try{await attach(false);const reply=await chrome.tabs.sendMessage(tabId,{type:'PLAYER_TRACK_ACTION',action,id:$('playerTracks').value});if(!reply?.ok)throw new Error(reply?.error || 'Track load failed.');status(action==='import' ? reply.count+' loaded lines imported. Use video controls for timing, style, and Save.' : action==='original' ? 'Player subtitles shown. Import to change timing or style.' : 'Player subtitle choices restored.');}
   finally{playerTrackBusy=false;await refreshPlayerTracks();}
 });
+$('playerLanguage').onchange=()=>refreshPlayerTracks().catch(error=>status(error.message,true));
 $('refreshPlayerTracks').onclick=()=>task($('refreshPlayerTracks'),async()=>{await attach(false);await refreshPlayerTracks();});
 async function task(button, action) {
   button.disabled = true;
@@ -179,7 +178,7 @@ $('saveFile').onclick = () => {
   const searchSettings=await provider({type:'SUBTITLE_SEARCH_SETTINGS'});
   const prefs=searchSettings.preferences;
   defaultSearchUrl=searchSettings.defaultUrl;
-  $('query').value=prefs.title || '';$('language').value=prefs.language;$('year').value=prefs.year || '';
+  $('query').value=prefs.title || '';setLanguage(prefs.language);$('year').value=prefs.year || '';
   $('searchMode').value=prefs.mode;$('searchUrl').value=prefs.urlTemplate;searchMode();
   try{
     const previousTitle=$('query').value;

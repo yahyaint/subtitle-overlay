@@ -1,3 +1,4 @@
+function setLanguage(value){const select=document.getElementById('language'),code=String(value || 'en').toLowerCase();if(/^[a-z]{2,3}(?:-[a-z0-9]{2,8})*$/.test(code) && !Array.from(select.options).some(item=>item.value===code)){const option=document.createElement('option');option.value=code;option.textContent=code;select.append(option);}select.value=code;if(!select.value)select.value='en';}
 const $ = id => document.getElementById(id);
 let providers = [];
 function status(text, error = false) { $('status').textContent = text; $('status').classList.toggle('error', error); }
@@ -124,5 +125,5 @@ $('directForm').onsubmit = event => { event.preventDefault(); task(event.submitt
 (async () => {
   const settings = await configuration(); const params = new URLSearchParams(location.search);
   $('title').value = params.get('title') || settings.preferences.title || ''; $('year').value = params.get('year') || settings.preferences.year || '';
-  $('language').value = params.get('language') || settings.preferences.language || 'en';
+  setLanguage(params.get('language') || settings.preferences.language || 'en');
 })().catch(error => status(error.message, true));

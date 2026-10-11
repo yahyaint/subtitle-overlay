@@ -1,5 +1,24 @@
 /* Read public tracks and their selected subtitle file. No network interception. */
 (() => {
+  function languageName(code) {
+    if(!code || code==='und')return 'Unknown language';
+    try{return new Intl.DisplayNames(['en'],{type:'language'}).of(code) || code;}catch{return code;}
+  }
+  function groupTracks(tracks) {
+    const groups=new Map();
+    for(const track of tracks){const raw=String(track.language || '').toLowerCase().replaceAll('_','-'),code=/^[a-z]{2,3}(?:-[a-z0-9]{2,8})*$/.test(raw) ? raw : 'und';if(!groups.has(code))groups.set(code,{code,name:languageName(code),tracks:[]});groups.get(code).tracks.push(track);}
+    return Array.from(groups.values()).sort((a,b)=>a.code==='und' ? 1 : b.code==='und' ? -1 : a.name.localeCompare(b.name));
+  }
+  function renderOptions(tracks,select,languages) {
+    const doc=select.ownerDocument,groups=groupTracks(tracks),filter=languages.value,previous=select.value;
+    const option=(value,label)=>{const node=doc.createElement('option');node.value=value;node.textContent=label;return node;};
+    languages.replaceChildren(option('*','All languages ('+tracks.length+')'),...groups.map(group=>option(group.code,group.name+' ('+group.tracks.length+')')));
+    languages.value=groups.some(group=>group.code===filter) ? filter : '*';languages.disabled=!tracks.length;
+    const shown=groups.filter(group=>languages.value==='*' || group.code===languages.value);select.replaceChildren();
+    for(const group of shown){const section=doc.createElement('optgroup');section.label=group.name+' ('+group.tracks.length+')';for(const track of group.tracks)section.append(option(track.id,track.label+(track.language && track.language!==track.label ? ' · '+track.language : '')+' · '+(track.count===null ? 'not loaded' : track.count+' lines')));select.append(section);}
+    const visible=shown.flatMap(group=>group.tracks);select.value=visible.some(track=>track.id===previous) ? previous : (visible.find(track=>track.mode==='showing') || visible[0])?.id || '';select.disabled=!visible.length;
+    return {visible,languages:groups.length};
+  }
   function create({getVideo,getTime,core}) {
     let video=null,revision=0,nextId=0,pending=null,lastCaption=null;
     const hiddenCaptions=new Map();
@@ -171,5 +190,5 @@
     }
     return {list,use,hide,read,restore};
   }
-  globalThis.SubtitlePlayerTracks={create};
+  globalThis.SubtitlePlayerTracks={create,groupTracks,renderOptions,languageName};
 })();

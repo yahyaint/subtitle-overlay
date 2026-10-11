@@ -18,4 +18,10 @@ To update: replace these files in the same folder, select **Reload** in the brow
 
 In **Find → Player subtitles**, select **Use player** to keep the original display, or **Import** to load the selected file or copy readable lines, player style, and position into the overlay. Under **Text style**, **Restore player style** restores the captured appearance and keeps timing and sentence-sync points. Save keeps the original style with your current settings. Some player styles are not readable. **Restore player** restores caption choices changed by the extension. Only public tracks are listed; some players expose none.
 
-Version 0.7.13 is a preview. The publisher confirmed Disney+ playback, seeking, and sentence sync in Vivaldi on Windows with 0.7.10. The new player-subtitle import still needs a live Disney+ check. Authenticated OpenSubtitles delivery still needs confirmation.
+Version 0.7.14 is a preview. The publisher confirmed Disney+ playback, seeking, and sentence sync in Vivaldi on Windows with 0.7.10. The new player-subtitle import still needs a live Disney+ check. Authenticated OpenSubtitles delivery still needs confirmation.
+
+## Languages and series
+
+In Find, select a subtitle language from the list. Open Player subtitles to see tracks grouped by language, with a count for each group. Select a language to filter the track list. Unknown language keeps tracks with no valid language code.
+
+Player metadata supplies the current film or show first. Episode suggestions use show name, season, episode number, and a readable episode name, such as The Bear S03E04 - Violet. Website search and API search use the episode numbers. Saved subtitles stay separate for each episode. Edit the suggestion when the page gives incomplete or stale metadata.

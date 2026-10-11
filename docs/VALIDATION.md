@@ -1,5 +1,15 @@
 # Local validation
 
+## 0.7.14 languages and series - October 11, 2026
+
+The popup and overlay group selected-player tracks by their language codes. Browser tests check named groups, counts, language filtering, filter retention on refresh, regional codes, and Unknown language. Discovery still leaves track modes and lazy file loading unchanged.
+
+All 53 search language options map to a website language filter. Episode tests cover Media Session titles and album metadata, player attributes, special episodes, JSON-LD with referenced season/series nodes, episode-only player titles, and editable search fields. API search sends the show name, season, and episode numbers. Saved routing separates episodes. Missing episode names and optional metadata keep the loaded subtitle and timing; a new episode clears the old subtitle.
+
+An isolated Chromium check of the supplied Cinejoy page recognizes The Bear S03E04 - Violet from player metadata and page details. It groups 91 public tracks, including 14 Arabic tracks. Media requests were blocked. This checks public metadata and groups, not full live playback or the user's Vivaldi window.
+
+All eight local integration suites pass. A final automatic-download/recognition rerun also passes after the last language-map and title-punctuation changes. Style import/restore, all three sentence-sync modes, segmented clocks, seeking, file imports, and downloads pass their regression checks. Static checks and four real-UI store screenshots pass. No new permissions were added.
+
 ## 0.7.13 player appearance — October 11, 2026
 
 The supplied Cinejoy episode imported 641 English lines and its public caption appearance: Inter at 28.8 px, white text, a black background at 50% opacity, a 2 px shadow offset with 4 px blur, padding, and video-relative position. The check used an isolated Chromium window with media requests blocked. It checks subtitle loading and appearance capture, not full live playback or the user's Vivaldi window.

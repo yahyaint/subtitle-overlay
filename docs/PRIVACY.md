@@ -1,6 +1,6 @@
 # Subtitle Overlay privacy notice
 
-Version: 0.7.13. Updated: October 11, 2026. Publisher: yahyaint.
+Version: 0.7.14. Updated: October 11, 2026. Publisher: yahyaint.
 
 ## Data on this device
 
@@ -53,3 +53,7 @@ Uninstall the extension to remove its remaining extension storage. Files already
 ## Contact
 
 Use [the project's issue page](https://github.com/yahyaint/subtitle-overlay/issues) for privacy questions. Do not include passwords or tokens in a public issue.
+
+## Language groups and episode suggestions
+
+Player track language codes supply the language groups and counts. Film and series suggestions read public playback metadata, declared page metadata, visible titles, and matching caption labels. Series suggestions can include the show, season, episode number, and episode name. Suggestions stay editable. The extension sends these search fields to the selected provider only when you search. These changes add no permissions or telemetry.

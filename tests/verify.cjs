@@ -292,9 +292,12 @@ const server = http.createServer((req, res) => {res.writeHead(200, {'Content-Typ
     assert(requests.some(request=>request.url.startsWith('https://vip-api.opensubtitles.com/api/v1/subtitles?')));
     assert(requests.some(request=>request.body==='{"file_id":1234,"sub_format":"srt"}'));
     passed('Mocked provider login, VIP routing, search file ID and download-to-overlay');
+    const episodeSearch=await popup.evaluate(()=>chrome.runtime.sendMessage({type:'SEARCH',query:'The Bear S03E04 - Violet',language:'ar'}));assert.equal(episodeSearch.results[0].title,'The Bear S03E04 - Violet');const seriesRequests=await worker.evaluate(()=>globalThis.__requests);const episodeUrl=new URL(seriesRequests.at(-1).url);assert.equal(episodeUrl.searchParams.get('query'),'The Bear');assert.equal(episodeUrl.searchParams.get('season_number'),'3');assert.equal(episodeUrl.searchParams.get('episode_number'),'4');assert.equal(episodeUrl.searchParams.get('type'),'episode');
+    passed('Episode API search uses show title and separate season/episode filters; returned files keep their full episode identity');
+
     await page.locator('#subtitle-overlay-root #tab-find').click();
     await page.locator('#subtitle-overlay-root #overlayQuery').fill('Test Film');
-    await page.locator('#subtitle-overlay-root #overlayLanguage').fill('ar');
+    await page.locator('#subtitle-overlay-root #overlayLanguage').selectOption('ar');
     await page.locator('#subtitle-overlay-root #overlayYear').fill('2020');
     await page.locator('#subtitle-overlay-root #overlaySearchMode').selectOption('api');
     assert.equal(await page.locator('#subtitle-overlay-root #overlaySearchButton').textContent(),'Find subtitles');

@@ -1,6 +1,6 @@
 # Data and permission notes
 
-These notes describe version 0.7.13 from its source. They are inputs for the publisher's dashboard answers. They do not claim store acceptance or assign dashboard data categories.
+These notes describe version 0.7.14 from its source. They are inputs for the publisher's dashboard answers. They do not claim store acceptance or assign dashboard data categories.
 
 ## Purpose
 
@@ -50,3 +50,7 @@ SoundCloud preview opens a third-party iframe only after the user selects Previe
 The publisher must map these facts to the current dashboard questions, confirm the published privacy URL, and complete the required attestations. Service-governing policy and terms review is excluded under the active Terms Privacy Guard.
 
 Player-file import requests only the selected public track URL, after Import. It uses normal page CORS access and sends no cookies or authorization headers. Parsed text stays in page memory until saved. This adds no permission and does not intercept network traffic.
+
+## Language groups and episode recognition
+
+Version 0.7.14 groups public player track labels by their language codes. It reads public playback and page metadata to suggest the film or episode. Series searches send the show, season, and episode numbers to the selected provider after the user starts a search. There are no new permissions.

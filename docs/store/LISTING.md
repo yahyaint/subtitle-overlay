@@ -60,3 +60,5 @@ Version 0.7.10 is a preview. Live player compatibility and provider delivery can
 - Category suggestion: Accessibility. Confirm the available dashboard category at submission.
 
 Create and verify the target URLs before you enter them in the live listing. The store account may also need a publisher contact email. A contact email was not found in the CTC files checked.
+
+Player subtitles appear in named language groups with track counts. Select a language to filter tracks before Import. Film and show suggestions use player metadata first. Series suggestions include readable season, episode, and episode-name details. Search languages use a named dropdown list.

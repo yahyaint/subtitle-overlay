@@ -1,5 +1,5 @@
 const PROVIDER_HOSTS = new Set(['api.opensubtitles.com', 'vip-api.opensubtitles.com']);
-const APP = 'SubtitleOverlay v0.7.13';
+const APP = 'SubtitleOverlay v0.7.14';
 importScripts('dub-sources.js', 'subtitle-search.js','subtitles.js','subtitle-settings.js','download-folder.js','subtitle-download.js');
 const dubSearchCache = new Map();
 let libraryQueue=Promise.resolve();
@@ -11,7 +11,8 @@ async function subtitleLibrary() {
 function saveSubtitle(fileId, text, name, film = {}, language = '', preset, customId) { return libraryMutation(async()=>{
   const id = customId || `opensubtitles:${fileId}`;
   const entry = {id, fileId, name: String(name).slice(0,250), title: String(film.title || name).slice(0,200), year: String(film.year || '').slice(0,4), language: String(language).slice(0,40), good:false, savedAt:Date.now()};
-  entry.filmKey = `${DubSources.normalize(entry.title)}:${entry.year}`;
+  const series=SubtitleSearch.episode(entry.title);if(series)Object.assign(entry,series);
+  entry.filmKey = `${DubSources.normalize(series ? series.showTitle+' S'+String(series.season).padStart(2,'0')+'E'+String(series.episode).padStart(2,'0') : entry.title)}:${entry.year}`;
   const key=`subtitleFile:${id}`;
   const existing=await chrome.storage.local.get(key);
   const addedBytes=new TextEncoder().encode(JSON.stringify({text})).length - (existing[key] ? new TextEncoder().encode(JSON.stringify(existing[key])).length : 0);
@@ -208,11 +209,12 @@ async function handle(message, sender) {
     const current=SubtitleSearch.query(message);
     const query = {query:current.title, languages:current.language, order_by:'download_count', order_direction:'desc'};
     if (current.year) query.year=current.year;
+    if(current.showTitle){query.query=current.showTitle;query.type='episode';query.season_number=current.season;query.episode_number=current.episode;}
     const data = await api('subtitles', undefined, query);
     const {rejectedSubtitles=[]}=await chrome.storage.local.get('rejectedSubtitles');
     return {results: (data.data || []).flatMap(item => (item.attributes?.files || []).filter(file=>!rejectedSubtitles.includes(file.file_id)).map(file => ({
       fileId: file.file_id, name: file.file_name, release: item.attributes.release,
-      title: item.attributes.feature_details?.title, language: item.attributes.language,
+      title: current.showTitle ? current.title : item.attributes.feature_details?.title, language: item.attributes.language,
       year: item.attributes.feature_details?.year,
       downloads: item.attributes.download_count, hearingImpaired: item.attributes.hearing_impaired
     }))).slice(0, 50)};
