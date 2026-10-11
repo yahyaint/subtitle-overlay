@@ -1,6 +1,6 @@
 # Data and permission notes
 
-These notes describe version 0.8.2 from its source. They are inputs for the publisher's dashboard answers. They do not claim store acceptance or assign dashboard data categories.
+These notes describe version 0.8.3 from its source. They are inputs for the publisher's dashboard answers. They do not claim store acceptance or assign dashboard data categories.
 
 ## Purpose
 
@@ -51,7 +51,7 @@ Player-file import requests only the selected public track URL, after Import. It
 
 ## Language groups and episode recognition
 
-Version 0.8.2 groups public player track labels by their language codes. It reads public playback and page metadata to suggest the film or episode. Series searches send the show, season, and episode numbers to the selected provider after the user starts a search. There are no new permissions.
+Version 0.8.3 groups public player track labels by their language codes. It reads public playback and page metadata to suggest the film or episode. Series searches send the show, season, and episode numbers to the selected provider after the user starts a search. There are no new permissions.
 
 
-The Inter font is bundled with 0.8.2. Its single WOFF2 file is web accessible through a dynamic session URL so the controller can load it. No script, account data, or subtitle file is exposed by this rule. The extension does not request a remote font.
+The Inter font is bundled with 0.8.3. Its single WOFF2 file is web accessible through a dynamic session URL so the controller can load it. No script, account data, or subtitle file is exposed by this rule. The extension does not request a remote font.

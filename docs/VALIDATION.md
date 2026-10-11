@@ -1,5 +1,13 @@
 # Local validation
 
+## 0.8.3 intrinsic browser popup sizing - October 11, 2026
+
+The popup document and body have an intrinsic 440 px width. The old viewport-capped rule could retain Vivaldi's narrow starting viewport. The three-bar header decoration and its CSS are removed. The document requests 590 px height; the body fits the available height. Main is a flex column so only the workspace scrolls while the header and file-action footer remain visible.
+
+The focused design browser check passes from 200 px, 440 px, and 800 px starting viewports. A separate actual Chrome action-popup check calls chrome.action.openPopup and reads its popup target through CDP. With a 200 px starting browser viewport, the popup reports a 448 px viewport, 440 px document/body, 510 px available height, and footer bottom at 510 px. No header decoration remains. The captured actual popup shows all footer actions. This directly checks browser auto-sizing rather than a manually enlarged preview. The current fix still needs confirmation in Vivaldi.
+
+Keyboard navigation, font loading, focus, sampled action contrast, compact controller access, and sync/style/import/file paths pass. Final store assets and static/package checks pass. No player, subtitle, sync, storage, or request logic changed. Tests use isolated local Chromium fixtures; no live stream is claimed.
+
 ## 0.8.2 muted theme and wider popup - October 11, 2026
 
 The popup is 440 px wide instead of 392 px. Player status and film-source hints use plain helper text without a side rule. Marine surfaces, buttons, gold accents, and the logo use less saturated colors. Narrow-screen access remains. Caption appearance is unchanged.

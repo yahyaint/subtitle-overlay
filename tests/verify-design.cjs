@@ -25,8 +25,8 @@ const {chromium}=require('playwright');
   await video.waitForFunction(()=>[...document.fonts].some(f=>f.family==='SubtitleOverlayInter' && f.status==='loaded'));assert.match(await ui('panel').evaluate(e=>getComputedStyle(e).fontFamily),/SubtitleOverlayInter/);
 
   await popup.locator('#tab-find').focus();await popup.keyboard.press('ArrowDown');assert.equal(await popup.locator('#tab-saved').getAttribute('aria-selected'),'true');await popup.keyboard.press('ArrowDown');assert.equal(await popup.locator('#tab-settings').getAttribute('aria-selected'),'true');await popup.keyboard.press('Home');assert.equal(await popup.locator('#tab-find').getAttribute('aria-selected'),'true');
-  for(const width of [440,320]){
-   await popup.setViewportSize({width,height:600});assert(await popup.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
+  for(const width of [200,440,800]){
+   await popup.setViewportSize({width,height:600});assert.equal(await popup.locator('body').evaluate(e=>e.getBoundingClientRect().width),440);assert.equal(await popup.evaluate(()=>document.documentElement.getBoundingClientRect().width),440);
    for(const name of ['find','saved','settings']){await popup.locator('#tab-'+name).click();assert(await popup.locator('#attach').isVisible());assert(await popup.locator('#file').isVisible());const dock=await popup.locator('.action-dock').boundingBox();assert(dock.y+dock.height<=600);}
   }
   await popup.locator('#tab-find').click();await popup.setViewportSize({width:440,height:600});await popup.locator('body').screenshot({path:path.join(artifacts,'new-design-popup.png')});
@@ -43,6 +43,6 @@ const {chromium}=require('playwright');
    const c=getComputedStyle(e),lum=value=>{const rgb=value.match(/[\d.]+/g).slice(0,3).map(n=>Number(n)/255).map(x=>x<=.04045?x/12.92:((x+.055)/1.055)**2.4);return rgb[0]*.2126+rgb[1]*.7152+rgb[2]*.0722;};const values=[lum(c.color),lum(c.backgroundColor)].sort((a,b)=>a-b);return (values[1]+.05)/(values[0]+.05);
   });assert(contrast>=4.5,'Primary action text contrast');
   assert.equal(await popup.locator('#dubLibrary').count(),0);const retired=await popup.evaluate(()=>chrome.runtime.sendMessage({type:'DUB_SETTINGS'}));assert.equal(retired.ok,false);assert.match(retired.error,/Unknown request/);await ui('tab-controls').click();if(!await ui('advancedSettings').evaluate(e=>e.open))await ui('advancedSettings').locator('summary').click();await ui('remove').click();assert.equal(await video.evaluate(()=>[...document.fonts].some(f=>f.family==='SubtitleOverlayInter')),false);
-  assert.deepEqual(errors,[]);console.log('PASS New Design: vertical keyboard tabs, fixed file dock, 320px popup, compact controller, sync/style/import/file paths, visible focus, and no script errors.');
+  assert.deepEqual(errors,[]);console.log('PASS New Design: vertical keyboard tabs, fixed file dock, intrinsic 440px popup from narrow/wide starting viewports, compact controller, sync/style/import/file paths, visible focus, and no script errors.');
  }finally{if(context)await context.close();await new Promise(resolve=>server.close(resolve));}
 })().catch(error=>{console.error(error);process.exitCode=1;});

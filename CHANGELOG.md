@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.8.3 - October 11, 2026
+
+- Fix popup sizing with an intrinsic 440 px document and body width. Do not cap it to the browser's initial popup viewport.
+- Remove the decorative three-bar header mark.
+
 ## 0.8.2 - October 11, 2026
 
 - Increase the popup width from 392 px to 440 px. Keep access on narrow screens.
