@@ -1,9 +1,11 @@
-# Subtitle Overlay 0.8.10
+# Subtitle Overlay 0.8.11
 
-Close now removes the whole overlay from the page, including subtitle text, controls, and the overlay icon. The header Close button, rail Close button, and Remove overlay use the same cleanup action.
+The current distribution uses PolyForm Noncommercial 1.0.0. New original code first published after v0.8.10 uses this license. Personal use is permitted. Commercial reuse or resale of new code needs separate written permission unless another valid license permits it. This is source-available software.
 
-Saved subtitle files and saved settings stay in the extension. Select Show overlay to start it again. Load a saved file to restore its saved settings.
+Versions through v0.8.10 were already published under MIT. Their MIT permissions remain in effect, including commercial reuse and resale of that code. Updated notes and downloads for v0.8.9 and v0.8.10 cannot withdraw those permissions. Original Git tags are unchanged.
 
-Download `subtitle-overlay-0.8.10-release.zip`. Extract it and load its extension folder. For an existing installation, reload the extension and refresh film tabs. Store upload uses `subtitle-overlay-0.8.10-chrome-web-store.zip`.
+The ZIPs include LICENSE, NOTICE, and LICENSE-MIT-LEGACY.txt. The Inter font keeps its own license. See docs/LICENSING.md in the source archive.
 
-No new permissions. MIT license. Live player and provider support can vary.
+No feature or permission changes. The planned EUR 1 checkout is not implemented in this build. A payment-enabled version will require external checkout and verified purchases.
+
+Use `subtitle-overlay-0.8.11-chrome-web-store.zip` for store upload. For an existing installation, reload the extension and refresh film tabs.

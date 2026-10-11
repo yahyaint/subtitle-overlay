@@ -1,3 +1,9 @@
+## 0.8.11
+
+- Use PolyForm Noncommercial 1.0.0 for new original additions after v0.8.10.
+- Preserve MIT permissions for earlier code and the separate Inter font license.
+- Package LICENSE, NOTICE, and the legacy MIT notice. No payment gate or feature changes.
+
 ## 0.8.10
 
 - Close now removes the overlay, captions, and icon. Both Close buttons use the same cleanup as Remove overlay.

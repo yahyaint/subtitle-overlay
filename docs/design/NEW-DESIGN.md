@@ -73,7 +73,7 @@ The final palette adapts [Color Hunt's navy/marine/gold palette](https://colorhu
 
 Font source: `https://rsms.me/inter/font-files/InterVariable.woff2?v=4.1`.
 Font SHA-256: `693b77d4f32ee9b8bfc995589b5fad5e99adf2832738661f5402f9978429a8e3`.
-Upstream notice source: `https://raw.githubusercontent.com/rsms/inter/v4.1/LICENSE.txt`. The font notice is separate from the project's MIT license.
+Upstream notice source: `https://raw.githubusercontent.com/rsms/inter/v4.1/LICENSE.txt`. The font notice is separate from the project's software license.
 
 The controller font is the only web-accessible resource. It uses a dynamic session URL. The resource rule exposes no executable code or user data.
 

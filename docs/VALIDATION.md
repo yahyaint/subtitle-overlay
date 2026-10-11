@@ -1,3 +1,9 @@
+## Version 0.8.11 - October 11, 2026
+
+Licensing and packaging update. PolyForm Noncommercial 1.0.0 is copied unchanged from its official source. LICENSE-MIT-LEGACY.txt preserves the original MIT notice for code published through v0.8.10. NOTICE and docs/LICENSING.md explain the scope and prior permissions. The Inter font license is unchanged.
+
+Static syntax/resources and verified ZIP builds pass. Package validation checks official license equality, old MIT notice equality, required notices in all ZIPs, digests, and unchanged extension code apart from version strings. No feature or permission changes. No payment gate was added; the planned EUR 1 checkout needs an external processor.
+
 ## Version 0.8.10 - October 11, 2026
 
 Both Close buttons use the existing Remove overlay cleanup. Subtitle text, controller, and icon are removed together. Saved files and saved settings are kept.

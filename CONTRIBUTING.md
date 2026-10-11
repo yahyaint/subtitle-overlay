@@ -10,4 +10,4 @@ Use local fixtures for tests. Do not commit account data, API keys, browser prof
 
 Describe the problem, the new behavior, and the checks you ran. Include a screenshot for a visible change.
 
-Contributions use the project's [MIT license](LICENSE).
+New contributions use the project's [PolyForm Noncommercial license](LICENSE). Read [license scope](docs/LICENSING.md). Earlier MIT contributions keep their MIT permissions.
