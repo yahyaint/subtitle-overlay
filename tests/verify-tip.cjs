@@ -2,7 +2,7 @@ const fs=require('node:fs'),path=require('node:path'),assert=require('node:asser
 const {chromium}=require('playwright');
 (async()=>{
  const project=path.resolve(__dirname,'..'),root=path.join(project,'extension'),artifacts=path.join(project,'.test-artifacts');fs.mkdirSync(artifacts,{recursive:true});
- const context=await chromium.launchPersistentContext(path.join(artifacts,'tip-profile-'+Date.now()),{channel:'chromium',headless:true,timeout:30000,args:[`--disable-extensions-except=${root}`,`--load-extension=${root}`],viewport:{width:370,height:700}});
+ const context=await chromium.launchPersistentContext(path.join(artifacts,'tip-profile-'+Date.now()),{channel:'chromium',headless:true,timeout:30000,args:[`--disable-extensions-except=${root}`,`--load-extension=${root}`],viewport:{width:440,height:600}});
  try{
   const worker=context.serviceWorkers()[0]||await context.waitForEvent('serviceworker'),id=new URL(worker.url()).hostname,page=await context.newPage(),errors=[];
   page.on('pageerror',error=>errors.push(error.message));await page.goto(`chrome-extension://${id}/popup.html`);

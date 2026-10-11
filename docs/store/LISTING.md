@@ -46,7 +46,7 @@ This is an independent extension. It is not affiliated with Disney+, OpenSubtitl
 
 The extension is free to use. The optional Tip link opens https://yahyanabil.com/support. A tip is not needed to use any feature.
 
-Version 0.8.4 is a preview. Live player compatibility and provider delivery can vary.
+Version 0.8.5 is a preview. Live player compatibility and provider delivery can vary.
 
 ## URLs and publisher
 

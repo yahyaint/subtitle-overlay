@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.8.5 - October 11, 2026
+
+- Align the Tip browser fixture with the popup's intrinsic 440 px width.
+- Keep the new soft-white accents and marine surfaces.
+
 ## 0.8.4 - October 11, 2026
 
 - Replace gold UI accents with soft white. Keep the marine background and user-selected caption colors.

@@ -1,5 +1,11 @@
 # Local validation
 
+## 0.8.5 soft-white browser checks - October 11, 2026
+
+The popup, controller, and subtitle website setup use soft-white accents. Caption colors and marine backgrounds remain. The Tip browser fixture now uses the intrinsic 440 px popup width. This corrects the old 370 px preview assertion that failed in the 0.8.3 GitHub check.
+
+The focused design and Tip checks pass. Actual Chrome action-popup inspection reports 440 px content width with the footer contained in the browser-limited height. Store assets were rendered again and reviewed with white accents. Static, ZIP, digest, and production-file checks pass. Tests use isolated local Chromium fixtures; no live streaming check is claimed. Playback and subtitle algorithms are unchanged.
+
 ## 0.8.4 soft-white accents - October 11, 2026
 
 Soft white #dce4ec replaces gold #c6b07c in the popup, controller, and subtitle website setup. Marine surfaces and caption colors remain unchanged.
