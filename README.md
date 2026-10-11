@@ -57,7 +57,7 @@ The library stays on this device. Deleting a library item does not delete files 
 - ASS and SSA text and timing are supported. Embedded styles and effects are not rendered.
 - Image subtitles, RAR files, encrypted ZIP files, and archives over the 2 MB limit are not supported.
 - Audio tools find sources and download direct audio files. They do not replace or sync the stream's audio.
-- Authenticated OpenSubtitles delivery still needs confirmation for version 0.7.14.
+- Authenticated OpenSubtitles delivery still needs confirmation for version 0.7.15.
 
 ## Use player subtitles
 

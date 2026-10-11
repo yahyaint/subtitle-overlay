@@ -5,6 +5,7 @@ let savedEntries=[];
 let activeLibraryId=null;
 let localChoices=[];
 let playerTrackBusy=false;
+let knownPlayerTracks=[];
 const saveIcon='<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M4 3h13l4 4v14H3V3h1Z"/><path d="M7 3v6h10V3M7 21v-8h10v8"/></svg>';
 let defaultSearchUrl;
 function searchMode() {
@@ -58,7 +59,10 @@ async function refreshPlayerTracks() {
   if(playerTrackBusy)return;
   const reply=await chrome.tabs.sendMessage(tabId,{type:'GET_PLAYER_TRACKS'});
   if(!reply?.ok)throw new Error(reply?.error || 'Open controls to connect the video.');
-  const tracks=reply.tracks,grouped=globalThis.SubtitlePlayerTracks.renderOptions(tracks,$('playerTracks'),$('playerLanguage'));
+  renderPlayerTracks(reply.tracks);
+}
+function renderPlayerTracks(tracks) {
+  knownPlayerTracks=tracks;const grouped=globalThis.SubtitlePlayerTracks.renderOptions(tracks,$('playerTracks'),$('playerLanguage'));
   $('playerTrackCount').textContent=String(tracks.length);
   $('usePlayerTrack').disabled=!grouped.visible.length;$('importPlayerTrack').disabled=!grouped.visible.length;
   $('playerTracksHint').textContent=tracks.length ? grouped.languages+' languages. Select a track, then Import.' : 'No readable tracks. Select a language in the player, then refresh.';
@@ -68,7 +72,7 @@ for(const [id,action] of [['usePlayerTrack','original'],['importPlayerTrack','im
   try{await attach(false);const reply=await chrome.tabs.sendMessage(tabId,{type:'PLAYER_TRACK_ACTION',action,id:$('playerTracks').value});if(!reply?.ok)throw new Error(reply?.error || 'Track load failed.');status(action==='import' ? reply.count+' loaded lines imported. Use video controls for timing, style, and Save.' : action==='original' ? 'Player subtitles shown. Import to change timing or style.' : 'Player subtitle choices restored.');}
   finally{playerTrackBusy=false;await refreshPlayerTracks();}
 });
-$('playerLanguage').onchange=()=>refreshPlayerTracks().catch(error=>status(error.message,true));
+$('playerLanguage').onchange=()=>renderPlayerTracks(knownPlayerTracks);
 $('refreshPlayerTracks').onclick=()=>task($('refreshPlayerTracks'),async()=>{await attach(false);await refreshPlayerTracks();});
 async function task(button, action) {
   button.disabled = true;

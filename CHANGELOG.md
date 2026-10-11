@@ -1,5 +1,9 @@
 # Changes
 
+## 0.7.15 - October 11, 2026
+
+- Filter the loaded player track list immediately in the popup. Avoid waiting for a tab reply when changing the language.
+
 ## 0.7.14 - October 11, 2026
 
 - Group detected player tracks by named language and show track counts. Filter groups in the popup and overlay.

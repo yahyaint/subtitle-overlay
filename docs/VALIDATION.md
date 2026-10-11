@@ -2,7 +2,7 @@
 
 ## 0.7.14 languages and series - October 11, 2026
 
-The popup and overlay group selected-player tracks by their language codes. Browser tests check named groups, counts, language filtering, filter retention on refresh, regional codes, and Unknown language. Discovery still leaves track modes and lazy file loading unchanged.
+The popup and overlay group selected-player tracks by their language codes. The popup filters its loaded list immediately without waiting for a tab reply. Browser tests check named groups, counts, language filtering, filter retention on refresh, regional codes, and Unknown language. Discovery still leaves track modes and lazy file loading unchanged.
 
 All 53 search language options map to a website language filter. Episode tests cover Media Session titles and album metadata, player attributes, special episodes, JSON-LD with referenced season/series nodes, episode-only player titles, and editable search fields. API search sends the show name, season, and episode numbers. Saved routing separates episodes. Missing episode names and optional metadata keep the loaded subtitle and timing; a new episode clears the old subtitle.
 
