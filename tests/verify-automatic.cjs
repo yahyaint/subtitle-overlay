@@ -25,9 +25,24 @@ const srt='1\n00:00:00,000 --> 00:10:00,000\nAutomatic subtitle';
     const fixture=await browser.newPage();await fixture.goto('http://127.0.0.1/film');
     const popup=await browser.newPage();await popup.goto('chrome-extension://'+extensionId+'/popup.html');const errors=[];fixture.on('pageerror',error=>errors.push(error.message));popup.on('pageerror',error=>errors.push(error.message));
     const tabId=await popup.evaluate(async url=>(await chrome.tabs.query({})).find(tab=>tab.url===url).id,fixture.url());
+    // Hold the real settings response until metadata detection has already run.
+    await worker.evaluate(()=>chrome.storage.local.set({subtitleSearch:{title:'Animals',year:'1988',language:'ar',mode:'api',urlTemplate:SubtitleSearch.defaultUrl}}));
+    await popup.evaluate(async id=>chrome.scripting.executeScript({target:{tabId:id},func:()=>{
+      const send=chrome.runtime.sendMessage.bind(chrome.runtime);
+      chrome.runtime.sendMessage=message=>message.type==='OVERLAY_SETTINGS' ? send(message).then(result=>new Promise(resolve=>{globalThis.releaseSearchSettings=()=>{chrome.runtime.sendMessage=send;resolve(result);};})) : send(message);
+    }}),tabId);
     await popup.evaluate(async id=>chrome.scripting.executeScript({target:{tabId:id},files:['subtitles.js','subtitle-settings.js','film-detection.js','player-subtitles.js','content.js']}),tabId);
     await fixture.waitForFunction(()=>document.querySelector('#subtitle-overlay-root').shadowRoot.querySelector('#overlayQuery').value==='The Lion King 1½',null,{timeout:8000}).catch(async error=>{console.log('DETECTION',await fixture.evaluate(()=>({title:document.title,json:document.querySelector('script')?.textContent,query:document.querySelector('#subtitle-overlay-root')?.shadowRoot.querySelector('#overlayQuery').value,message:document.querySelector('#subtitle-overlay-root')?.shadowRoot.querySelector('#message').textContent})),await popup.evaluate(async id=>(await chrome.scripting.executeScript({target:{tabId:id},func:()=>globalThis.SubtitleFilm.detect()}))[0].result,tabId));throw error;});
     assert.equal(await fixture.locator('#subtitle-overlay-root #overlayYear').inputValue(),'2004');
+    await popup.waitForFunction(async id=>(await chrome.scripting.executeScript({target:{tabId:id},func:()=>typeof globalThis.releaseSearchSettings==='function'}))[0].result,tabId);
+    await popup.evaluate(id=>chrome.scripting.executeScript({target:{tabId:id},func:()=>globalThis.releaseSearchSettings()}),tabId);
+    const initialSearch=await popup.evaluate(async id=>(await chrome.tabs.sendMessage(id,{type:'GET_PLAYER_TRACKS'})).search,tabId);
+    assert.equal(initialSearch.query,'The Lion King 1½');assert.equal(initialSearch.year,'2004');assert.equal(initialSearch.language,'ar');assert.equal(initialSearch.mode,'api');
+    assert.equal(await fixture.locator('#subtitle-overlay-root #overlayQuery').inputValue(),'The Lion King 1½');
+    await popup.evaluate(id=>chrome.tabs.sendMessage(id,{type:'SET_SEARCH_STATE',href:'http://127.0.0.1/film',patch:{language:'en',mode:'website'}}),tabId);
+    await worker.evaluate(()=>chrome.storage.local.set({subtitleSearch:{title:'Animals',year:'1988',language:'en',mode:'website',urlTemplate:SubtitleSearch.defaultUrl}}));
+    pass('Delayed saved settings cannot replace detected film or year; language and search mode still load');
+
     await fixture.waitForFunction(()=>!document.querySelector('#subtitle-overlay-root').shadowRoot.querySelector('#view-find').hidden);
     const detect=()=>popup.evaluate(async id=>(await chrome.scripting.executeScript({target:{tabId:id},func:()=>globalThis.SubtitleFilm.detect()}))[0].result,tabId);
     await fixture.evaluate(()=>{history.pushState({},'', '/tv/138502/1/4');navigator.mediaSession.metadata=new MediaMetadata({title:"X-Men '97"});});
@@ -128,6 +143,25 @@ const srt='1\n00:00:00,000 --> 00:10:00,000\nAutomatic subtitle';
     await popup.waitForFunction(()=>document.querySelector('#query').value==='The Lion King 1½');
     assert.equal(await popup.locator('#year').inputValue(),'2004');
     pass('Popup suggests the active film title/year without opening the overlay search');
+    await popup.locator('#language').selectOption('ar');await popup.locator('#searchMode').selectOption('api');
+    await popup.locator('#query').fill('Manual film');await popup.locator('#year').fill('2023');
+    await fixture.waitForFunction(()=>{const ui=document.querySelector('#subtitle-overlay-root').shadowRoot;return ui.querySelector('#overlayQuery').value==='Manual film' && ui.querySelector('#overlayLanguage').value==='ar' && ui.querySelector('#overlaySearchMode').value==='api' && ui.querySelector('#overlayYear').value==='2023';});
+    await popup.waitForTimeout(1300);assert.equal(await popup.locator('#query').inputValue(),'Manual film');
+    await fixture.locator('#subtitle-overlay-root #tab-find').click();await fixture.locator('#subtitle-overlay-root #overlayQuery').fill('Controller edit');
+    await fixture.locator('#subtitle-overlay-root #overlayYear').fill('2022');await fixture.locator('#subtitle-overlay-root #overlayLanguage').selectOption('fr');await fixture.locator('#subtitle-overlay-root #overlaySearchMode').selectOption('website');
+    await popup.waitForFunction(()=>document.querySelector('#query').value==='Controller edit' && document.querySelector('#year').value==='2022' && document.querySelector('#language').value==='fr' && document.querySelector('#searchMode').value==='website');
+    await fixture.bringToFront();await popup.evaluate(code=>eval(code),init);
+    await popup.waitForFunction(()=>document.querySelector('#query').value==='Controller edit');
+    await fixture.evaluate(()=>navigator.mediaSession.metadata=new MediaMetadata({title:'New shared film (2025)'}));
+    await popup.waitForFunction(()=>document.querySelector('#query').value==='New shared film' && document.querySelector('#year').value==='2025');
+    assert.equal(await fixture.locator('#subtitle-overlay-root #overlayQuery').inputValue(),'New shared film');
+    const rejected=await popup.evaluate(id=>chrome.tabs.sendMessage(id,{type:'SET_SEARCH_STATE',href:'http://127.0.0.1/old-film',patch:{query:'Stale request'}}),tabId);assert.equal(rejected.ok,false);
+    await fixture.evaluate(()=>navigator.mediaSession.metadata=null);
+    await popup.waitForFunction(()=>document.querySelector('#query').value==='The Lion King 1½' && document.querySelector('#year').value==='2004');
+    await popup.locator('#language').selectOption('en');
+    await fixture.waitForFunction(()=>document.querySelector('#subtitle-overlay-root').shadowRoot.querySelector('#overlayLanguage').value==='en');
+    pass('Popup and controller share film, year, language, and method; edits survive polling/reopening; new film replaces old edits; stale page writes are rejected');
+
     const suggested=await popup.evaluate(async id=>{const [item]=await chrome.scripting.executeScript({target:{tabId:id},func:()=>globalThis.SubtitleFilm.detect()});return item.result;},tabId);
     assert.equal(suggested.title,'The Lion King 1½');assert.equal(suggested.year,'2004');
     await worker.evaluate(({compressed,multiple,srt,utf16zip,gzip})=>{

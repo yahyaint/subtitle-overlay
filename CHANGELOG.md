@@ -1,3 +1,9 @@
+## Version 0.8.7 - October 11, 2026
+
+- Fixed the delayed settings response that replaced the detected film with a saved search.
+- Shared search fields between the popup and controller for the active tab. Manual edits remain until the film changes.
+- Added space between Player subtitles and online search. Moved the detected title source below the title field.
+
 ## 0.8.6 - 2026-10-11
 
 - Put Player subtitles first in both Find views.

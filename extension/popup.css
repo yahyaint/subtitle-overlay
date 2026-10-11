@@ -11,3 +11,6 @@ details{border:1px solid var(--line);background:#132237;border-radius:12px;paddi
 
 /* Let the workspace scroll while the file actions remain visible. */
 body>header,.action-dock{flex:none}main{display:flex;flex-direction:column;flex:1;min-height:0;overflow:hidden}
+
+/* Separate player tracks from online search in both Find views. */
+#view-find>#playerTracksSettings{margin:0 0 20px}

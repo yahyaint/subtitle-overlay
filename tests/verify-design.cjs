@@ -29,6 +29,15 @@ const {chromium}=require('playwright');
    await popup.setViewportSize({width,height:600});assert.equal(await popup.locator('body').evaluate(e=>e.getBoundingClientRect().width),440);assert.equal(await popup.evaluate(()=>document.documentElement.getBoundingClientRect().width),440);
    for(const name of ['find','saved','settings']){await popup.locator('#tab-'+name).click();assert(await popup.locator('#attach').isVisible());assert(await popup.locator('#file').isVisible());const dock=await popup.locator('.action-dock').boundingBox();assert(dock.y+dock.height<=600);}
   }
+  await popup.locator('#tab-find').click();await ui('tab-find').click();
+  for(const open of [false,true]){
+   for(const [page,prefix] of [[popup,''],[video,'#subtitle-overlay-root ']]){
+    await page.locator(prefix+'#playerTracksSettings').evaluate((e,open)=>e.open=open,open);
+    const gap=await page.locator(prefix+'#view-find').evaluate(e=>e.querySelector('.view-heading').getBoundingClientRect().top-e.querySelector('#playerTracksSettings').getBoundingClientRect().bottom);
+    assert(gap>=20 && gap<=24,'Player panel/search separation: '+gap);
+   }
+  }
+  await popup.locator('#playerTracksSettings').evaluate(e=>e.open=false);await ui('playerTracksSettings').evaluate(e=>e.open=false);
   await popup.locator('#tab-find').click();await popup.setViewportSize({width:440,height:600});await popup.locator('body').screenshot({path:path.join(artifacts,'new-design-popup.png')});
   await ui('tab-controls').click();await ui('tab-controls').focus();await video.keyboard.press('ArrowDown');assert.equal(await ui('tab-find').getAttribute('aria-selected'),'true');await video.keyboard.press('ArrowDown');assert.equal(await ui('tab-saved').getAttribute('aria-selected'),'true');await video.keyboard.press('Home');assert.equal(await ui('tab-controls').getAttribute('aria-selected'),'true');
   await ui('syncSettings').locator('summary').click();await ui('syncMode').selectOption('three');assert(await ui('markFirst').isVisible());assert(await ui('syncThird').isVisible());
@@ -37,7 +46,7 @@ const {chromium}=require('playwright');
   await video.setViewportSize({width:390,height:600});await ui('textSettings').locator(':scope > summary').click();await ui('shadowBlur').scrollIntoViewIfNeeded();
   const panel=await ui('panel').boundingBox();assert(panel.x>=0 && panel.x+panel.width<=390 && panel.y+panel.height<=600);assert(await ui('panel').evaluate(e=>e.scrollHeight===e.clientHeight));assert(await ui('panel').evaluate(e=>e.scrollWidth===e.clientWidth));
   await ui('tab-find').click();assert.equal(await ui('view-find').evaluate(e=>e.parentElement.scrollTop),0);await ui('overlaySearchButton').scrollIntoViewIfNeeded();assert(await ui('overlaySearchButton').isVisible());await ui('playerTracksSettings').locator('summary').click();await ui('refreshPlayerTracks').click();
-  await video.screenshot({path:path.join(artifacts,'new-design-controller-compact.png')});await ui('tab-controls').click();await ui('advancedSettings').locator('summary').click();await ui('file').scrollIntoViewIfNeeded();assert(await ui('file').isVisible());await ui('close').click();assert.equal(await ui('panel').isVisible(),false);await ui('toggle').click();assert(await ui('panel').isVisible());
+  await video.screenshot({path:path.join(artifacts,'new-design-controller-compact.png')});await ui('playerTracksSettings').locator('summary').click();await video.screenshot({path:path.join(artifacts,'new-design-controller-find.png')});await ui('tab-controls').click();await ui('advancedSettings').locator('summary').click();await ui('file').scrollIntoViewIfNeeded();assert(await ui('file').isVisible());await ui('close').click();assert.equal(await ui('panel').isVisible(),false);await ui('toggle').click();assert(await ui('panel').isVisible());
   await popup.locator('#query').focus();assert.equal(await popup.locator('#query').evaluate(e=>getComputedStyle(e).outlineStyle),'solid');
   const contrast=await popup.locator('#searchButton').evaluate(e=>{
    const c=getComputedStyle(e),lum=value=>{const rgb=value.match(/[\d.]+/g).slice(0,3).map(n=>Number(n)/255).map(x=>x<=.04045?x/12.92:((x+.055)/1.055)**2.4);return rgb[0]*.2126+rgb[1]*.7152+rgb[2]*.0722;};const values=[lum(c.color),lum(c.backgroundColor)].sort((a,b)=>a-b);return (values[1]+.05)/(values[0]+.05);

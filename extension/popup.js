@@ -8,6 +8,27 @@ let playerTrackBusy=false;
 let knownPlayerTracks=[];
 const saveIcon='<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M4 3h13l4 4v14H3V3h1Z"/><path d="M7 3v6h10V3M7 21v-8h10v8"/></svg>';
 let defaultSearchUrl;
+let searchHref='',searchEditRevision=0,searchWrite=Promise.resolve();
+function applySearchState(search){
+  if(!search)return;
+  searchHref=search.href;
+  $('query').value=search.query;setLanguage(search.language);$('year').value=search.year;
+  if($('searchMode').value!==search.mode){$('searchMode').value=search.mode;searchMode();}
+  $('searchUrl').value=search.urlTemplate;
+  $('filmSuggestion').hidden=search.suggestionHidden;$('filmSuggestion').textContent=search.suggestion;
+}
+function shareSearch(patch){
+  if(!tabId || !searchHref)return;
+  const href=searchHref;++searchEditRevision;
+  searchWrite=searchWrite.catch(()=>{}).then(async()=>{
+    const reply=await chrome.tabs.sendMessage(tabId,{type:'SET_SEARCH_STATE',href,patch});
+    if(!reply?.ok)throw new Error(reply?.error || 'Could not update video controls.');
+  });
+  searchWrite.catch(error=>status(error.message,true));
+}
+for(const [id,key] of [['query','query'],['year','year'],['language','language']])$(id).addEventListener(id==='language' ? 'change' : 'input',()=>shareSearch({[key]:$(id).value}));
+$('searchMode').addEventListener('change',()=>shareSearch({mode:$('searchMode').value}));
+$('searchUrl').addEventListener('input',()=>shareSearch({urlTemplate:$('searchUrl').value}));
 function searchMode() {
   const api=$('searchMode').value==='api';
   $('searchButton').textContent=api ? 'Find subtitles' : 'Open OpenSubtitles';
@@ -16,7 +37,7 @@ function searchMode() {
 }
 $('searchMode').onchange=()=>{searchMode();provider({type:'SAVE_SUBTITLE_SEARCH',mode:$('searchMode').value}).catch(error=>status(error.message,true));};
 $('websiteForm').onsubmit=event=>{event.preventDefault();task(event.submitter,async()=>{await provider({type:'SAVE_SUBTITLE_SEARCH',urlTemplate:$('searchUrl').value});status('Search link saved.');});};
-$('resetSearchUrl').onclick=()=>task($('resetSearchUrl'),async()=>{await provider({type:'SAVE_SUBTITLE_SEARCH',urlTemplate:defaultSearchUrl});$('searchUrl').value=defaultSearchUrl;status('Default search link restored.');});
+$('resetSearchUrl').onclick=()=>task($('resetSearchUrl'),async()=>{await provider({type:'SAVE_SUBTITLE_SEARCH',urlTemplate:defaultSearchUrl});$('searchUrl').value=defaultSearchUrl;shareSearch({urlTemplate:defaultSearchUrl});status('Default search link restored.');});
 const views = ['find', 'saved', 'settings'];
 function showView(name, focus = false) {
   for (const view of views) {
@@ -58,9 +79,11 @@ async function attach(show=true) {
 }
 async function refreshPlayerTracks() {
   if(playerTrackBusy)return;
+  const revision=searchEditRevision;await searchWrite;
   const reply=await chrome.tabs.sendMessage(tabId,{type:'GET_PLAYER_TRACKS'});
   if(!reply?.ok)throw new Error(reply?.error || 'Open controls to connect the video.');
   renderPlayerTracks(reply.tracks);
+  if(revision===searchEditRevision)applySearchState(reply.search);
 }
 function renderPlayerTracks(tracks) {
   knownPlayerTracks=tracks;const grouped=globalThis.SubtitlePlayerTracks.renderOptions(tracks,$('playerTracks'),$('playerLanguage'));
@@ -108,7 +131,7 @@ async function refreshLibrary(selected) {
   $('savedFilm').hidden=!savedEntries.length;
   if(seen.has(previous)) $('savedFilm').value=previous;renderLibrary();
 }
-$('savedFilm').onchange=()=>{const entry=savedEntries.find(item=>item.filmKey===$('savedFilm').value);if(entry){$('query').value=entry.title;$('year').value=entry.year;}renderLibrary();};
+$('savedFilm').onchange=()=>{const entry=savedEntries.find(item=>item.filmKey===$('savedFilm').value);if(entry){$('query').value=entry.title;$('year').value=entry.year;shareSearch({query:entry.title,year:entry.year});}renderLibrary();};
 chrome.storage.onChanged.addListener((changes,area)=>{if(area==='local' && changes.subtitleLibrary) refreshLibrary().catch(error=>status(error.message,true));});
 $('attach').onclick = () => task($('attach'), async () => { await attach(); status('Controls opened on the video.'); });
 $('file').onchange = async () => {

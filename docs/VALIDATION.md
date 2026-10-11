@@ -1,3 +1,18 @@
+## Version 0.8.7 - October 11, 2026
+
+The controller no longer replaces the detected film with a stale saved search. The popup and controller share search fields for the active tab. Player subtitles stays first, with a 20 px gap before online search.
+
+Checks passed:
+
+- All nine local integration suites on the final extension code.
+- A held real settings response reproduces the startup race. The current film and year remain correct when the response arrives. Language and method still load.
+- Popup/controller edits to title, year, language, and method agree. Edits survive polling and reopening. A new film resets title/year. Old-page writes are rejected.
+- Open and closed Player subtitles panels keep a measured gap before online search. Compact controls, keyboard focus, and fixed popup actions remain usable.
+- Subtitle imports, saved style/timing, seeks, segment-clock recovery, and one/two/three-sentence sync pass.
+- JavaScript/manifest checks, four store screenshots, ZIP integrity, digests, and installed-file equality pass.
+
+No new permissions. These are local browser checks. Live player and provider support can vary.
+
 ## Version 0.8.6 - October 11, 2026
 
 All nine local integration suites pass. Static checks and test syntax checks pass. Store image generation passes; the Player subtitles screenshot was inspected.

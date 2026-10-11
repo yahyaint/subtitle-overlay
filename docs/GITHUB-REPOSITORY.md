@@ -5,8 +5,8 @@
 - Description: `Find, save, style, and sync external subtitles over browser video.`
 - Topics: `chrome-extension`, `subtitles`, `subtitle-sync`, `accessibility`, `manifest-v3`.
 - Default branch: `main`.
-- Current release: `v0.8.6`, marked as a pre-release.
-- Release title: `Subtitle Overlay 0.8.6 preview`.
+- Current release: `v0.8.7`, marked as a pre-release.
+- Release title: `Subtitle Overlay 0.8.7 preview`.
 - Release body: [release draft](GITHUB-RELEASE.md).
 
 The repository is public. Its source and release preparation files are published on the `main` branch.
