@@ -1,3 +1,8 @@
+## 0.8.12
+
+- Remove the bundled legacy license file. Package the current PolyForm license and NOTICE.
+- Keep prior permissions and third-party font licensing unchanged. No feature changes.
+
 ## 0.8.11
 
 - Use PolyForm Noncommercial 1.0.0 for new original additions after v0.8.10.

@@ -5,8 +5,8 @@
 - Description: `Find, save, style, and sync external subtitles over browser video.`
 - Topics: `chrome-extension`, `subtitles`, `subtitle-sync`, `accessibility`, `manifest-v3`.
 - Default branch: `main`.
-- Current release: `v0.8.11`, marked as a stable release.
-- Release title: `Subtitle Overlay 0.8.11`.
+- Current release: `v0.8.12`, marked as a stable release.
+- Release title: `Subtitle Overlay 0.8.12`.
 - Release body: [release draft](GITHUB-RELEASE.md).
 
 The repository is public. Its source and release preparation files are published on the `main` branch.
@@ -17,4 +17,4 @@ The local Git identity uses `yahyaint` and the account's GitHub no-reply address
 
 The project uses the [PolyForm Noncommercial license](../LICENSE). A private security contact and the store account's contact fields still need completion.
 
-Earlier MIT code keeps its permissions. See [license scope](LICENSING.md).
+See [license scope](LICENSING.md).

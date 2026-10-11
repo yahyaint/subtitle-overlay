@@ -1,3 +1,9 @@
+## Version 0.8.12 - October 11, 2026
+
+Remove the bundled legacy license file and references to it in current documentation and packaging. The official PolyForm license and Inter font license are unchanged. Previously granted permissions remain valid.
+
+Static and build checks pass. Package checks verify no legacy license file, official license equality, CRCs/digests, unchanged extension code apart from version strings, and installed-output equality. No feature or permission changes.
+
 ## Version 0.8.11 - October 11, 2026
 
 Licensing and packaging update. PolyForm Noncommercial 1.0.0 is copied unchanged from its official source. LICENSE-MIT-LEGACY.txt preserves the original MIT notice for code published through v0.8.10. NOTICE and docs/LICENSING.md explain the scope and prior permissions. The Inter font license is unchanged.

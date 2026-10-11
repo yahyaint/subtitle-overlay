@@ -5,13 +5,8 @@ Original additions first published after version 0.8.10 use this license.
 Commercial reuse or resale of those additions needs separate written permission
 unless another valid license permits it. Contact: https://yahyanabil.com/support
 
-Legacy scope: versions 0.8.10 and earlier were published under MIT. Existing MIT
-permissions for that code remain available, including commercial reuse and
-resale. A license change does not withdraw those permissions. The preserved MIT
-notice is in LICENSE-MIT-LEGACY.txt; it is not an MIT grant for later additions.
-
-The v0.8.9 and v0.8.10 release downloads may include updated licensing notices.
-Their original code and previously granted MIT permissions remain unchanged.
+Previously granted permissions remain valid. Removing a bundled notice or
+changing the current distribution license does not withdraw earlier grants.
 Original Git tags and historical source remain unchanged.
 
 Bundled Inter font: its separate license is in INTER-LICENSE.txt. Project license
