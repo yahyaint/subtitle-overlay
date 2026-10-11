@@ -1,3 +1,8 @@
+## 0.8.10
+
+- Close now removes the overlay, captions, and icon. Both Close buttons use the same cleanup as Remove overlay.
+- Saved files and saved settings are kept. Show overlay starts the overlay again.
+
 ## Version 0.8.9 - October 11, 2026
 
 - Added Close to the controller rail. Hiding the controls keeps subtitles and saved settings in place.

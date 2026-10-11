@@ -56,4 +56,4 @@ The library is local to this extension installation. It does not sync to another
 
 The overlay's fullscreen button switches browser fullscreen. F11 also toggles this mode. The player can have its own fullscreen button.
 
-Select **Close** at the bottom of the controller rail to hide its controls. Subtitles keep playing. Use **Show overlay** in the extension to show the controls again. The loaded file and settings stay in place.
+Select **Close** at the bottom of the controller rail to remove the overlay and its subtitles. The header Close button and **Remove overlay** do the same. Saved files and saved settings stay in the extension. Use **Show overlay** to start the overlay again. Load a saved file to restore its saved settings.

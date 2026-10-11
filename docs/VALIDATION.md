@@ -1,3 +1,16 @@
+## Version 0.8.10 - October 11, 2026
+
+Both Close buttons use the existing Remove overlay cleanup. Subtitle text, controller, and icon are removed together. Saved files and saved settings are kept.
+
+Checks passed:
+
+- Design suite: header Close, rail Close from each view, and keyboard Close remove the overlay root, runtime instance, and UI font. Visible caption text is removed with the root.
+- Saved extension storage is unchanged by Close. Show overlay creates one fresh overlay after each removal.
+- Existing design checks cover keyboard tabs, compact sizing, file/style/sync controls, and script errors.
+- Static checks, regenerated store assets, verified ZIP builds, and installed-output equality pass.
+
+Playback-clock and sentence-sync logic are unchanged. No new permissions.
+
 ## Version 0.8.9 - October 11, 2026
 
 The controller has a Close button at the bottom of its tool rail. The popup action is Show overlay. This release is marked stable after the publisher reported that the current build works in their setup.

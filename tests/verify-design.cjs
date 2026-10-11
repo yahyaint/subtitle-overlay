@@ -46,17 +46,29 @@ const {chromium}=require('playwright');
   await video.setViewportSize({width:390,height:600});await ui('textSettings').locator(':scope > summary').click();await ui('shadowBlur').scrollIntoViewIfNeeded();
   const panel=await ui('panel').boundingBox();assert(panel.x>=0 && panel.x+panel.width<=390 && panel.y+panel.height<=600);assert(await ui('panel').evaluate(e=>e.scrollHeight===e.clientHeight));assert(await ui('panel').evaluate(e=>e.scrollWidth===e.clientWidth));
   await ui('tab-find').click();assert.equal(await ui('view-find').evaluate(e=>e.parentElement.scrollTop),0);await ui('overlaySearchButton').scrollIntoViewIfNeeded();assert(await ui('overlaySearchButton').isVisible());await ui('playerTracksSettings').locator('summary').click();await ui('refreshPlayerTracks').click();
-  await video.screenshot({path:path.join(artifacts,'new-design-controller-compact.png')});await ui('playerTracksSettings').locator('summary').click();await video.screenshot({path:path.join(artifacts,'new-design-controller-find.png')});await ui('tab-controls').click();await ui('advancedSettings').locator('summary').click();await ui('file').scrollIntoViewIfNeeded();assert(await ui('file').isVisible());await ui('close').click();assert.equal(await ui('panel').isVisible(),false);await ui('toggle').click();assert(await ui('panel').isVisible());
+  await video.screenshot({path:path.join(artifacts,'new-design-controller-compact.png')});await ui('playerTracksSettings').locator('summary').click();await video.screenshot({path:path.join(artifacts,'new-design-controller-find.png')});await ui('tab-controls').click();await ui('advancedSettings').locator('summary').click();await ui('file').scrollIntoViewIfNeeded();assert(await ui('file').isVisible());
   assert.equal(await popup.locator('#attach span').textContent(),'Show overlay');
   await popup.evaluate(id=>{tabId=id;},tabId);
+  async function assertRemovedAndReopen(){
+   assert.equal(await video.locator('#subtitle-overlay-root').count(),0);
+   assert.equal(await video.evaluate(()=>Boolean(globalThis.__subtitleOverlay)),false);
+   assert.equal(await video.evaluate(()=>[...document.fonts].some(f=>f.family==='SubtitleOverlayInter')),false);
+   await popup.locator('#attach').click();await ui('panel').waitFor();
+   assert.equal(await video.locator('#subtitle-overlay-root').count(),1);
+  }
+  await ui('close').click();await assertRemovedAndReopen();
   for(const view of ['controls','find','saved']){
-   await ui('tab-'+view).click();const before=await ui('syncMode').inputValue();
+   await popup.evaluate(id=>chrome.tabs.sendMessage(id,{type:'LOAD_SUBTITLES',text:'1\n00:00:00,000 --> 00:01:00,000\nClose test\n',name:'close-test.srt'}),tabId);
+   await ui('text').getByText('Close test',{exact:true}).waitFor();
+   await ui('tab-'+view).click();
    const close=await ui('railClose').boundingBox(),panel=await ui('panel').boundingBox();assert(close.y+close.height<=panel.y+panel.height);
    assert.equal(await ui('railClose').evaluate(e=>e.closest('[role=tablist]')===null),true);
-   await ui('railClose').click();assert.equal(await ui('panel').isVisible(),false);assert.equal(await ui('toggle').evaluate(e=>e.getRootNode().activeElement===e),true);
-   await popup.locator('#attach').click();await ui('panel').waitFor();assert.equal(await ui('tab-'+view).getAttribute('aria-selected'),'true');assert.equal(await ui('syncMode').inputValue(),before);
+   const stored=await worker.evaluate(()=>chrome.storage.local.get(null));
+   await ui('railClose').click();
+   assert.deepEqual(await worker.evaluate(()=>chrome.storage.local.get(null)),stored,'Close must not delete saved files or settings');
+   await assertRemovedAndReopen();
   }
-  await ui('railClose').focus();await video.keyboard.press('Enter');assert.equal(await ui('panel').isVisible(),false);await ui('toggle').click();
+  await ui('railClose').focus();await video.keyboard.press('Enter');await assertRemovedAndReopen();
   await popup.locator('#query').focus();assert.equal(await popup.locator('#query').evaluate(e=>getComputedStyle(e).outlineStyle),'solid');
   const contrast=await popup.locator('#searchButton').evaluate(e=>{
    const c=getComputedStyle(e),lum=value=>{const rgb=value.match(/[\d.]+/g).slice(0,3).map(n=>Number(n)/255).map(x=>x<=.04045?x/12.92:((x+.055)/1.055)**2.4);return rgb[0]*.2126+rgb[1]*.7152+rgb[2]*.0722;};const values=[lum(c.color),lum(c.backgroundColor)].sort((a,b)=>a-b);return (values[1]+.05)/(values[0]+.05);

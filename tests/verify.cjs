@@ -137,7 +137,8 @@ const server = http.createServer((req, res) => {res.writeHead(200, {'Content-Typ
     await page.locator('#subtitle-overlay-root #enabled').uncheck();
     await page.waitForFunction(()=>document.querySelector('#subtitle-overlay-root').shadowRoot.querySelector('#text').textContent==='');
     await page.locator('#subtitle-overlay-root #enabled').check();
-    await page.locator('#subtitle-overlay-root #close').click();
+    // Hide only the panel while checking fullscreen caption placement.
+    await page.locator('#subtitle-overlay-root #toggle').click();
     await page.bringToFront();
     await page.getByRole('button',{name:'Container fullscreen',exact:true}).click();
     await page.waitForFunction(()=>document.fullscreenElement?.contains(document.querySelector('#subtitle-overlay-root')),null,{timeout:10000}).catch(async error=>{console.log('FULLSCREEN',await page.evaluate(()=>({fullscreen:document.fullscreenElement?.id,enabled:document.fullscreenEnabled,parent:document.querySelector('#subtitle-overlay-root')?.parentElement?.id})),errors);throw error;});

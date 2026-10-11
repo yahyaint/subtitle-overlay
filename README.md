@@ -10,9 +10,9 @@ Add your own subtitles to browser video. Find a subtitle, set its timing, and ch
 
 Saved subtitles has separate Films and Shows views. Shows use show, season, and episode selectors. Older saved episode titles are recognized without changing stored files.
 
-Version 0.8.9 keeps the popup and video controller search fields in sync. Saved searches cannot replace the detected film.
+Version 0.8.10 keeps the popup and video controller search fields in sync. Saved searches cannot replace the detected film.
 
-Version 0.8.9 uses a shared tool rail, fixed popup file actions, and a clearer timing card. See [design notes and research](docs/design/NEW-DESIGN.md).
+Version 0.8.10 uses a shared tool rail, fixed popup file actions, and a clearer timing card. See [design notes and research](docs/design/NEW-DESIGN.md).
 
 ## Features
 
@@ -29,7 +29,7 @@ Version 0.8.9 uses a shared tool rail, fixed popup file actions, and a clearer t
 
 ## Install
 
-Version 0.8.9 is the current stable release. A Chrome Web Store listing is not available yet.
+Version 0.8.10 is the current stable release. A Chrome Web Store listing is not available yet.
 
 1. Download this repository or a release ZIP. Extract the files.
 2. Open `chrome://extensions`. In Edge, open `edge://extensions`.
@@ -64,7 +64,7 @@ The library stays on this device. Deleting a library item does not delete files 
 - Closed shadow roots and inaccessible frames can prevent player access.
 - ASS and SSA text and timing are supported. Embedded styles and effects are not rendered.
 - Image subtitles, RAR files, encrypted ZIP files, and archives over the 2 MB limit are not supported.
-- Authenticated OpenSubtitles delivery still needs confirmation for version 0.8.9.
+- Authenticated OpenSubtitles delivery still needs confirmation for version 0.8.10.
 
 ## Import player subtitles
 
