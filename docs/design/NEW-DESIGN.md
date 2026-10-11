@@ -60,7 +60,7 @@ Reviewed visual distance: shell/navigation 2, silhouette 2, grouping 1, typograp
 
 Three local concepts were rendered at desktop and 390px widths. Screening Room was integrated, then checked against the previous controller screenshots. The score is 22/26: shell/navigation 6, silhouette 6, grouping 2, typography 1, rhythm 1, component grammar 4, palette/motion 2. The rail, bottom action dock, and timing card change the main layout. The marine identity and native disclosure behavior remain familiar. Inter replaces the system UI typeface.
 
-Text and focus checks use the actual local theme. White on marine actions has 7.76:1 contrast; silver text on the dark marine shell has 13.3:1; amber focus and navigation have high contrast on marine surfaces. These checks cover the sampled theme roles, not a full accessibility certification. SVG decoration is hidden from assistive technology. Tabs have names, selected state, and vertical arrow-key navigation. Short windows scroll within the workspace while the header and tool rail remain available.
+Text and focus checks use the actual local theme. White on marine actions and silver text on the dark marine shell meet the sampled minimum contrast check; muted gold marks focus and navigation. These checks cover the sampled theme roles, not a full accessibility certification. SVG decoration is hidden from assistive technology. Tabs have names, selected state, and vertical arrow-key navigation. Short windows scroll within the workspace while the header and tool rail remain available.
 
 Tool changes reset workspace scroll to show the view heading. They retain form inputs, playback time, and subtitle settings. Player import sits below the search form in Find. Caption lift and reduced-motion behavior remain in the rendering path.
 
@@ -69,7 +69,7 @@ Tool changes reset workspace scroll to show the view heading. They retain form i
 
 The user requested a new UI font and three main colors, then chose marine as the dominant color. Inter is selected for the app labels and controls. Its [official design notes](https://rsms.me/inter/) describe small-text optical sizing, interface use, and tabular numerals. The variable font is bundled locally, including its upstream copyright notice. No CDN request is made during use. The caption font remains a user setting. Removal releases the controller's font registration.
 
-The final palette adapts [Color Hunt's navy/marine/gold palette](https://colorhunt.co/palette/191d881450a3337ccfffc436). Marine `#1450a3` is the dominant identity, with deep marine surfaces. Amber `#ffc436` marks selected tools, focus, and timing. Silver `#eef3fa` supports text. Accents occupy small areas; file surfaces stay marine. The original logo is retained. Contrast follows the [W3C minimum-contrast guidance](https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum).
+The final palette adapts [Color Hunt's navy/marine/gold palette](https://colorhunt.co/palette/191d881450a3337ccfffc436). Muted marine `#274c73` is the dominant identity, with deep marine surfaces. Muted gold `#c6b07c` marks selected tools, focus, and timing. Silver `#e7edf3` supports text. Accents occupy small areas; file surfaces stay marine. The original logo is retained. Contrast follows the [W3C minimum-contrast guidance](https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum).
 
 Font source: `https://rsms.me/inter/font-files/InterVariable.woff2?v=4.1`.
 Font SHA-256: `693b77d4f32ee9b8bfc995589b5fad5e99adf2832738661f5402f9978429a8e3`.
@@ -82,6 +82,8 @@ The controller font is the only web-accessible resource. It uses a dynamic sessi
 
 The behavior contract covers B1-B12. All 12 outcomes are retained. The nine-suite regression run passed, including file formats, search, downloads, recognition, imported styles, saved presets, all sentence-sync modes, segmented clocks, seeking, fullscreen, and caption clearance. After the font and final palette changes, focused UI/font and core overlay checks cover the changed paths. The font test confirms a loaded Inter face in both popup and video document, plus removal of the controller registration on cleanup.
 
-Commands: `npm run check`, `npm test`, `node tests/verify-design.cjs`, `node tests/verify-tip.cjs`, `node tests/verify.cjs`, `npm run store:assets`, and `npm run build`. Screenshot review covers desktop controls and text style, popup at 392px, popup access at 320px, and controller at 390x600. Store screenshots use local sample video.
+Commands: `npm run check`, `npm test`, `node tests/verify-design.cjs`, `node tests/verify-tip.cjs`, `node tests/verify.cjs`, `npm run store:assets`, and `npm run build`. Screenshot review covers desktop controls and text style, popup at 440px, popup access at 320px, and controller at 390x600. Store screenshots use local sample video.
 
 Remaining checks: the final design still needs a live signed-in player check and store review. Browser-native HUD clearance remains an interaction estimate. No new extension permissions, playback algorithms, provider endpoints, or credential operations are added. The one web-accessible font resource is a presentation asset.
+
+The 0.8.2 refinement widens the popup to 440 px, reduces saturation across the app theme and logo, and removes side rules from player status and film-source helper text. Caption appearance and timing remain user settings.

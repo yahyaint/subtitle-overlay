@@ -1,5 +1,11 @@
 # Local validation
 
+## 0.8.2 muted theme and wider popup - October 11, 2026
+
+The popup is 440 px wide instead of 392 px. Player status and film-source hints use plain helper text without a side rule. Marine surfaces, buttons, gold accents, and the logo use less saturated colors. Narrow-screen access remains. Caption appearance is unchanged.
+
+The focused design browser check passes: popup access at 440 px and 320 px, local Inter loading and cleanup, keyboard navigation, focus, sampled action contrast, compact controller access, and sync/style/import/file paths. Final store asset rendering and screenshot review pass. Static checks pass. A source comparison confirms that the controller's executable logic is unchanged outside the style sheet and logo colors; background changes only its version label. The nine-suite 0.8.1 regression remains the behavioral baseline. Checks use isolated local Chromium fixtures and sample video, not a live signed-in stream.
+
 ## 0.8.1 remove dub audio - October 11, 2026
 
 Find dub audio, audio pages, provider routes, catalogs, source examples, and bundled source data are removed. Updates clear only the retired audio preferences and session tokens. Saved subtitles, OpenSubtitles access, and film matching remain. Subtitle website setup now uses its own stylesheet.

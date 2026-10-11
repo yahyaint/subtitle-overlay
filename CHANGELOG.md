@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.8.2 - October 11, 2026
+
+- Increase the popup width from 392 px to 440 px. Keep access on narrow screens.
+- Show player status and film-source hints as plain helper text.
+- Reduce saturation in the marine surfaces, action colors, gold accents, and logo.
+
 ## 0.8.1 - Remove dub audio
 
 - Remove external audio discovery, pages, sources, catalogs, and downloads.

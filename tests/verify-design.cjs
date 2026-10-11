@@ -25,11 +25,11 @@ const {chromium}=require('playwright');
   await video.waitForFunction(()=>[...document.fonts].some(f=>f.family==='SubtitleOverlayInter' && f.status==='loaded'));assert.match(await ui('panel').evaluate(e=>getComputedStyle(e).fontFamily),/SubtitleOverlayInter/);
 
   await popup.locator('#tab-find').focus();await popup.keyboard.press('ArrowDown');assert.equal(await popup.locator('#tab-saved').getAttribute('aria-selected'),'true');await popup.keyboard.press('ArrowDown');assert.equal(await popup.locator('#tab-settings').getAttribute('aria-selected'),'true');await popup.keyboard.press('Home');assert.equal(await popup.locator('#tab-find').getAttribute('aria-selected'),'true');
-  for(const width of [392,320]){
+  for(const width of [440,320]){
    await popup.setViewportSize({width,height:600});assert(await popup.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
    for(const name of ['find','saved','settings']){await popup.locator('#tab-'+name).click();assert(await popup.locator('#attach').isVisible());assert(await popup.locator('#file').isVisible());const dock=await popup.locator('.action-dock').boundingBox();assert(dock.y+dock.height<=600);}
   }
-  await popup.locator('#tab-find').click();await popup.setViewportSize({width:392,height:600});await popup.locator('body').screenshot({path:path.join(artifacts,'new-design-popup.png')});
+  await popup.locator('#tab-find').click();await popup.setViewportSize({width:440,height:600});await popup.locator('body').screenshot({path:path.join(artifacts,'new-design-popup.png')});
   await ui('tab-controls').click();await ui('tab-controls').focus();await video.keyboard.press('ArrowDown');assert.equal(await ui('tab-find').getAttribute('aria-selected'),'true');await video.keyboard.press('ArrowDown');assert.equal(await ui('tab-saved').getAttribute('aria-selected'),'true');await video.keyboard.press('Home');assert.equal(await ui('tab-controls').getAttribute('aria-selected'),'true');
   await ui('syncSettings').locator('summary').click();await ui('syncMode').selectOption('three');assert(await ui('markFirst').isVisible());assert(await ui('syncThird').isVisible());
   await ui('textSettings').locator(':scope > summary').click();await ui('shadowSettings').locator('summary').click();assert(await ui('shadowBlur').isVisible());await ui('positionSettings').locator('summary').click();assert(await ui('avoidControls').isVisible());assert(await ui('restorePlayerStyle').isVisible());
