@@ -1,12 +1,12 @@
 # Subtitle Overlay privacy notice
 
-Version: 0.8.0. Updated: October 11, 2026. Publisher: yahyaint.
+Version: 0.8.1. Updated: October 11, 2026. Publisher: yahyaint.
 
 ## Data on this device
 
 The extension stores saved subtitle text, film labels, language choices, rejected subtitle IDs, search preferences, source URLs, and timing and text settings in extension-local browser storage. The library does not use browser sync.
 
-An OpenSubtitles API key stays in local extension storage. Login tokens and optional audio-catalog tokens stay in browser-session storage. The extension sends a password to OpenSubtitles only when you log in. It does not save the password to extension storage. Browser password-manager behavior is separate.
+An OpenSubtitles API key stays in local extension storage. Login tokens stay in browser-session storage. The extension sends a password to OpenSubtitles only when you log in. It does not save the password to extension storage. Browser password-manager behavior is separate.
 
 Provider credentials and saved subtitle storage are restricted to trusted extension contexts. The film page does not receive the provider API key or account token.
 
@@ -24,8 +24,6 @@ A selected player subtitle file request contacts its file host. That host receiv
 
 OpenSubtitles receives the title, language, year if entered, and requests needed to find or download a subtitle. API requests also send your key and session token when present. Website search opens the provider website. Its browser session can use the provider's existing cookies. Website file retrieval can include provider cookies.
 
-Audio search sends your search fields to the source you select, such as Internet Archive, SoundCloud, Google search, or a catalog you add. A catalog token is sent to that catalog when you configure one. Direct downloads contact the file host. SoundCloud preview loads its embedded player after you select **Preview audio**.
-
 These services receive normal network information, such as your IP address. This notice describes the extension's behavior. It does not describe what those services do with data they receive.
 
 ## Optional tips
@@ -36,7 +34,7 @@ The **Tip** link opens `https://yahyanabil.com/support` in a new browser tab. It
 
 The extension uses browser download events and matching download records to find the subtitle you select in its managed search window. It keeps the search window, selected link, download ID, and film-tab association in session storage. It does not upload download history to a developer server.
 
-Subtitle copies go to `Subtitle Overlay` inside the browser's download folder. Direct audio downloads use a Save dialog. Browser settings can also cause subtitle Save dialogs.
+Subtitle copies go to `Subtitle Overlay` inside the browser's download folder. Browser settings can also cause subtitle Save dialogs.
 
 A player report is created only when you select its report button. It contains public player clocks, playback state, control labels and attributes, and layout measurements. It excludes stream URLs, subtitle text, and extension credentials. It is saved locally. It is not sent automatically. Check it before sharing it.
 
@@ -46,7 +44,7 @@ This build has no developer-operated server, analytics SDK, advertising SDK, or 
 
 ## Remove data
 
-Remove a subtitle in **Saved** to delete its library copy and saved settings. Use **Remove account access** to remove the OpenSubtitles API key and token. Remove an added audio source to remove its configuration and session token.
+Remove a subtitle in **Saved** to delete its library copy and saved settings. Use **Remove account access** to remove the OpenSubtitles API key and token.
 
 Uninstall the extension to remove its remaining extension storage. Files already saved in the download folder remain until you delete them. Browser history, provider sessions, and provider-held data are separate.
 

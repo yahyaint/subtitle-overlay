@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.8.1 - Remove dub audio
+
+- Remove external audio discovery, pages, sources, catalogs, and downloads.
+- Clear retired audio preferences and tokens on update.
+- Keep subtitle setup, film matching, and saved subtitle settings.
+
 ## 0.8.0 - New Design
 
 - Add a shared tool rail with marine blue, amber, and silver.

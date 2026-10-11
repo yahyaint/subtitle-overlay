@@ -8,7 +8,7 @@ Add your own subtitles to browser video. Find a subtitle, set its timing, and ch
 
 ## New Design
 
-Version 0.8.0 uses a shared tool rail, fixed popup file actions, and a clearer timing card. See [design notes and research](docs/design/NEW-DESIGN.md).
+Version 0.8.1 uses a shared tool rail, fixed popup file actions, and a clearer timing card. See [design notes and research](docs/design/NEW-DESIGN.md).
 
 ## Features
 
@@ -22,7 +22,6 @@ Version 0.8.0 uses a shared tool rail, fixed popup file actions, and a clearer t
 - Adjust the delay. Sync with one, two, or three sentences.
 - Change the font, size, color, background, and shadow.
 - Save subtitles and their timing and text settings on this device.
-- Find external audio sources through websites or audio catalogs.
 
 ## Install
 
@@ -61,8 +60,7 @@ The library stays on this device. Deleting a library item does not delete files 
 - Closed shadow roots and inaccessible frames can prevent player access.
 - ASS and SSA text and timing are supported. Embedded styles and effects are not rendered.
 - Image subtitles, RAR files, encrypted ZIP files, and archives over the 2 MB limit are not supported.
-- Audio tools find sources and download direct audio files. They do not replace or sync the stream's audio.
-- Authenticated OpenSubtitles delivery still needs confirmation for version 0.8.0.
+- Authenticated OpenSubtitles delivery still needs confirmation for version 0.8.1.
 
 ## Import player subtitles
 

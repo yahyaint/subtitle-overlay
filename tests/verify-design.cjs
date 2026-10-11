@@ -9,6 +9,13 @@ const {chromium}=require('playwright');
  try{
   context=await chromium.launchPersistentContext(path.join(artifacts,'design-profile-'+Date.now()),{channel:'chromium',headless:true,args:[`--disable-extensions-except=${root}`,`--load-extension=${root}`],viewport:{width:1360,height:900}});
   const worker=context.serviceWorkers()[0]||await context.waitForEvent('serviceworker'),id=new URL(worker.url()).hostname,video=await context.newPage(),errors=[];
+  const migration=await worker.evaluate(async()=>{
+   await chrome.storage.local.set({dubProviders:[{id:'retired'}],dubPreferences:{language:'ar'},apiKey:'subtitle-fixture-key','subtitleFile:migration':{text:'Keep subtitle'}});
+   await chrome.storage.session.set({'dubToken:retired':'remove-fixture-token',token:'keep-subtitle-token'});
+   await restrictStorage();const local=await chrome.storage.local.get(null),session=await chrome.storage.session.get(null);
+   const result={removed:!('dubProviders' in local)&&!('dubPreferences' in local)&&!('dubToken:retired' in session),kept:local.apiKey==='subtitle-fixture-key' && local['subtitleFile:migration'].text==='Keep subtitle' && session.token==='keep-subtitle-token',identity:normalizeFilmTitle('Amélie'),fraction:normalizeFilmTitle('Film ½')};
+   await chrome.storage.local.remove(['apiKey','subtitleFile:migration']);await chrome.storage.session.remove('token');return result;
+  });assert.deepEqual(migration,{removed:true,kept:true,identity:'amelie',fraction:'film 1 2'});
   video.on('pageerror',error=>errors.push(error.message));await video.goto('http://127.0.0.1:'+server.address().port);
   const popup=await context.newPage();popup.on('pageerror',error=>errors.push(error.message));await popup.goto(`chrome-extension://${id}/popup.html`);
   const tabId=await popup.evaluate(async url=>(await chrome.tabs.query({})).find(tab=>tab.url===url).id,video.url());
@@ -35,7 +42,7 @@ const {chromium}=require('playwright');
   const contrast=await popup.locator('#searchButton').evaluate(e=>{
    const c=getComputedStyle(e),lum=value=>{const rgb=value.match(/[\d.]+/g).slice(0,3).map(n=>Number(n)/255).map(x=>x<=.04045?x/12.92:((x+.055)/1.055)**2.4);return rgb[0]*.2126+rgb[1]*.7152+rgb[2]*.0722;};const values=[lum(c.color),lum(c.backgroundColor)].sort((a,b)=>a-b);return (values[1]+.05)/(values[0]+.05);
   });assert(contrast>=4.5,'Primary action text contrast');
-  const [audio]=await Promise.all([context.waitForEvent('page'),popup.locator('#dubLibrary').click()]);await audio.waitForURL(url=>url.pathname==='/dub-library.html');assert.equal(new URL(audio.url()).hostname,id);await audio.close();await ui('tab-controls').click();if(!await ui('advancedSettings').evaluate(e=>e.open))await ui('advancedSettings').locator('summary').click();await ui('remove').click();assert.equal(await video.evaluate(()=>[...document.fonts].some(f=>f.family==='SubtitleOverlayInter')),false);
+  assert.equal(await popup.locator('#dubLibrary').count(),0);const retired=await popup.evaluate(()=>chrome.runtime.sendMessage({type:'DUB_SETTINGS'}));assert.equal(retired.ok,false);assert.match(retired.error,/Unknown request/);await ui('tab-controls').click();if(!await ui('advancedSettings').evaluate(e=>e.open))await ui('advancedSettings').locator('summary').click();await ui('remove').click();assert.equal(await video.evaluate(()=>[...document.fonts].some(f=>f.family==='SubtitleOverlayInter')),false);
   assert.deepEqual(errors,[]);console.log('PASS New Design: vertical keyboard tabs, fixed file dock, 320px popup, compact controller, sync/style/import/file paths, visible focus, and no script errors.');
  }finally{if(context)await context.close();await new Promise(resolve=>server.close(resolve));}
 })().catch(error=>{console.error(error);process.exitCode=1;});

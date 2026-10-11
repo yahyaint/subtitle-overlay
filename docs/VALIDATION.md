@@ -1,5 +1,11 @@
 # Local validation
 
+## 0.8.1 remove dub audio - October 11, 2026
+
+Find dub audio, audio pages, provider routes, catalogs, source examples, and bundled source data are removed. Updates clear only the retired audio preferences and session tokens. Saved subtitles, OpenSubtitles access, and film matching remain. Subtitle website setup now uses its own stylesheet.
+
+All nine local integration suites pass. The design fixture checks the removed action and route, legacy storage cleanup, retained subtitle credentials and files, and unchanged title normalization. The other suites cover player import and original style restore, subtitle formats, automatic downloads, first-use website access, saved presets, seeking, one/two/three-sentence sync, film clocks, fullscreen, and caption movement around player controls. Static checks and updated store assets pass. No new permissions are added. These checks use isolated local Chromium fixtures; this release has not been tested in a live signed-in stream.
+
 ## 0.8.0 New Design - October 11, 2026
 
 The popup and controller share a tool rail, fixed popup file dock, surfaced file card, and larger timing readout. Inter is bundled for app controls. The final palette adapts Color Hunt: marine dominates, amber marks selected actions and timing, and silver supports text. The original logo remains. Caption font and appearance settings remain user-controlled.

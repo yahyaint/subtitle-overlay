@@ -55,9 +55,3 @@ The library is local to this extension installation. It does not sync to another
 ## Fullscreen
 
 The overlay's fullscreen button switches browser fullscreen. F11 also toggles this mode. The player can have its own fullscreen button.
-
-## Audio sources
-
-Select **Find dub audio** to search audio sources. Add a website search link or a JSON catalog. An example catalog is in `extension/audio-catalog-example.json`.
-
-Search results are candidates. Check the language, duration, and film version. Direct audio downloads use the browser's Save dialog. A source preview does not sync with the film. The extension does not replace the player's audio.

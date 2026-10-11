@@ -1,6 +1,6 @@
 # Prepare a release
 
-Prepared project: `yahyaint/subtitle-overlay`. Current version: `0.8.0` preview.
+Prepared project: `yahyaint/subtitle-overlay`. Current version: `0.8.1` preview.
 
 ## Files prepared
 
@@ -14,7 +14,7 @@ Prepared project: `yahyaint/subtitle-overlay`. Current version: `0.8.0` preview.
 
 1. Include the project's MIT license in each release archive.
 2. Confirm publisher identity and a private security contact.
-3. Check version 0.8.0 in the existing signed-in player. Test pause, forward seek, backward seek, hidden controls, and all three sentence-sync modes.
+3. Check version 0.8.1 in the existing signed-in player. Test pause, forward seek, backward seek, hidden controls, and all three sentence-sync modes.
 4. Test a live OpenSubtitles download through its follow-up page. Confirm Save, ZIP import, load, and reload.
 5. Run `npm ci`, `npm run check`, `npm test`, and `npm run build` from a fresh checkout.
 6. Push the release commit to the public GitHub repository.
@@ -38,7 +38,7 @@ Use [the release draft](GITHUB-RELEASE.md) for a preview release. Upload the gen
 
 ## Chrome Web Store setup
 
-Upload `dist/subtitle-overlay-0.8.0-chrome-web-store.zip`. Its manifest is at the ZIP root. This follows Google's [package preparation instructions](https://developer.chrome.com/docs/webstore/prepare).
+Upload `dist/subtitle-overlay-0.8.1-chrome-web-store.zip`. Its manifest is at the ZIP root. This follows Google's [package preparation instructions](https://developer.chrome.com/docs/webstore/prepare).
 
 Copy the [listing text](store/LISTING.md). Use the images in `docs/store/assets`. The prepared screenshots are 1280 × 800. The tile is 440 × 280. See Google's [listing image fields](https://developer.chrome.com/docs/webstore/cws-dashboard-listing).
 

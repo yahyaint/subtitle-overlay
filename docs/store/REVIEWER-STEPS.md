@@ -39,10 +39,6 @@ Some players expose no readable tracks. Streaming tracks may expose only loaded 
 
 Website delivery can depend on the provider. API mode requires the reviewer's own key and any account access needed by that provider. No shared production credentials are included.
 
-## Audio-source path
-
-Open **Find dub audio**. Add a website search link or a JSON audio catalog. Search sends the entered fields to that source after permission is granted. `audio-catalog-example.json` shows the data format; its example URLs are placeholders.
-
 ## Clock limits
 
 When a player uses a segment clock, a public playback timeline can supply the film time. Show the player controls if asked. Players that expose neither cannot be synced reliably. The extension does not access closed shadow roots or inaccessible frame internals.

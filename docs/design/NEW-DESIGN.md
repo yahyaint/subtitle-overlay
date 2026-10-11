@@ -16,7 +16,7 @@ Replace popup and controller presentation. Keep the marine-blue identity and exi
 | B8 | Font, color, size, background, shadow, position and spacing remain reachable | `verify`, `verify-player-tracks` |
 | B9 | Temporary control clearance preserves saved position; opt-out and reduced motion work | `verify-shadow-clock` |
 | B10 | Fullscreen, close, toggle, report export and complete cleanup work | `verify`, `verify-clock-bridge` |
-| B11 | Audio search and Tip stay available; no extra permissions or referrer | `verify-tip`, existing audio entry route |
+| B11 | Tip stays available; no extra permissions or referrer | `verify-tip` |
 | B12 | Visible focus, keyboard tabs, readable states, compact viewport and RTL isolation work | `verify`, focused design checks |
 
 ## Research
@@ -43,7 +43,7 @@ A viewing companion for people who want to find, load, align, and restyle subtit
 | B7 | Large delay readout and sentence-sync sheet | Horizontal timing dock and sync drawer | Timing console |
 | B8/B9 | Text-style inspector with nested sections | Typography sheet | Style console |
 | B10/B12 | Labeled rail, header actions, advanced sheet | Bottom labels and compact command strip | Numbered steps and utilities |
-| B11 | Quiet support/audio footer | Links on library shelf | Utility row |
+| B11 | Quiet support footer | Links on library shelf | Utility row |
 
 All candidates use mocked state during exploration. Production integration keeps existing domain code and stable control IDs.
 

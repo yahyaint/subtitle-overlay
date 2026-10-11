@@ -1,7 +1,7 @@
 const PROVIDER_HOSTS = new Set(['api.opensubtitles.com', 'vip-api.opensubtitles.com']);
-const APP = 'SubtitleOverlay v0.8.0';
-importScripts('dub-sources.js', 'subtitle-search.js','subtitles.js','subtitle-settings.js','download-folder.js','subtitle-download.js');
-const dubSearchCache = new Map();
+const APP = 'SubtitleOverlay v0.8.1';
+importScripts('subtitle-search.js','subtitles.js','subtitle-settings.js','download-folder.js','subtitle-download.js');
+function normalizeFilmTitle(value) { return String(value || '').replace(/½/g, ' 1/2').normalize('NFKD').replace(/\p{M}/gu, '').toLocaleLowerCase().replace(/[^\p{L}\p{N}]+/gu, ' ').trim(); }
 let libraryQueue=Promise.resolve();
 function libraryMutation(action) { const result=libraryQueue.then(action);libraryQueue=result.catch(()=>{});return result; }
 // Files and compact metadata are stored separately so opening the popup stays quick.
@@ -12,7 +12,7 @@ function saveSubtitle(fileId, text, name, film = {}, language = '', preset, cust
   const id = customId || `opensubtitles:${fileId}`;
   const entry = {id, fileId, name: String(name).slice(0,250), title: String(film.title || name).slice(0,200), year: String(film.year || '').slice(0,4), language: String(language).slice(0,40), good:false, savedAt:Date.now()};
   const series=SubtitleSearch.episode(entry.title);if(series)Object.assign(entry,series);
-  entry.filmKey = `${DubSources.normalize(series ? series.showTitle+' S'+String(series.season).padStart(2,'0')+'E'+String(series.episode).padStart(2,'0') : entry.title)}:${entry.year}`;
+  entry.filmKey = `${normalizeFilmTitle(series ? series.showTitle+' S'+String(series.season).padStart(2,'0')+'E'+String(series.episode).padStart(2,'0') : entry.title)}:${entry.year}`;
   const key=`subtitleFile:${id}`;
   const existing=await chrome.storage.local.get(key);
   const addedBytes=new TextEncoder().encode(JSON.stringify({text})).length - (existing[key] ? new TextEncoder().encode(JSON.stringify(existing[key])).length : 0);
@@ -86,6 +86,11 @@ function rateSubtitle(id, verdict, tabId) { return libraryMutation(async()=>{
 async function restrictStorage() {
   await chrome.storage.local.setAccessLevel({accessLevel: 'TRUSTED_CONTEXTS'});
   await chrome.storage.session.setAccessLevel({accessLevel: 'TRUSTED_CONTEXTS'});
+  // Retire only the removed audio feature's preferences and session credentials.
+  await chrome.storage.local.remove(['dubProviders','dubPreferences']);
+  const legacySession=await chrome.storage.session.get(null);
+  const legacyKeys=Object.keys(legacySession).filter(key=>key.startsWith('dubToken:'));
+  if(legacyKeys.length)await chrome.storage.session.remove(legacyKeys);
 }
 const storageReady = restrictStorage();
 chrome.runtime.onInstalled.addListener(() => { restrictStorage().catch(console.error); });
@@ -120,7 +125,6 @@ function allowedDownload(link) {
 async function handle(message, sender) {
   await storageReady;
   if (typeof message?.type !== 'string') throw new Error('Invalid request.');
-  if (message.type.startsWith('DUB_')) return handleDub(message);
   if(message.type==='EXPORT_PLAYER_REPORT'){
     if(!Number.isSafeInteger(message.tabId))throw new Error('Open a film tab first.');
     const result=await chrome.tabs.sendMessage(message.tabId,{type:'GET_PLAYER_INFO'}).catch(()=>null);
@@ -249,111 +253,6 @@ async function handle(message, sender) {
     return {text, name, count: loaded.count, saved,saveError};
   }
   throw new Error('Unknown request.');
-}
-async function jsonSource(url, headers = {}) {
-  const parsed = DubSources.safeUrl(url);
-  const permitted = await chrome.permissions.contains({origins: [`${parsed.origin}/*`]});
-  if (!permitted) throw new Error(`Enable access to ${parsed.hostname} in the source settings first.`);
-  const response = await fetch(parsed.href, {headers: {Accept: 'application/json', ...headers}, credentials: 'omit', redirect: 'error', signal: AbortSignal.timeout(20000)});
-  if (!response.ok) throw new Error(`Source request failed (HTTP ${response.status}).`);
-  const reader = response.body.getReader(); const chunks = []; let length = 0;
-  while (true) {
-    const {done, value} = await reader.read(); if (done) break;
-    length += value.length; if (length > 2_000_000) { await reader.cancel(); throw new Error('Catalog exceeds 2 MB.'); }
-    chunks.push(value);
-  }
-  const bytes = new Uint8Array(length); let at = 0;
-  for (const chunk of chunks) { bytes.set(chunk, at); at += chunk.length; }
-  try { return JSON.parse(new TextDecoder().decode(bytes)); }
-  catch { throw new Error('Source returned a web page instead of a JSON audio catalog. Use website search for that source.'); }
-}
-async function dubConfiguration() {
-  const {dubProviders = [], dubPreferences = {language: 'en'}} = await chrome.storage.local.get(['dubProviders', 'dubPreferences']);
-  return {providers: [{id:'all',kind:'aggregate',name:'Search all audio catalogs'}, {id: 'archive', kind: 'archive', name: 'Internet Archive audio'}, {id:'soundcloud-search', kind:'website', name:'SoundCloud search', urlTemplate:'https://soundcloud.com/search/sounds?q={title}%20{languageName}'}, {id: 'leads', kind: 'leads', name: 'Researched Arabic source leads'}, ...dubProviders], preferences: dubPreferences};
-}
-async function handleDub(message) {
-  if (message.type === 'DUB_SETTINGS') return dubConfiguration();
-  if (message.type === 'DUB_SAVE_SOURCE') {
-    const source = message.source;
-    if (!source || !['json', 'website'].includes(source.kind) || !source.name?.trim() || source.name.length > 80) throw new Error('Enter a source name and source type.');
-    const url = DubSources.template(source.urlTemplate, {title: 'test', language: 'en', year: '2000'});
-    if (source.kind === 'website' && !source.urlTemplate.includes('{title}')) throw new Error('Website search URL must include {title}.');
-    if (source.kind === 'json' && !await chrome.permissions.contains({origins: [`${new URL(url).origin}/*`]})) throw new Error('Source host access was not enabled.');
-    const {dubProviders = []} = await chrome.storage.local.get('dubProviders');
-    if (dubProviders.length >= 12) throw new Error('Remove a source before adding another (maximum 12).');
-    const entry = {id: crypto.randomUUID(), kind: source.kind, name: source.name.trim(), urlTemplate: source.urlTemplate};
-    await chrome.storage.local.set({dubProviders: [...dubProviders, entry]});
-    if (message.token?.trim()) await chrome.storage.session.set({[`dubToken:${entry.id}`]: message.token.trim().slice(0, 2000)});
-    dubSearchCache.clear(); return {id: entry.id};
-  }
-  if (message.type === 'DUB_REMOVE_SOURCE') {
-    const {dubProviders = []} = await chrome.storage.local.get('dubProviders');
-    await chrome.storage.local.set({dubProviders: dubProviders.filter(source => source.id !== message.id)});
-    await chrome.storage.session.remove(`dubToken:${message.id}`); dubSearchCache.clear(); return {};
-  }
-  if (message.type === 'DUB_PREFERENCES') {
-    await chrome.storage.local.set({dubPreferences: {language: String(message.language || 'en').trim().slice(0, 40), title: String(message.title || '').trim().slice(0, 200), year: String(message.year || '').slice(0, 4)}}); return {};
-  }
-  if (message.type === 'DUB_SEARCH') {
-    const query = {title: String(message.title || '').trim(), language: String(message.language || '').trim().toLowerCase(), year: String(message.year || ''), includeUnknown: Boolean(message.includeUnknown)};
-    if (!query.title || query.title.length > 200 || !query.language || query.language.length > 40 || !/^[a-z]{2,3}(?:-[a-z0-9]{2,8})*$/i.test(query.language)) throw new Error('Enter film title and language code (e.g. en, ar, ar-eg).');
-    if (query.year && !/^(18|19|20|21)\d{2}$/.test(query.year)) throw new Error('Enter a valid release year.');
-    const {providers} = await dubConfiguration(); const source = providers.find(item => item.id === message.id);
-    if (!source) throw new Error('Choose an audio source.');
-    if (source.kind === 'aggregate') {
-      const catalogs = providers.filter(item => ['archive','json'].includes(item.kind));
-      const matches = await Promise.allSettled(catalogs.map(item => handleDub({...message, id:item.id})));
-      const tracks=[]; const providerErrors=[]; let searchedItems=0, failedItems=0;
-      for (let i=0;i<matches.length;i++) {
-        const result=matches[i];
-        if (result.status==='fulfilled') { tracks.push(...result.value.tracks); searchedItems+=result.value.searchedItems; failedItems+=result.value.failedItems; }
-        else providerErrors.push({source:catalogs[i].name,error:result.reason.message});
-      }
-      const seen=new Set();
-      return {tracks:tracks.filter(track => !seen.has(track.url) && seen.add(track.url)).slice(0,80), searchedItems, failedItems, sourceCount:catalogs.length, providerErrors};
-    }
-    if (source.kind === 'website') return {website: DubSources.template(source.urlTemplate, query), tracks: []};
-    if (source.kind === 'leads') {
-      const payload = await (await fetch(chrome.runtime.getURL('audio-leads.json'))).json();
-      return {tracks: DubSources.leadsTracks(payload, query), searchedItems: 0, failedItems: 0};
-    }
-    const cacheKey = JSON.stringify([source.id, query]);
-    const cached = dubSearchCache.get(cacheKey);
-    if (cached && Date.now() - cached.created < 120000) return cached.result;
-    let result;
-    if (source.kind === 'archive') {
-      const search = await jsonSource(DubSources.archiveSearch(query));
-      const documents = (search.response?.docs || []).slice(0, 12);
-      let failedItems = 0; const tracks = [];
-      // Two metadata requests at a time; partial reads retrieve file lists only.
-      for (let i = 0; i < documents.length; i += 2) {
-        const items = await Promise.allSettled(documents.slice(i, i + 2).map(async item => {
-          if (!/^[a-zA-Z0-9_.-]+$/.test(item.identifier)) return [];
-          const metadata = await jsonSource(`https://archive.org/metadata/${encodeURIComponent(item.identifier)}/files?count=500`);
-          if (!Array.isArray(metadata.result)) return [];
-          if (query.year && item.year && String(item.year) !== query.year) return [];
-          return DubSources.archiveFiles(item, metadata.result);
-        }));
-        for (const item of items) { if (item.status === 'fulfilled') tracks.push(...item.value); else failedItems++; }
-      }
-      result = {tracks: tracks.slice(0, 80), searchedItems: documents.length, failedItems, totalItems: search.response?.numFound || 0};
-    } else {
-      const stored = await chrome.storage.session.get(`dubToken:${source.id}`);
-      const token = stored[`dubToken:${source.id}`];
-      const payload = await jsonSource(DubSources.template(source.urlTemplate, query), token ? {Authorization: `Bearer ${token}`} : {});
-      result = {tracks: DubSources.catalogTracks(payload, query, source), searchedItems: 0, failedItems: 0};
-    }
-    if (dubSearchCache.size > 20) dubSearchCache.clear();
-    dubSearchCache.set(cacheKey, {created: Date.now(), result}); return result;
-  }
-  if (message.type === 'DUB_DOWNLOAD') {
-    const url = DubSources.safeUrl(message.url);
-    if (!DubSources.audioFormat(url.pathname)) throw new Error('Choose a direct audio-file URL. Web pages and videos are not audio files.');
-    if (!await chrome.permissions.contains({permissions: ['downloads']})) throw new Error('Enable file downloads first.');
-    const downloadId = await chrome.downloads.download({url: url.href, saveAs: true});
-    return {downloadId};
-  }
-  throw new Error('Unknown audio-source request.');
 }
 async function websiteContext(tabId) {
   const stored=await chrome.storage.session.get('websiteTab:'+tabId);if(stored['websiteTab:'+tabId])return stored['websiteTab:'+tabId];

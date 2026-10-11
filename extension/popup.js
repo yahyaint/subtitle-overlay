@@ -111,10 +111,6 @@ async function refreshLibrary(selected) {
 $('savedFilm').onchange=()=>{const entry=savedEntries.find(item=>item.filmKey===$('savedFilm').value);if(entry){$('query').value=entry.title;$('year').value=entry.year;}renderLibrary();};
 chrome.storage.onChanged.addListener((changes,area)=>{if(area==='local' && changes.subtitleLibrary) refreshLibrary().catch(error=>status(error.message,true));});
 $('attach').onclick = () => task($('attach'), async () => { await attach(); status('Controls opened on the video.'); });
-$('dubLibrary').onclick = () => {
-  const params = new URLSearchParams($('query').value.trim() ? {title: $('query').value, language: $('language').value, year: $('year').value} : {});
-  chrome.tabs.create({url: `${chrome.runtime.getURL('dub-library.html')}?${params}`});
-};
 $('file').onchange = async () => {
   const file = $('file').files[0]; if (!file) return;
   try {

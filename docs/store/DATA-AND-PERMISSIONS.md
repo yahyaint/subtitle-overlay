@@ -1,10 +1,10 @@
 # Data and permission notes
 
-These notes describe version 0.8.0 from its source. They are inputs for the publisher's dashboard answers. They do not claim store acceptance or assign dashboard data categories.
+These notes describe version 0.8.1 from its source. They are inputs for the publisher's dashboard answers. They do not claim store acceptance or assign dashboard data categories.
 
 ## Purpose
 
-Display external subtitles over browser video. Help the user find, load, sync, style, and save those subtitles. A related audio-source page finds external audio candidates; it does not replace stream audio.
+Display external subtitles over browser video. Help the user find, load, sync, style, and save those subtitles.
 
 ## Required permissions
 
@@ -13,15 +13,15 @@ Display external subtitles over browser video. Help the user find, load, sync, s
 | `activeTab` | Access the selected film page after the user opens the extension. |
 | `scripting` | Add packaged overlay code and a public player-clock bridge to that tab. Add the packaged download bridge to an approved provider window. |
 | `storage` | Keep subtitle files, film labels, preferences, saved presets, and the API key locally. Keep tokens and active download associations in session storage. |
-| `downloads` | Save subtitle copies, find the selected provider download, save user-requested player reports, and download selected direct audio files. |
+| `downloads` | Save subtitle copies, find the selected provider download, save user-requested player reports. |
 
 ## Optional host access
 
 `https://*.opensubtitles.com/*` supports API calls and provider downloads. Website setup asks for the OpenSubtitles.org and OpenSubtitles.com origins.
 
-`https://*/*` is an optional declaration for user-added HTTPS audio catalogs and provider download hosts. The code requests selected origins when the user enables website downloads or a catalog. It does not request all HTTPS sites at once. No permanent film-site host access is declared.
+`https://*/*` is an optional declaration for user-selected HTTPS subtitle providers and download hosts. The code requests selected origins when the user enables website downloads. It does not request all HTTPS sites at once. No permanent film-site host access is declared.
 
-The broad optional declaration remains because catalogs can use a user-selected HTTPS origin. Review this scope if the audio-source feature changes.
+The broad optional declaration supports edited subtitle search links and provider download hosts. The extension requests only the selected origins.
 
 ## Data handling
 
@@ -30,10 +30,10 @@ The broad optional declaration remains because catalogs can use a user-selected 
 | Film metadata, video state, public player controls | Read on the attached page to suggest titles, sync captions, and avoid visible controls. |
 | Page address and selected provider/download URLs | Used locally to route a selected file to the film tab and match provider downloads. |
 | Subtitle text, film labels, language, sync and text settings, captured player appearance | Kept in extension-local storage. Exported copies go to the browser's download folder. |
-| Search title, language, optional year | Sent to the provider or source selected by the user. |
+| Search title, language, optional year | Sent to the provider selected by the user. |
 | API key | Stored locally; sent to OpenSubtitles API. |
 | Username and password | Sent to OpenSubtitles when the user logs in. Not saved by extension code. |
-| Login or catalog token | Kept in session storage; sent to the matching provider or catalog. |
+| Login token | Kept in session storage; sent to the matching provider. |
 | Selected download records | Checked through browser downloads for managed-window import. No developer-server upload. |
 | Player report | Saved locally only on request. Review before sharing. |
 
@@ -41,9 +41,7 @@ There is no developer-operated backend, analytics, sale of data, or automatic di
 
 ## Executable code
 
-All extension JavaScript is packaged. The clock bridge runs a packaged file in the page's MAIN world. Catalog and subtitle responses are parsed as data. No `eval`, dynamic function construction, or remote JavaScript import is used.
-
-SoundCloud preview opens a third-party iframe only after the user selects Preview audio. This is external web content. Include it when reviewing third-party data flows and the final store submission.
+All extension JavaScript is packaged. The clock bridge runs a packaged file in the page's MAIN world. Subtitle responses are parsed as data. No `eval`, dynamic function construction, or remote JavaScript import is used.
 
 ## Final disclosure task
 
@@ -53,7 +51,7 @@ Player-file import requests only the selected public track URL, after Import. It
 
 ## Language groups and episode recognition
 
-Version 0.8.0 groups public player track labels by their language codes. It reads public playback and page metadata to suggest the film or episode. Series searches send the show, season, and episode numbers to the selected provider after the user starts a search. There are no new permissions.
+Version 0.8.1 groups public player track labels by their language codes. It reads public playback and page metadata to suggest the film or episode. Series searches send the show, season, and episode numbers to the selected provider after the user starts a search. There are no new permissions.
 
 
-The Inter font is bundled with 0.8.0. Its single WOFF2 file is web accessible through a dynamic session URL so the controller can load it. No script, account data, or subtitle file is exposed by this rule. The extension does not request a remote font.
+The Inter font is bundled with 0.8.1. Its single WOFF2 file is web accessible through a dynamic session URL so the controller can load it. No script, account data, or subtitle file is exposed by this rule. The extension does not request a remote font.

@@ -3,7 +3,7 @@ const {zipFiles}=require('./zip-tools.cjs');require('./check.cjs');
 const project=path.resolve(__dirname,'..'),root=path.join(project,'extension'),out=path.join(project,'dist');fs.mkdirSync(out,{recursive:true});
 const version=JSON.parse(fs.readFileSync(path.join(root,'manifest.json'))).version;
 // Keep packaging independent of local files and browser-generated artifacts.
-const include=['audio-catalog-example.json','audio-leads.json','background.js','content.js','download-folder.js','dub-library.css','dub-library.html','dub-library.js','dub-sources.js','film-detection.js','icon-128.png','icon-16.png','icon-32.png','icon-48.png','logo.svg','manifest.json','player-clock-bridge.js','popup.css','popup.html','popup.js','sample.srt','subtitle-download.js','subtitle-search.js','subtitle-settings.js','subtitles.js','website-bridge.js','website-permission.html','website-permission.js'];
+const include=['background.js','content.js','download-folder.js','film-detection.js','icon-128.png','icon-16.png','icon-32.png','icon-48.png','logo.svg','manifest.json','player-clock-bridge.js','popup.css','popup.html','popup.js','sample.srt','subtitle-download.js','subtitle-search.js','subtitle-settings.js','subtitles.js','website-bridge.js','website-permission.css','website-permission.html','website-permission.js'];
 include.push('player-subtitles.js','app-font.css','inter-variable.woff2','INTER-LICENSE.txt');
 const source=include.map(name=>[name,fs.readFileSync(path.join(root,name))]);
 const license=fs.readFileSync(path.join(project,'LICENSE'));

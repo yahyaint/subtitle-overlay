@@ -40,15 +40,13 @@ Save for later:
 
 Start a film, open the extension, and select Open controls. Local files need no account. API search needs your OpenSubtitles key. Website search needs no extension API key.
 
-The extension also helps you find external audio sources. You can add an audio catalog or website search link. Audio discovery does not replace or sync the player's audio.
-
 Some players do not expose a readable film clock. If asked, show the player's own controls. ASS and SSA styles and effects are not rendered. Image subtitles and RAR files are not supported. Files and extracted subtitle data have a 2 MB limit.
 
-This is an independent extension. It is not affiliated with Disney+, OpenSubtitles, or the audio sources it links to.
+This is an independent extension. It is not affiliated with Disney+, OpenSubtitles.
 
 The extension is free to use. The optional Tip link opens https://yahyanabil.com/support. A tip is not needed to use any feature.
 
-Version 0.8.0 is a preview. Live player compatibility and provider delivery can vary.
+Version 0.8.1 is a preview. Live player compatibility and provider delivery can vary.
 
 ## URLs and publisher
 
