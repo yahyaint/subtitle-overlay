@@ -25,7 +25,8 @@ No API key or provider account is needed for local files. The local sample is sh
 3. Check that only tracks from the selected video appear. Detection must not change caption choices.
 4. Select **Import**. Check the loaded lines, delay, sentence sync, text style, and Save.
 5. Test an empty HTML track with an SRT file URL. It must show **not loaded** before Import, request only the selected file after Import, and show its imported line count.
-6. Load a saved subtitle or remove the overlay. Check that caption choices changed by the extension are restored.
+6. Add a track or replace the video. Check that the list updates without Refresh. Test a public caption file from a custom menu or supported player API. No file request should start before Import.
+7. Load a saved subtitle or remove the overlay. Check that caption choices changed by the extension are restored.
 
 Some players expose no readable tracks. Streaming tracks may expose only loaded lines. The new import feature has not yet been checked live on Disney+.
 

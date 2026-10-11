@@ -1,3 +1,11 @@
+## 0.8.6 - 2026-10-11
+
+- Put Player subtitles first in both Find views.
+- React to native track events, video changes, and caption source changes.
+- Read custom caption links in open shadow roots and public Video.js, JW Player, and Artplayer caption files.
+- Recognize season and episode numbers from compatible TV routes.
+- Keep subtitle downloads on demand and retain current permissions.
+
 # Changelog
 
 ## 0.8.5 - October 11, 2026

@@ -1,3 +1,13 @@
+## Version 0.8.6 - October 11, 2026
+
+All nine local integration suites pass. Static checks and test syntax checks pass. Store image generation passes; the Player subtitles screenshot was inspected.
+
+New checks cover first-panel order in both Find views, native track updates within 900 ms, unchanged Refresh without change notifications, custom caption links in open shadow roots, public Video.js/JW Player/Artplayer caption adapters, language grouping, file imports on demand, and exclusion of metadata/other players/removed sources. Source-change tests use a controlled pending response rather than a fixed delay. Episode routing tests prepare saved entries before changing the episode.
+
+Existing checks cover local files, archive downloads, ASS/SSA, saved style and timing, one/two/three-sentence sync, seeking, segmented clocks, shadow controls, and cleanup.
+
+Live Movy check: https://www.movy.sx/tv/138502/1/4 opened and played in an isolated Chromium window. Its episode player exposed no native tracks; its own caption menu text reported no subtitles available. This does not prove that all Movy episodes or servers have no subtitles. Public player APIs were tested with local adapters, not live engine distributions. Cross-origin iframe players need a separate integration. Live Disney+ player-subtitle import and authenticated OpenSubtitles delivery remain unverified.
+
 # Local validation
 
 ## 0.8.5 soft-white browser checks - October 11, 2026

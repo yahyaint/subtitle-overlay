@@ -66,7 +66,7 @@ function renderPlayerTracks(tracks) {
   knownPlayerTracks=tracks;const grouped=globalThis.SubtitlePlayerTracks.renderOptions(tracks,$('playerTracks'),$('playerLanguage'));
   $('playerTrackCount').textContent=String(tracks.length);
   $('importPlayerTrack').disabled=!grouped.visible.length;
-  $('playerTracksHint').textContent=tracks.length ? grouped.languages+' languages. Select a track, then Import.' : 'No readable tracks. Select a language in the player, then refresh.';
+  $('playerTracksHint').textContent=tracks.length ? grouped.languages+' languages. Select a track, then Import.' : 'No tracks exposed yet. Open the player subtitle menu. Tracks update automatically.';
 }
 for(const [id,action] of [['importPlayerTrack','import']])$(id).onclick=()=>task($(id),async()=>{
   playerTrackBusy=true;
@@ -197,5 +197,6 @@ $('saveFile').onclick = () => {
     const reply = await attach(false);await refreshPlayerTracks();
     if (reply?.ok) $('player').textContent = `${reply.player ? 'Video found' : 'Waiting for video'}${reply.name ? ` · ${reply.name}` : ''}`;
   } catch { /* Browser pages may not allow video access. */ }
-  setInterval(()=>refreshPlayerTracks().catch(()=>{}),1500);
+  chrome.runtime.onMessage.addListener((message,sender)=>{if(message?.type==='PLAYER_TRACKS_CHANGED' && sender.tab?.id===tabId)refreshPlayerTracks().catch(()=>{});});
+  setInterval(()=>refreshPlayerTracks().catch(()=>{}),1000);
 })().catch(error => status(error.message, true));

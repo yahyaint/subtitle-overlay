@@ -4,8 +4,8 @@
     return String(value || '').replace(/\s+/g, ' ').trim()
       .replace(player ? /^(?:watch|play)\s+(?:the\s+)?(?:movie|film)\s*[:：]?\s+/i : /^(?:watch|play)(?:\s+(?:the\s+)?(?:movie|film))?\s*[:：]?\s+/i, '')
       .replace(player ? /^(?:مشاهدة|شاهد|شغل)\s+(?:فيلم|الفيلم|مسلسل|المسلسل)\s*[:：]?\s+/ : /^(?:مشاهدة|شاهد|شغل)(?:\s+(?:فيلم|الفيلم|مسلسل|المسلسل))?\s*[:：]?\s+/, '')
-      .replace(/\s*[|–—-]\s*(?:Disney\+|Disney Plus|Netflix|Prime Video|Cinejoy).*$/i, '')
-      .replace(/\s+on\s+(?:Disney\+|Disney Plus|Netflix|Prime Video|Cinejoy).*$/i, '')
+      .replace(/\s*[|–—-]\s*(?:Disney\+|Movy|Disney Plus|Netflix|Prime Video|Cinejoy).*$/i, '')
+      .replace(/\s+on\s+(?:Disney\+|Movy|Disney Plus|Netflix|Prime Video|Cinejoy).*$/i, '')
       .trim().slice(0, 200);
   }
   const validYear = value => /^(18|19|20|21)\d{2}$/.test(String(value)) ? String(value) : '';
@@ -23,7 +23,7 @@
       let title=clean(value,source);
       const dated=title.match(/\s*[([]((?:18|19|20|21)\d{2})[)\]]$/);
       if(dated){year=validYear(year)||dated[1];title=title.slice(0,dated.index).trim();}
-      if(!title || /^(?:Disney\+|Disney Plus|Netflix|Prime Video|Home|Watch|Browse|Play|Player|Video|Video player|(?:watch|play) video|Movie|Film|مشغل الفيديو|فيديو|تشغيل|فيلم|Disney\+.*streaming)$/i.test(title))return;
+      if(!title || /^(?:Disney\+|Movy|Disney Plus|Netflix|Prime Video|Home|Watch|Browse|Play|Player|Video|Video player|Background trailer|Trailer|Preview|Hover preview|(?:watch|play) video|Movie|Film|مشغل الفيديو|فيديو|تشغيل|فيلم|Disney\+.*streaming)$/i.test(title))return;
       const series=details || episode(title),candidate={title,year:validYear(year),source};
       if(series && series.showTitle && number(series.season)!==null && number(series.episode)!==null){Object.assign(candidate,series,{title:format(series),type:'episode'});episodes.push(candidate);}
       candidates.push(candidate);return candidate;
@@ -78,8 +78,8 @@
     if(bare && related)selected={...related,episodeTitle:bare[3].replace(/^[\s.\u00b7:_\-\u2013\u2014]+/,'').trim() || related.episodeTitle,source:selected.source,year:selected.year || related.year};
     if(!selected.showTitle && related)selected={...related,source:selected.source,year:selected.year || related.year};
     if(!selected.showTitle){
-      const route=location.pathname.match(/\/watch\/tv\/\d+\/(\d{1,3})\/(\d{1,3})(?:\/|$)/i);
-      if(route && !bare && location.hostname==='cinejoy.pk')selected={...selected,showTitle:selected.title,season:Number(route[1]),episode:Number(route[2]),episodeTitle:'',type:'episode'};
+      const route=location.pathname.match(/\/(?:watch\/)?tv\/\d+\/(\d{1,3})\/(\d{1,3})(?:\/|$)/i);
+      if(route && !bare)selected={...selected,showTitle:selected.title,season:Number(route[1]),episode:Number(route[2]),episodeTitle:'',type:'episode'};
     }
     if(selected.showTitle){
       if(!selected.episodeTitle)selected.episodeTitle=episodes.find(item=>titleKey(item.showTitle)===titleKey(selected.showTitle) && item.season===selected.season && item.episode===selected.episode && item.episodeTitle)?.episodeTitle || '';

@@ -1,6 +1,6 @@
 # Subtitle Overlay privacy notice
 
-Version: 0.8.5. Updated: October 11, 2026. Publisher: yahyaint.
+Version: 0.8.6. Updated: October 11, 2026. Publisher: yahyaint.
 
 ## Data on this device
 
@@ -58,3 +58,5 @@ Player track language codes supply the language groups and counts. Film and seri
 
 
 The app font is bundled with the extension. It loads from a local extension URL, with no external font service. Its static font resource uses a dynamic session URL. This resource contains no user data.
+
+The player subtitle reader checks public track metadata, caption links near the selected video, and public Video.js, JW Player, and Artplayer caption APIs. It does not inspect account state. A selected subtitle file is requested only after Import, with normal page CORS access and no credentials.

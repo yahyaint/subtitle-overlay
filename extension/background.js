@@ -1,5 +1,5 @@
 const PROVIDER_HOSTS = new Set(['api.opensubtitles.com', 'vip-api.opensubtitles.com']);
-const APP = 'SubtitleOverlay v0.8.5';
+const APP = 'SubtitleOverlay v0.8.6';
 importScripts('subtitle-search.js','subtitles.js','subtitle-settings.js','download-folder.js','subtitle-download.js');
 function normalizeFilmTitle(value) { return String(value || '').replace(/½/g, ' 1/2').normalize('NFKD').replace(/\p{M}/gu, '').toLocaleLowerCase().replace(/[^\p{L}\p{N}]+/gu, ' ').trim(); }
 let libraryQueue=Promise.resolve();
@@ -474,8 +474,8 @@ chrome.runtime.onMessage.addListener((message, sender, reply) => {
       return {name:loaded.name,count:loaded.count,saved:loaded.saved,saveError:loaded.saveError};
     }).then(data=>reply({ok:true,...data})).catch(error=>reply({ok:false,error:error.message}));return true;
   }
-  if(message?.type==='INSTALL_PLAYER_CLOCK' && sender.id===chrome.runtime.id && Number.isSafeInteger(sender.tab?.id)){
-    chrome.scripting.executeScript({target:{tabId:sender.tab.id,frameIds:[sender.frameId || 0]},world:'MAIN',files:['player-clock-bridge.js']}).then(()=>reply({ok:true})).catch(error=>reply({ok:false,error:error.message}));return true;
+  if(['INSTALL_PLAYER_CLOCK','INSTALL_PLAYER_SOURCES'].includes(message?.type) && sender.id===chrome.runtime.id && Number.isSafeInteger(sender.tab?.id)){
+    chrome.scripting.executeScript({target:{tabId:sender.tab.id,frameIds:[sender.frameId || 0]},world:'MAIN',files:[message.type==='INSTALL_PLAYER_SOURCES' ? 'player-sources-bridge.js' : 'player-clock-bridge.js']}).then(()=>reply({ok:true})).catch(error=>reply({ok:false,error:error.message}));return true;
   }
   if (['TOGGLE_FULLSCREEN','FULLSCREEN_STATUS'].includes(message?.type) && sender.id===chrome.runtime.id && Number.isSafeInteger(sender.tab?.windowId)) {
     storageReady.then(async()=>{

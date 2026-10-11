@@ -38,11 +38,11 @@
     <details id="textSettings"><summary><span class="section-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16M12 5v15M8 20h8M5 5v3m14-3v3"/></svg></span><span class="summary-label">Text style</span></summary><button id="restorePlayerStyle" disabled>Restore player style</button><p id="playerStyleHint" class="hint" hidden></p><div class="grid"><label>Font<select id="font"><option value="system-ui, sans-serif">System</option><option value="Arial, sans-serif">Arial</option><option value="Verdana, sans-serif">Verdana</option><option value="Tahoma, sans-serif">Tahoma</option><option value="Georgia, serif">Georgia</option><option value="'Courier New', monospace">Courier New</option></select></label><label>Color<input id="color" type="color" value="#edf0fb"></label></div><div class="fields"><label>Weight<input id="weight" type="number" min="100" max="900" step="100" value="600"></label><label class="enabled"><input id="italic" type="checkbox">Italic</label></div><div class="swatches"><label>Background<input id="backgroundColor" type="color" value="#000000" aria-label="Subtitle background color"></label><label>Opacity <span id="opacityLabel">72%</span><input id="backgroundOpacity" type="range" min="0" max="100" value="72" aria-label="Subtitle background opacity"></label></div><p class="hint">0% is clear. 100% is solid.</p><details id="shadowSettings" class="shadow-options"><summary>Shadow</summary><label class="enabled"><input id="shadowEnabled" type="checkbox" checked>Show shadow</label><div class="fields"><label>Color<input id="shadowColor" type="color" value="#000000"></label><label>Opacity<input id="shadowOpacity" type="range" min="0" max="100" value="100"></label><label>Blur (px)<input id="shadowBlur" type="number" min="0" max="20" value="3"></label><label>Offset (px)<input id="shadowOffset" type="number" min="-20" max="20" value="2"></label><label>Horizontal offset (px)<input id="shadowX" type="number" min="-20" max="20" value="0"></label></div></details><label>Size <span id="sizeLabel">30px</span></label><div class="row"><input id="size" type="range" min="12" max="96" value="30" aria-label="Subtitle size slider"><input id="sizeNumber" type="number" min="12" max="96" value="30" aria-label="Subtitle size in pixels"></div><details id="positionSettings" class="shadow-options"><summary>Position</summary><label class="enabled"><input id="avoidControls" type="checkbox" checked>Avoid player controls</label><div class="fields"><label>Edge<select id="positionEdge"><option value="bottom">Bottom</option><option value="top">Top</option></select></label><label>Text align<select id="align"><option value="center">Center</option><option value="left">Left</option><option value="right">Right</option><option value="start">Start</option><option value="end">End</option></select></label></div><label>Distance from edge <span id="bottomLabel">10%</span><input id="bottom" type="range" min="0" max="100" step="0.1" value="10"></label><label>Horizontal position<input id="horizontal" type="range" min="0" max="100" step="0.1" value="50"></label><label>Maximum width<input id="width" type="range" min="1" max="100" value="94"></label></details><details class="shadow-options"><summary>Spacing</summary><div class="fields"><label>Line height<input id="lineHeight" type="number" min="0.5" max="4" step="0.05" value="1.35"></label><label>Corner radius (px)<input id="radius" type="number" min="0" max="96" value="5"></label><label>Side padding (px)<input id="paddingX" type="number" min="0" max="96" step="0.1" value="12"></label><label>Vertical padding (px)<input id="paddingY" type="number" min="0" max="96" step="0.1" value="3.6"></label></div></details></details>
     <details id="advancedSettings"><summary><span class="section-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M4 17h16"/><circle cx="9" cy="7" r="3" fill="#0d1827"/><circle cx="15" cy="17" r="3" fill="#0d1827"/></svg></span><span class="summary-label">More settings</span></summary><label for="rate">Timing scale (%)</label><input id="rate" type="number" value="100" step="0.1" min="50" max="200"><p class="hint">Use 100 for normal timing. Increase this if subtitles gradually appear too early.</p><label class="file">Load subtitle file<input id="file" type="file" accept=".srt,.vtt,.sub,.ass,.ssa,.zip,.gz"></label><select id="localTracks" aria-label="Choose a subtitle file from the archive" hidden></select><label>File encoding<select id="encoding"><option value="utf-8">Automatic (UTF-8 / UTF-16)</option><option value="windows-1256">Arabic (Windows-1256)</option><option value="windows-1252">Western (Windows-1252)</option><option value="utf-16le">UTF-16 LE</option></select></label><label for="fileFps">SUB FPS (if needed)</label><input id="fileFps" type="number" min="1" max="120" step=".001" placeholder="23.976"><p class="hint">Use the FPS listed for a frame-based SUB file.</p><p class="hint">Alt+Shift+O: show controls.<br>Alt+Shift+Left/Right: change delay.</p><button id="remove">Remove overlay</button></details>
     </div>
-    <div id="view-find" role="tabpanel" aria-labelledby="tab-find" hidden><h3 class="view-heading">Find subtitles</h3>
+    <div id="view-find" role="tabpanel" aria-labelledby="tab-find" hidden><details id="playerTracksSettings"><summary>Player subtitles <span id="playerTrackCount">0</span></summary><label>Language<select id="playerLanguage" aria-label="Player subtitle language"><option value="*">All languages</option></select></label><label>Track<select id="playerTracks" aria-label="Subtitle track from this player"></select></label><p id="playerTracksHint" class="hint">No tracks exposed yet. Open the player subtitle menu. Tracks update automatically.</p><div class="row"><button id="importPlayerTrack" disabled>Import</button><button id="refreshPlayerTracks">Refresh</button></div><p class="hint">Import copies lines, readable text style, and position. Save keeps your changes.</p></details><h3 class="view-heading">Find subtitles</h3>
 
       <form id="overlaySearch"><p id="filmSuggestion" class="hint" hidden></p><label for="overlayQuery">Film or show</label><input id="overlayQuery" required maxlength="200" placeholder="Enter a film or show"><div class="fields"><label>Language<select id="overlayLanguage"><option value="af">Afrikaans</option><option value="sq">Albanian</option><option value="ar">Arabic</option><option value="eu">Basque</option><option value="bn">Bengali</option><option value="bs">Bosnian</option><option value="bg">Bulgarian</option><option value="ca">Catalan</option><option value="zh">Chinese</option><option value="hr">Croatian</option><option value="cs">Czech</option><option value="da">Danish</option><option value="nl">Dutch</option><option value="en">English</option><option value="et">Estonian</option><option value="tl">Filipino</option><option value="fi">Finnish</option><option value="fr">French</option><option value="de">German</option><option value="el">Greek</option><option value="he">Hebrew</option><option value="hi">Hindi</option><option value="hu">Hungarian</option><option value="is">Icelandic</option><option value="id">Indonesian</option><option value="it">Italian</option><option value="ja">Japanese</option><option value="ko">Korean</option><option value="lv">Latvian</option><option value="lt">Lithuanian</option><option value="mk">Macedonian</option><option value="ms">Malay</option><option value="ml">Malayalam</option><option value="no">Norwegian</option><option value="fa">Persian</option><option value="pl">Polish</option><option value="pt">Portuguese</option><option value="pt-br">Portuguese (Brazil)</option><option value="ro">Romanian</option><option value="ru">Russian</option><option value="sr">Serbian</option><option value="sk">Slovak</option><option value="sl">Slovenian</option><option value="es">Spanish</option><option value="sw">Swahili</option><option value="sv">Swedish</option><option value="ta">Tamil</option><option value="te">Telugu</option><option value="th">Thai</option><option value="tr">Turkish</option><option value="uk">Ukrainian</option><option value="ur">Urdu</option><option value="vi">Vietnamese</option></select></label><label>Year (optional)<input id="overlayYear" type="number" min="1880" max="2199" placeholder="2004"></label></div><div class="search-method"><label for="overlaySearchMode">Search with</label><select id="overlaySearchMode"><option value="website">Website</option><option value="api">API</option></select></div><button id="overlaySearchButton" type="submit">Open OpenSubtitles</button></form>
       <p id="overlaySearchHint" class="hint">Website search needs no extension API key.</p><div id="overlayResults"></div>
-      <details id="playerTracksSettings"><summary>Player subtitles <span id="playerTrackCount">0</span></summary><label>Language<select id="playerLanguage" aria-label="Player subtitle language"><option value="*">All languages</option></select></label><label>Track<select id="playerTracks" aria-label="Subtitle track from this player"></select></label><p id="playerTracksHint" class="hint">No readable tracks. Select a subtitle language in the player, then refresh.</p><div class="row"><button id="importPlayerTrack" disabled>Import</button><button id="refreshPlayerTracks">Refresh</button></div><p class="hint">Import copies lines, readable text style, and position. Save keeps your changes.</p></details>
+
       <details id="searchLinkSettings"><summary>Edit search link</summary><label for="overlaySearchUrl">Search URL</label><input id="overlaySearchUrl" type="url" maxlength="2000"><p class="hint">Use {title}, {language}, {language3}, and {year}.</p><button id="saveSearchLink">Save link</button></details>
     </div>
     <div id="view-saved" role="tabpanel" aria-labelledby="tab-saved" hidden><h3 class="view-heading">Saved subtitles</h3><label for="overlaySavedFilm">Film</label><select id="overlaySavedFilm" hidden></select><div id="overlayLibrary"></div><p id="savedHint" class="hint">No saved subtitles.</p><button id="refreshSaved">Refresh saved files</button></div>
@@ -62,14 +62,14 @@
   })();
 
   $('panel').hidden=startHidden;
-  const playerTracks=globalThis.SubtitlePlayerTracks?.create({getVideo:()=>state.video,getTime:()=>playbackTime(),core});
+  const playerTracks=globalThis.SubtitlePlayerTracks?.create({getVideo:()=>state.video,getTime:()=>playbackTime(),core,onChange:scheduleDiscovery});
   function refreshPlayerTracks(force=false) {
     const tracks=playerTracks?.list() || [],signature=JSON.stringify(tracks);
     if(!force && signature===playerTracksSignature)return tracks;
-    playerTracksSignature=signature;const grouped=globalThis.SubtitlePlayerTracks.renderOptions(tracks,$('playerTracks'),$('playerLanguage'));
+    const changed=signature!==playerTracksSignature;playerTracksSignature=signature;if(changed)chrome.runtime.sendMessage({type:'PLAYER_TRACKS_CHANGED'}).catch(()=>{});const grouped=globalThis.SubtitlePlayerTracks.renderOptions(tracks,$('playerTracks'),$('playerLanguage'));
     $('playerTrackCount').textContent=String(tracks.length);$('playerTracks').disabled=!tracks.length;
     $('importPlayerTrack').disabled=playerTrackBusy || !grouped.visible.length;
-    $('playerTracksHint').textContent=tracks.length ? grouped.languages+' languages. Select a track, then Import.' : 'No readable tracks. Select a subtitle language in the player, then refresh.';
+    $('playerTracksHint').textContent=tracks.length ? grouped.languages+' languages. Select a track, then Import.' : 'No tracks exposed yet. Open the player subtitle menu. Tracks update automatically.';
     return tracks;
   }
   async function playerTrackAction(action,id) {
@@ -89,7 +89,7 @@
   }
   for(const [id,action] of [['importPlayerTrack','import']])$(id).onclick=event=>{if(event.isTrusted)task($(id),()=>playerTrackAction(action,$('playerTracks').value));};
   $('playerLanguage').onchange=()=>refreshPlayerTracks(true);
-  $('refreshPlayerTracks').onclick=event=>{if(event.isTrusted)refreshPlayerTracks(true);};
+  $('refreshPlayerTracks').onclick=event=>{if(event.isTrusted){discover();document.dispatchEvent(new Event('subtitle-overlay-sources-refresh'));refreshPlayerTracks(true);}};
   // Native details groups keep one settings section open at a time.
   for (const id of ['syncSettings', 'textSettings', 'advancedSettings']) $(id).name = 'subtitle-settings';
   function message(text, error = false) { $('message').textContent = text; $('message').classList.toggle('error', error); }
@@ -284,7 +284,7 @@
     return {video,visible,area:visible ? rect.width*rect.height : 0,painted,playing:!video.paused && !video.ended,ready:video.readyState>=2};
   }
   function selectVideo(){
-    const candidates=videos(document).map(videoInfo).filter(item=>item.visible);
+    const candidates=videos(document).map(videoInfo).filter(item=>item.visible && !/^(?:background trailer|trailer|preview|hover preview)$/i.test((item.video.getAttribute('title') || item.video.getAttribute('aria-label') || '').trim()));
     const largest=Math.max(0,...candidates.map(item=>item.area));
     // Ignore small hover previews. For stacked players, actual playback and paint
     // order matter more than equal rectangles or DOM insertion order.
@@ -415,6 +415,8 @@
     catch{let field=$('playerInfoText');if(!field){field=document.createElement('textarea');field.id='playerInfoText';field.readOnly=true;field.setAttribute('aria-label','Player info');playerInfo.after(field);}field.value=text;field.focus();field.select();message('Player info selected. Copy it and paste it in the support chat.');}
   };
   function discover() {
+    for(let i=discoveryObservers.length-1;i>=0;i--){const item=discoveryObservers[i];if(item.root.host && !item.root.host.isConnected){item.observer.disconnect();watchedRoots.delete(item.root);discoveryObservers.splice(i,1);}}
+    for(const root of publicRoots())watchDiscovery(root);
     const pageChanged=location.href!==state.href;state.href=location.href;
     // Seek controls may temporarily hide or replace a video. Retain a connected clock.
     state.video = selectVideo() || (state.video?.isConnected ? state.video : null);
@@ -718,9 +720,26 @@
   for(const name of ['pointermove','pointerdown','pointerout','keydown','focusin'])document.addEventListener(name,nativeControlsActivity);
   window.addEventListener('resize',browserFullscreenStatus);
   document.addEventListener('keydown', keydown);
-  const discoveryTimer = setInterval(discover, 1200), drawTimer = setInterval(draw, 80);
+  let discoveryQueued=null,removed=false;
+  function scheduleDiscovery(){if(!removed && discoveryQueued===null)discoveryQueued=setTimeout(()=>{discoveryQueued=null;discover();},100);}
+  const watchedRoots=new WeakSet(),discoveryObservers=[];
+  function watchDiscovery(root){
+    if(watchedRoots.has(root))return;watchedRoots.add(root);
+    const observer=new MutationObserver(records=>{
+      if(records.some(record=>{
+        if(record.target===host || record.target.closest?.('#subtitle-overlay-root'))return false;
+        if(record.type==='attributes')return true;
+        return Array.from(record.addedNodes).concat(Array.from(record.removedNodes)).some(node=>node.nodeType===1 && node!==host && (node.matches?.('video,track,h1,[data-subtitle-src],[data-caption-src]') || node.querySelector?.('video,track,h1,[data-subtitle-src],[data-caption-src]') || node.shadowRoot || record.target.closest?.('.video-js,.jwplayer,.artplayer-app,.plyr,[data-player]')));
+      }))scheduleDiscovery();
+    });
+    observer.observe(root,{subtree:true,childList:true,attributes:true,attributeFilter:['src','srclang','label','kind','data-subtitle-src','data-caption-src','data-language','data-title','data-season','data-episode']});discoveryObservers.push({root,observer});
+  }
+  const discoveryTimer=setInterval(discover,1000),drawTimer=setInterval(draw,80);
+  for(const name of ['loadedmetadata','loadeddata','emptied','load','error'])document.addEventListener(name,scheduleDiscovery,true);
+  chrome.runtime.sendMessage({type:'INSTALL_PLAYER_SOURCES'}).catch(()=>{});
   $('remove').onclick = () => {
-    playerTracks?.restore();
+    removed=true;clearTimeout(discoveryQueued);for(const item of discoveryObservers)item.observer.disconnect();for(const name of ['loadedmetadata','loadeddata','emptied','load','error'])document.removeEventListener(name,scheduleDiscovery,true);
+    playerTracks?.dispose();document.dispatchEvent(new Event('subtitle-overlay-sources-stop'));
     document.removeEventListener('subtitle-overlay-player-clock',pageClockUpdated);document.dispatchEvent(new Event('subtitle-overlay-clock-stop'));observedVideo?.removeAttribute('data-subtitle-overlay-clock');
     observedVideo?.removeEventListener('seeked',seekFinished);
     clearInterval(discoveryTimer); clearInterval(drawTimer);clearTimeout(idleTimer);clearTimeout(controlCaptureTimer);document.removeEventListener('pointermove',captureControls); chrome.runtime.onMessage.removeListener(receive);

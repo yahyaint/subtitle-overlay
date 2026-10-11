@@ -4,6 +4,7 @@
     if(!code || code==='und')return 'Unknown language';
     try{return new Intl.DisplayNames(['en'],{type:'language'}).of(code) || code;}catch{return code;}
   }
+  const namedLanguages=new Map(['en','ar','ar-eg','bn','bg','ca','zh','hr','cs','da','nl','et','fi','fr','de','el','he','hi','hu','is','id','it','ja','ko','lv','lt','mk','ms','ml','no','fa','pl','pt','pt-br','ro','ru','sr','sk','sl','es','sw','sv','ta','te','th','tr','uk','ur','vi'].map(code=>[languageName(code).toLowerCase(),code]));
   function groupTracks(tracks) {
     const groups=new Map();
     for(const track of tracks){const raw=String(track.language || '').toLowerCase().replaceAll('_','-'),code=/^[a-z]{2,3}(?:-[a-z0-9]{2,8})*$/.test(raw) ? raw : 'und';if(!groups.has(code))groups.set(code,{code,name:languageName(code),tracks:[]});groups.get(code).tracks.push(track);}
@@ -19,9 +20,16 @@
     const visible=shown.flatMap(group=>group.tracks);select.value=visible.some(track=>track.id===previous) ? previous : (visible.find(track=>track.mode==='showing') || visible[0])?.id || '';select.disabled=!visible.length;
     return {visible,languages:groups.length};
   }
-  function create({getVideo,getTime,core}) {
+  function create({getVideo,getTime,core,onChange=()=>{}}) {
     let video=null,revision=0,nextId=0,pending=null,lastCaption=null;
     const hiddenCaptions=new Map();
+    let external=new Map(),publicSources=[],sourceToken='',trackList=null;
+    const trackEvents=['addtrack','removetrack','change'];
+    const changed=()=>onChange();
+    function sourcesUpdated(event){
+      try{if(typeof event.detail!=='string' || event.detail.length>500000)return;const packet=JSON.parse(event.detail),target=getVideo();if(!target || packet.token!==target.getAttribute('data-subtitle-overlay-clock') || !Array.isArray(packet.tracks))return;if(target!==video)selected();sourceToken=packet.token;const next=packet.tracks.slice(0,100);if(JSON.stringify(next)!==JSON.stringify(publicSources)){publicSources=next;changed();}}catch{/* Ignore invalid page data. */}
+    }
+    document.addEventListener('subtitle-overlay-player-sources',sourcesUpdated);
     const ids=new WeakMap(),counts=new WeakMap(),owned=new Map(),files=new WeakMap();
     function restore() {
       revision++;
@@ -33,12 +41,37 @@
     }
     function selected() {
       const current=getVideo();
-      if(current!==video){restore();lastCaption=null;video=current;}
+      if(current!==video){restore();for(const name of trackEvents)trackList?.removeEventListener(name,changed);lastCaption=null;video=current;external.clear();publicSources=[];trackList=video?.textTracks;for(const name of trackEvents)trackList?.addEventListener(name,changed);}
       if(!video?.isConnected)return [];
-      return Array.from(video.textTracks || []).filter(track=>['subtitles','captions'].includes(track.kind)).slice(0,100);
+      const token=video.getAttribute('data-subtitle-overlay-clock') || '';if(token!==sourceToken){external.clear();publicSources=[];sourceToken=token;}
+      const native=Array.from(video.textTracks || []).filter(track=>['subtitles','captions'].includes(track.kind)).slice(0,100),sources=[...publicSources];
+      // Files published by custom caption menus, including menus in open shadow roots.
+      let parent=video.parentElement || video.getRootNode().host;
+      for(let depth=0;parent && depth<4;depth++,parent=parent.parentElement || parent.getRootNode().host){
+        if(parent.querySelectorAll('video').length>1)break;
+        const roots=[parent];for(let at=0;at<roots.length && roots.length<20;at++)for(const node of roots[at].querySelectorAll('*'))if(node.shadowRoot && node.id!=='subtitle-overlay-root')roots.push(node.shadowRoot);
+        for(const root of roots)for(const node of Array.from(root.querySelectorAll('[data-subtitle-src],[data-caption-src],a[href]')).slice(0,200)){
+          if(node.closest('#subtitle-overlay-root'))continue;
+          const src=node.getAttribute('data-subtitle-src') || node.getAttribute('data-caption-src') || node.getAttribute('href');
+          if(!src || !/\.(?:srt|vtt|ass|ssa|sub)(?:[?#]|$)/i.test(src) && !node.hasAttribute('data-subtitle-src') && !node.hasAttribute('data-caption-src'))continue;
+          sources.push({src,label:node.getAttribute('data-label') || node.getAttribute('aria-label') || node.textContent,language:node.getAttribute('srclang') || node.getAttribute('data-language') || node.getAttribute('lang') || ''});
+        }
+        if(parent.matches('.video-js,.jwplayer,.artplayer-app,.plyr,[data-player]'))break;
+      }
+      const active=new Map(),seen=new Set(native.map(source).filter(Boolean));
+      for(const item of sources.slice(0,300)){
+        const src=safeSource(item.src);if(!src || seen.has(src))continue;seen.add(src);
+        const key=src+'|'+String(item.language || '').slice(0,40),track=external.get(key) || {kind:'subtitles',cues:null};
+        track.src=src;track.label=String(item.label || item.language || 'Subtitles').trim().slice(0,150);track.language=String(item.language || namedLanguages.get(track.label.replace(/\s*\([^)]*\)\s*$/,'').toLowerCase()) || '').slice(0,40);active.set(key,track);if(active.size+native.length>=100)break;
+      }
+      external=active;return [...native,...active.values()];
     }
     function idOf(track){if(!ids.has(track))ids.set(track,String(++nextId));return ids.get(track);}
+    function safeSource(value){
+      try{const url=new URL(value,video?.ownerDocument.baseURI || location.href);if(url.username || url.password || !(url.protocol==='https:' || url.protocol==='http:' && url.origin===location.origin || url.protocol==='blob:' && url.origin===location.origin))return '';return url.href;}catch{return '';}
+    }
     function source(track) {
+      if(track.src)return safeSource(track.src);
       const element=Array.from(video?.querySelectorAll('track') || []).find(item=>item.track===track);
       if(!element?.getAttribute('src'))return '';
       try{
@@ -95,7 +128,7 @@
       const clamp=(value,min,max)=>Math.max(min,Math.min(max,value));
       const color=value=>{const parts=String(value).match(/^rgba?\(\s*([\d.]+)[, ]+([\d.]+)[, ]+([\d.]+)(?:\s*[,/]\s*([\d.]+))?\s*\)$/);return parts ? {hex:'#'+parts.slice(1,4).map(n=>Math.round(clamp(Number(n),0,255)).toString(16).padStart(2,'0')).join(''),alpha:parts[4]===undefined ? 1 : Number(parts[4])} : null;};
       // Read known caption renderers near this video. Never read extension UI.
-      const selector='.lp-subtitle,.vjs-text-track-cue,.shaka-text-container,.jw-text-track-cue,[data-subtitle-cue]';
+      const selector='.lp-subtitle,.vjs-text-track-cue,.shaka-text-container,.jw-text-track-cue,.artplayer-subtitle,.dplayer-subtitle,.plyr__caption,[data-subtitle-cue]';
       let caption=null,parent=target.parentElement;
       for(let depth=0;parent && depth<4;depth++,parent=parent.parentElement){
         if(parent.querySelectorAll('video').length!==1)break;
@@ -137,7 +170,7 @@
     }
     async function read(id) {
       const track=find(id),target=video,request=revision,href=location.href,src=source(track);
-      const check=()=>{if(revision!==request || target!==getVideo() || !target.isConnected || location.href!==href || !Array.from(target.textTracks).includes(track) || source(track)!==src)throw new Error('The video or track changed. Select a track again.');};
+      const check=()=>{if(revision!==request || target!==getVideo() || !target.isConnected || location.href!==href || !selected().includes(track) || source(track)!==src)throw new Error('The video or track changed. Select a track again.');};
       let capturedStyle=playerStyle(target,track);
       const temporary=track.mode==='disabled';
       // Disabled HTML tracks may not be loaded yet. Hidden loads without display.
@@ -183,7 +216,8 @@
         if(temporary && revision===request && item && track.mode===item.expected){track.mode=item.original;owned.delete(track);}
       }
     }
-    return {list,hide,read,restore};
+    function dispose(){restore();for(const name of trackEvents)trackList?.removeEventListener(name,changed);document.removeEventListener('subtitle-overlay-player-sources',sourcesUpdated);}
+    return {list,hide,read,restore,dispose};
   }
   globalThis.SubtitlePlayerTracks={create,groupTracks,renderOptions,languageName};
 })();

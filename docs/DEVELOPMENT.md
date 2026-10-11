@@ -44,4 +44,11 @@ Set the same version in `package.json`, `extension/manifest.json`, and the backg
 
 ## Store images
 
-`npm run store:assets` renders the real extension UI on a local demo video. It writes three 1280 × 800 screenshots, one 440 × 280 tile, and the 128 × 128 icon. It uses no film footage or remote media. It also regenerates the privacy HTML from the notice.
+`npm run store:assets` renders the real extension UI on a local demo video. It writes four 1280 × 800 screenshots, one 440 × 280 tile, and the 128 × 128 icon. It uses no film footage or remote media. It also regenerates the privacy HTML from the notice.
+
+
+## Public player subtitle sources
+
+The source bridge reads only players tied to the selected video. It never changes the player's subtitle selection. Caption files load through the page's normal CORS access only after Import. Track and DOM events queue discovery after 100 ms; periodic checks cover API-only changes. The bridge and observers stop when the overlay is removed.
+
+API references: [Video.js text tracks](https://docs.videojs.com/docs/guides/text-tracks.html), [JW Player playlist metadata](https://docs.jwplayer.com/players/reference/playlist-events), and [Artplayer subtitle properties](https://github.artplayer.org/document/en/advanced/built-in.html). Cross-origin iframe players need a separate permission and routing design.
