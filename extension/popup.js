@@ -25,14 +25,15 @@ function showView(name, focus = false) {
     $('tab-' + view).setAttribute('aria-selected', String(selected));
     $('tab-' + view).tabIndex = selected ? 0 : -1;
   }
+  document.querySelector('.workspace-content').scrollTop=0;
   if (focus) $('tab-' + name).focus();
 }
 for (const [index, view] of views.entries()) {
   $('tab-' + view).onclick = () => showView(view);
   $('tab-' + view).onkeydown = event => {
     let next;
-    if (event.key === 'ArrowRight') next = (index + 1) % views.length;
-    if (event.key === 'ArrowLeft') next = (index + views.length - 1) % views.length;
+    if (event.key === 'ArrowRight' || event.key === 'ArrowDown') next = (index + 1) % views.length;
+    if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') next = (index + views.length - 1) % views.length;
     if (event.key === 'Home') next = 0;
     if (event.key === 'End') next = views.length - 1;
     if (next !== undefined) { event.preventDefault(); showView(views[next], true); }
@@ -88,11 +89,11 @@ function renderLibrary() {
     load.onclick=()=>task(load,async()=>{await attach();lastDownload=await provider({type:'LIBRARY_LOAD',id:entry.id,tabId});activeLibraryId=entry.id;renderLibrary();$('saveFile').hidden=false;status(`${lastDownload.count} saved lines loaded. Saved settings restored if available.`);});
     const good=document.createElement('button');good.className='rating';good.innerHTML=saveIcon;good.title=entry.id===activeLibraryId ? 'Save current subtitle settings' : 'Load this file to save its settings';good.setAttribute('aria-label',good.title);good.setAttribute('aria-pressed',String(Boolean(entry.settingsSaved)));good.disabled=entry.id!==activeLibraryId;
     good.onclick=()=>task(good,async()=>{await provider({type:'SAVE_ACTIVE_SUBTITLE',libraryId:entry.id,tabId});await refreshLibrary(entry.filmKey);status('Subtitle, timing, and text style saved.');});
-    const bad=document.createElement('button');bad.className='rating';bad.textContent='👎';bad.title="Doesn't work — delete saved subtitle";bad.setAttribute('aria-label',"Subtitle doesn't work; delete it");
+    const bad=document.createElement('button');bad.className='rating';bad.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 4h9a3 3 0 0 1 3 3l-2 6H13v6a2 2 0 0 1-4 0l-1-6H4V4Z"/></svg>';bad.title="Doesn't work — delete saved subtitle";bad.setAttribute('aria-label',"Subtitle doesn't work; delete it");
     bad.onclick=()=>task(bad,async()=>{await provider({type:'LIBRARY_RATE',id:entry.id,verdict:'bad',tabId});lastDownload=null;$('saveFile').hidden=true;await refreshLibrary(entry.filmKey);status('Subtitle deleted. This file will not appear in search results.');});
     row.append(load,good,bad);$('library').append(row);
   }
-  $('libraryHint').textContent=savedEntries.length ? 'Load a file. Save stores its settings. 👎 deletes it.' : 'No saved subtitles. Downloads are saved here by film.';
+  $('libraryHint').textContent=savedEntries.length ? 'Load a file. Save keeps its settings. Delete removes it.' : 'No saved subtitles. Downloads are saved here by film.';
   $('savedCount').textContent=String(savedEntries.length);
 }
 async function refreshLibrary(selected) {

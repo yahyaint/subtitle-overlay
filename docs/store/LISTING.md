@@ -12,14 +12,14 @@ Find, save, and sync subtitles over browser video. Change the font, color, size,
 
 Read. Sync. Watch.
 
-Add external subtitles to a video in your browser. Use a local file or search OpenSubtitles. Keep the controls on the video so you can adjust the subtitles while you watch. Bottom subtitles move above readable player controls, then return to your chosen position.
+Add external subtitles to a video in your browser. Use a local file or search OpenSubtitles. Use clear Inter text and a marine-blue tool rail to find, save, and adjust subtitles. File buttons stay at the bottom of the popup. A larger clock and delay field help you set the timing on the video. Bottom subtitles move above readable player controls, then return to your chosen position.
 
 Find and load:
 - Load SRT, WebVTT, ASS, SSA, or text SUB files.
 - Open subtitle files inside ZIP and gzip archives.
 - Search OpenSubtitles through its website or API.
 - Get an editable film title suggestion from the player.
-- Detect readable player subtitle tracks. Keep the player display or load their subtitle files or import readable lines for overlay adjustments and saving.
+- Group readable player subtitle tracks by language. Import lines, readable style, and position for overlay adjustments and saving.
 
 Set the timing:
 - Move subtitles earlier or later.
@@ -48,7 +48,7 @@ This is an independent extension. It is not affiliated with Disney+, OpenSubtitl
 
 The extension is free to use. The optional Tip link opens https://yahyanabil.com/support. A tip is not needed to use any feature.
 
-Version 0.7.10 is a preview. Live player compatibility and provider delivery can vary.
+Version 0.8.0 is a preview. Live player compatibility and provider delivery can vary.
 
 ## URLs and publisher
 

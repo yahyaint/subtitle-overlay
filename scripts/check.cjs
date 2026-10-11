@@ -7,6 +7,9 @@ assert.equal(manifest.manifest_version,3);assert.equal(manifest.version,pkg.vers
 assert.match(fs.readFileSync(path.join(root,'background.js'),'utf8'),new RegExp('SubtitleOverlay v'+pkg.version.replaceAll('.','\\.')));
 assert.deepEqual(manifest.permissions,['activeTab','scripting','storage','downloads']);
 assert.equal(manifest.host_permissions,undefined);assert.equal(manifest.content_scripts,undefined);
+assert.deepEqual(manifest.web_accessible_resources,[{resources:['inter-variable.woff2'],matches:['<all_urls>'],use_dynamic_url:true}]);
+assert.equal(fs.readFileSync(path.join(root,'inter-variable.woff2')).subarray(0,4).toString(),'wOF2');
+assert(fs.existsSync(path.join(root,'INTER-LICENSE.txt')));
 assert(manifest.description.length<=132);
 for(const name of files){
  const filepath=path.join(root,name);assert(fs.statSync(filepath).isFile(),'Unexpected directory: '+name);

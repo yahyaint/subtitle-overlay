@@ -1,6 +1,6 @@
 # Subtitle Overlay privacy notice
 
-Version: 0.7.17. Updated: October 11, 2026. Publisher: yahyaint.
+Version: 0.8.0. Updated: October 11, 2026. Publisher: yahyaint.
 
 ## Data on this device
 
@@ -57,3 +57,6 @@ Use [the project's issue page](https://github.com/yahyaint/subtitle-overlay/issu
 ## Language groups and episode suggestions
 
 Player track language codes supply the language groups and counts. Film and series suggestions read public playback metadata, declared page metadata, visible titles, and matching caption labels. Series suggestions can include the show, season, episode number, and episode name. Suggestions stay editable. The extension sends these search fields to the selected provider only when you search. These changes add no permissions or telemetry.
+
+
+The app font is bundled with the extension. It loads from a local extension URL, with no external font service. Its static font resource uses a dynamic session URL. This resource contains no user data.

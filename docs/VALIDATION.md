@@ -1,5 +1,13 @@
 # Local validation
 
+## 0.8.0 New Design - October 11, 2026
+
+The popup and controller share a tool rail, fixed popup file dock, surfaced file card, and larger timing readout. Inter is bundled for app controls. The final palette adapts Color Hunt: marine dominates, amber marks selected actions and timing, and silver supports text. The original logo remains. Caption font and appearance settings remain user-controlled.
+
+The nine-suite local regression passes. After the font and palette changes, focused design, Tip, and core overlay reruns pass. The design test verifies actual Inter loading in the popup and video document, font cleanup, 320px popup access, a compact controller, vertical keyboard navigation, focus, action contrast, and all sync/style/import/file paths. Core overlay checks preserve seeking, sentence sync, imported appearance, library saves, provider results, fullscreen, and cleanup. Static checks and final store screenshots pass. No new extension permissions or playback algorithms are added. A dynamic resource rule exposes only the bundled font.
+
+Behavior contract: 12 retained outcomes. Visual review score: 22/26; see [design notes](design/NEW-DESIGN.md). Checks use isolated local Chromium fixtures and sample video. The final design still needs a live signed-in player check and store review.
+
 ## 0.7.17 player-control clearance - October 11, 2026
 
 Bottom captions clear visible lower player controls and return to the configured distance when the controls hide. Avoid player controls is enabled by default under Text style > Position and can be saved with a subtitle. The lift is a temporary render offset. It does not change the saved distance, imported original appearance, delay, rate, or sync points.

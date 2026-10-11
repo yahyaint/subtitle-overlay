@@ -238,7 +238,7 @@ const server = http.createServer((req, res) => {res.writeHead(200, {'Content-Typ
     await page.reload();await popup.evaluate(async id=>chrome.scripting.executeScript({target:{tabId:id},files:['subtitles.js','subtitle-settings.js','film-detection.js','player-subtitles.js','content.js']}),tabId);
     const restored=await popup.evaluate(({id,tabId})=>chrome.runtime.sendMessage({type:'LIBRARY_LOAD',id,tabId}),{id:local.id,tabId});assert.equal(restored.ok,true);
     assert.equal(await page.locator('#subtitle-overlay-root #font').inputValue(),'Verdana, sans-serif');assert.equal(await page.locator('#subtitle-overlay-root #sizeNumber').inputValue(),'36');assert.equal(await page.locator('#subtitle-overlay-root #backgroundColor').inputValue(),'#142c4a');assert.equal(await page.locator('#subtitle-overlay-root #syncMode').inputValue(),'two');assert(Math.abs(Number(await page.locator('#subtitle-overlay-root #rate').inputValue())-120)<.01);
-    await popup.reload();await popup.locator('#tab-saved').click();await popup.locator('.saved-track .rating svg').waitFor();
+    await popup.reload();await popup.locator('#tab-saved').click();await popup.locator('.saved-track .rating[aria-label="Save current subtitle settings"] svg').waitFor();
     // Save the active preset from the popup, then remove just this disposable fixture file.
     await popup.locator('.saved-track .rating').first().click();
     await popup.waitForFunction(()=>document.querySelector('#status').textContent.includes('timing, and text style saved'));

@@ -1,4 +1,13 @@
-# Changes
+# Changelog
+
+## 0.8.0 - New Design
+
+- Add a shared tool rail with marine blue, amber, and silver.
+- Bundle Inter for app controls. Keep the selected caption font.
+- Keep file actions in a fixed popup dock.
+- Make the clock and delay easier to read. Group sync and text controls.
+- Add clear vector Save and Delete icons and vertical arrow-key navigation.
+- Preserve playback, subtitle import, search, downloads, and saved settings. Add no permissions.
 
 ## 0.7.17 - October 11, 2026
 

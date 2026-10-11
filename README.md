@@ -6,6 +6,10 @@ Add your own subtitles to browser video. Find a subtitle, set its timing, and ch
 
 ![Subtitle controls on a local demo player](docs/store/assets/01-controls.png)
 
+## New Design
+
+Version 0.8.0 uses a shared tool rail, fixed popup file actions, and a clearer timing card. See [design notes and research](docs/design/NEW-DESIGN.md).
+
 ## Features
 
 - Group player subtitle tracks by language. See each language name and track count. Filter the list before Import.
@@ -58,7 +62,7 @@ The library stays on this device. Deleting a library item does not delete files 
 - ASS and SSA text and timing are supported. Embedded styles and effects are not rendered.
 - Image subtitles, RAR files, encrypted ZIP files, and archives over the 2 MB limit are not supported.
 - Audio tools find sources and download direct audio files. They do not replace or sync the stream's audio.
-- Authenticated OpenSubtitles delivery still needs confirmation for version 0.7.17.
+- Authenticated OpenSubtitles delivery still needs confirmation for version 0.8.0.
 
 ## Import player subtitles
 
