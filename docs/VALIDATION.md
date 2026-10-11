@@ -1,3 +1,16 @@
+## Version 0.8.9 - October 11, 2026
+
+The controller has a Close button at the bottom of its tool rail. The popup action is Show overlay. This release is marked stable after the publisher reported that the current build works in their setup.
+
+Checks passed:
+
+- The design suite: Close is visible in the compact controller and works from Controls, Find, and Saved. It stays outside the tab list. Keyboard activation returns focus to the overlay toggle.
+- Show overlay opens the same view and keeps the sentence-sync mode. Existing header Close, file loading, text style, focus, and popup sizing checks still pass.
+- The saved-library suite: film/show selection, episode names, refresh, load/save/delete, and empty categories.
+- Controller screenshot inspected. Store screenshots and public site assets regenerated. Static checks and verified ZIP builds pass.
+
+Playback-clock code and subtitle timing are unchanged. No new permissions. Live player and provider support can vary.
+
 ## Version 0.8.8 - October 11, 2026
 
 Saved has separate Films and Shows views in the popup and controller. Shows use show, season, and episode selectors. This is a display change; stored files and settings do not need a migration.

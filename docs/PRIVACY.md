@@ -1,6 +1,6 @@
 # Subtitle Overlay privacy notice
 
-Version: 0.8.8. Updated: October 11, 2026. Publisher: yahyaint.
+Version: 0.8.9. Updated: October 11, 2026. Publisher: yahyaint.
 
 ## Data on this device
 

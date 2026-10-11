@@ -2,7 +2,7 @@
 
 ## Find and load
 
-Open a film. Select the extension, then **Open controls**. The title suggestion uses player metadata first. You can edit the title, language, and year.
+Open a film. Select the extension, then **Show overlay**. The title suggestion uses player metadata first. You can edit the title, language, and year.
 
 Select **Website** to search in a small browser window. Allow provider access when asked. Select a subtitle and complete its download steps. Tracking stays active until a valid file loads or you close that window.
 
@@ -55,3 +55,5 @@ The library is local to this extension installation. It does not sync to another
 ## Fullscreen
 
 The overlay's fullscreen button switches browser fullscreen. F11 also toggles this mode. The player can have its own fullscreen button.
+
+Select **Close** at the bottom of the controller rail to hide its controls. Subtitles keep playing. Use **Show overlay** in the extension to show the controls again. The loaded file and settings stay in place.

@@ -3,7 +3,7 @@
 1. Open `chrome://extensions` or `edge://extensions`.
 2. Turn on **Developer mode**.
 3. Select **Load unpacked**. Select this folder.
-4. Start a video. Open the extension and select **Open controls**.
+4. Start a video. Open the extension and select **Show overlay**.
 5. Select **Load file**, or use **Find** to search OpenSubtitles.
 
 Use **Sentence sync** to align one, two, or three sentences. Use **Text style** to change the font, color, size, background, and shadow. Under **Text style → Position**, **Avoid player controls** lifts bottom subtitles above readable controls and returns them to the chosen distance when the controls hide. Browser-drawn controls use a recent-interaction estimate. Select **Save** to keep the subtitle and its settings.
@@ -18,7 +18,7 @@ To update: replace these files in the same folder, select **Reload** in the brow
 
 In **Find → Player subtitles**, select **Import** to load the selected file or copy readable lines, player style, and position into the overlay. Under **Text style**, **Restore player style** restores the captured appearance and keeps timing and sentence-sync points. Save keeps the original style with your current settings. Some player styles are not readable. Only public tracks are listed; some players expose none.
 
-Version 0.8.8 is a preview. The publisher confirmed Disney+ playback, seeking, and sentence sync in Vivaldi on Windows with 0.7.10. The new player-subtitle import still needs a live Disney+ check. Authenticated OpenSubtitles delivery still needs confirmation.
+Version 0.8.9 is the current stable release. The publisher confirmed Disney+ playback, seeking, and sentence sync in Vivaldi on Windows with 0.7.10. The new player-subtitle import still needs a live Disney+ check. Authenticated OpenSubtitles delivery still needs confirmation.
 
 ## Languages and series
 

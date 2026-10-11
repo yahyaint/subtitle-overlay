@@ -1,3 +1,9 @@
+## Version 0.8.9 - October 11, 2026
+
+- Added Close to the controller rail. Hiding the controls keeps subtitles and saved settings in place.
+- Renamed the extension action to Show overlay.
+- Marked the release stable after the publisher reported that the current build works in their setup.
+
 ## Version 0.8.8 - October 11, 2026
 
 - Added separate Films and Shows views to Saved in the popup and controller.

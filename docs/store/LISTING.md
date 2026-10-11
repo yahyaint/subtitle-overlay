@@ -38,7 +38,7 @@ Save for later:
 - Save timing and text settings with each subtitle.
 - Browse saved Films or Shows. Select a show, season, and episode, then load a saved file.
 
-Start a film, open the extension, and select Open controls. Local files need no account. API search needs your OpenSubtitles key. Website search needs no extension API key.
+Start a film, open the extension, and select Show overlay. Local files need no account. API search needs your OpenSubtitles key. Website search needs no extension API key.
 
 Some players do not expose a readable film clock. If asked, show the player's own controls. ASS and SSA styles and effects are not rendered. Image subtitles and RAR files are not supported. Files and extracted subtitle data have a 2 MB limit.
 
@@ -46,7 +46,7 @@ This is an independent extension. It is not affiliated with Disney+, OpenSubtitl
 
 The extension is free to use. The optional Tip link opens https://yahyanabil.com/support. A tip is not needed to use any feature.
 
-Version 0.8.8 is a preview. Live player compatibility and provider delivery can vary.
+Version 0.8.9 is the current stable release. Live player compatibility and provider delivery can vary.
 
 ## URLs and publisher
 

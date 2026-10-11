@@ -81,7 +81,7 @@ async function refreshPlayerTracks() {
   if(playerTrackBusy)return;
   const revision=searchEditRevision;await searchWrite;
   const reply=await chrome.tabs.sendMessage(tabId,{type:'GET_PLAYER_TRACKS'});
-  if(!reply?.ok)throw new Error(reply?.error || 'Open controls to connect the video.');
+  if(!reply?.ok)throw new Error(reply?.error || 'Show overlay to connect the video.');
   renderPlayerTracks(reply.tracks);
   if(revision===searchEditRevision)applySearchState(reply.search);
 }
@@ -130,7 +130,7 @@ async function refreshLibrary(selected) {
   savedBrowser.update(savedEntries,selected,$('query').value);renderLibrary();
 }
 chrome.storage.onChanged.addListener((changes,area)=>{if(area==='local' && changes.subtitleLibrary) refreshLibrary().catch(error=>status(error.message,true));});
-$('attach').onclick = () => task($('attach'), async () => { await attach(); status('Controls opened on the video.'); });
+$('attach').onclick = () => task($('attach'), async () => { await attach(); status('Overlay shown on the video.'); });
 $('file').onchange = async () => {
   const file = $('file').files[0]; if (!file) return;
   try {
