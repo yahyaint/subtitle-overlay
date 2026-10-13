@@ -20,6 +20,24 @@
     const visible=shown.flatMap(group=>group.tracks);select.value=visible.some(track=>track.id===previous) ? previous : (visible.find(track=>track.mode==='showing') || visible[0])?.id || '';select.disabled=!visible.length;
     return {visible,languages:groups.length};
   }
+  function bindFindPanels(root) {
+    const detected=root.getElementById('playerTracksSettings'),find=root.getElementById('onlineSearchSettings');
+    const summary=find.querySelector('summary');let available=null;
+    // Only a zero/nonzero transition changes the default panels. Polling must
+    // not undo a user's choice while a subtitle track is being selected.
+    summary.addEventListener('click',event=>{if(!available){event.preventDefault();find.open=true;}});
+    find.addEventListener('toggle',()=>{if(!available && !find.open)find.open=true;});
+    return {update(count){
+      const next=count>0;
+      if(next!==available){detected.open=next;find.open=!next;available=next;}
+      find.classList.toggle('fixed-open',!next);
+      summary.setAttribute('aria-disabled',String(!next));
+    }};
+  }
+  function countBadge(node,count) {
+    node.textContent=count>99 ? '99+' : String(count);node.hidden=!count;
+    node.title=count+' saved subtitles';node.setAttribute('aria-label',node.title);
+  }
   function create({getVideo,getTime,core,onChange=()=>{}}) {
     let video=null,revision=0,nextId=0,pending=null,lastCaption=null;
     const hiddenCaptions=new Map();
@@ -219,5 +237,5 @@
     function dispose(){restore();for(const name of trackEvents)trackList?.removeEventListener(name,changed);document.removeEventListener('subtitle-overlay-player-sources',sourcesUpdated);}
     return {list,hide,read,restore,dispose};
   }
-  globalThis.SubtitlePlayerTracks={create,groupTracks,renderOptions,languageName};
+  globalThis.SubtitlePlayerTracks={create,groupTracks,renderOptions,languageName,bindFindPanels,countBadge};
 })();

@@ -347,11 +347,18 @@ const server = http.createServer((req, res) => {res.writeHead(200, {'Content-Typ
     passed('Thumbs-down deletes saved bytes/metadata and active captions; stale tab rating rejected');
     await page.locator('#subtitle-overlay-root #fullscreen').click();
     await page.waitForFunction(()=>document.querySelector('#subtitle-overlay-root').shadowRoot.querySelector('#panel').hidden);
-    assert.equal(await popup.evaluate(async()=>{const [tab]=await chrome.tabs.query({active:true,currentWindow:true});return (await chrome.windows.get(tab.windowId)).state;}),'fullscreen');
+    assert.equal(await page.evaluate(()=>document.fullscreenElement===document.documentElement),true);
     await page.mouse.move(550,330);await page.locator('#subtitle-overlay-root #toggle').click();await page.locator('#subtitle-overlay-root #fullscreen').click();
-    await popup.waitForFunction(async()=>{const [tab]=await chrome.tabs.query({active:true,currentWindow:true});return (await chrome.windows.get(tab.windowId)).state!=='fullscreen';});
+    await page.waitForFunction(()=>!document.fullscreenElement);
     assert.notEqual(await popup.evaluate(async()=>{const [tab]=await chrome.tabs.query({active:true,currentWindow:true});return (await chrome.windows.get(tab.windowId)).state;}),'fullscreen');
-    passed('Browser fullscreen button toggles actual Chrome window state and restores prior state');
+    passed('Trusted fullscreen button enters page fullscreen with browser navigation hidden and exits cleanly');
+    await popup.evaluate(id=>chrome.scripting.executeScript({target:{tabId:id},func:()=>{globalThis.savedFullscreenMethod=document.documentElement.requestFullscreen;document.documentElement.requestFullscreen=async()=>{throw new Error('Fixture: page fullscreen denied');};}}),tabId);
+    const previousWindowState=await popup.evaluate(async()=>{const [tab]=await chrome.tabs.query({active:true,currentWindow:true});return (await chrome.windows.get(tab.windowId)).state;});
+    await page.locator('#subtitle-overlay-root #fullscreen').click();await popup.waitForFunction(async()=>{const [tab]=await chrome.tabs.query({active:true,currentWindow:true});return (await chrome.windows.get(tab.windowId)).state==='fullscreen';});
+    await page.locator('#subtitle-overlay-root #toggle').click();await page.locator('#subtitle-overlay-root #fullscreen').click();await popup.waitForFunction(async expected=>{const [tab]=await chrome.tabs.query({active:true,currentWindow:true});return (await chrome.windows.get(tab.windowId)).state===expected;},previousWindowState);
+    await popup.evaluate(id=>chrome.scripting.executeScript({target:{tabId:id},func:()=>{document.documentElement.requestFullscreen=globalThis.savedFullscreenMethod;delete globalThis.savedFullscreenMethod;}}),tabId);
+    passed('When page fullscreen is denied, the browser-window fallback still restores the prior window state');
+
     const denied = await popup.evaluate(async id => (await chrome.scripting.executeScript({target:{tabId:id},func:async()=>{
       const key=await chrome.storage.local.get('apiKey').catch(()=>({denied:true}));
       const privileged=await chrome.runtime.sendMessage({type:'GET_SETTINGS'}).catch(()=>undefined);

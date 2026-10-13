@@ -46,7 +46,7 @@ This is an independent extension. It is not affiliated with Disney+, OpenSubtitl
 
 The extension is free to use. The optional Tip link opens https://yahyanabil.com/support. A tip is not needed to use any feature.
 
-Version 0.8.13 is the current stable release. Live player compatibility and provider delivery can vary.
+Version 0.8.14 is the current stable release. Live player compatibility and provider delivery can vary.
 
 ## URLs and publisher
 
@@ -59,4 +59,4 @@ Version 0.8.13 is the current stable release. Live player compatibility and prov
 
 Create and verify the target URLs before you enter them in the live listing. The store account may also need a publisher contact email. A contact email was not found in the CTC files checked.
 
-Player subtitles appear in named language groups with track counts. Select a language to filter tracks before Import. Film and show suggestions use player metadata first. Series suggestions include readable season, episode, and episode-name details. Search languages use a named dropdown list.
+Detected Subtitles appear in named language groups with track counts. Select a language to filter tracks before Import. Film and show suggestions use player metadata first. Series suggestions include readable season, episode, and episode-name details. Search languages use a named dropdown list.

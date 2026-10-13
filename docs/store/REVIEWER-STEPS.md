@@ -21,7 +21,7 @@ No API key or provider account is needed for local files. The local sample is sh
 ## Player-subtitle path
 
 1. Open a test video with public subtitle or caption tracks.
-2. Open **Player subtitles** in the popup, or **Find → Player subtitles** in the video controls.
+2. Open **Detected Subtitles** in the popup, or **Find → Detected Subtitles** in the video controls.
 3. Check that only tracks from the selected video appear. Detection must not change caption choices.
 4. Select **Import**. Check the loaded lines, delay, sentence sync, text style, and Save.
 5. Test an empty HTML track with an SRT file URL. It must show **not loaded** before Import, request only the selected file after Import, and show its imported line count.

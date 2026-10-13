@@ -6,6 +6,7 @@ let activeLibraryId=null;
 let localChoices=[];
 let playerTrackBusy=false;
 let knownPlayerTracks=[];
+const findPanels=SubtitlePlayerTracks.bindFindPanels(document);findPanels.update(0);
 const saveIcon='<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" aria-hidden="true"><path d="M4 3h13l4 4v14H3V3h1Z"/><path d="M7 3v6h10V3M7 21v-8h10v8"/></svg>';
 let defaultSearchUrl;
 let searchHref='',searchEditRevision=0,searchWrite=Promise.resolve();
@@ -87,7 +88,7 @@ async function refreshPlayerTracks() {
 }
 function renderPlayerTracks(tracks) {
   knownPlayerTracks=tracks;const grouped=globalThis.SubtitlePlayerTracks.renderOptions(tracks,$('playerTracks'),$('playerLanguage'));
-  $('playerTrackCount').textContent=String(tracks.length);
+  $('playerTrackCount').textContent=String(tracks.length);findPanels.update(tracks.length);
   $('importPlayerTrack').disabled=!grouped.visible.length;
   $('playerTracksHint').textContent=tracks.length ? grouped.languages+' languages. Select a track, then Import.' : 'No tracks exposed yet. Open the player subtitle menu. Tracks update automatically.';
 }
@@ -122,7 +123,7 @@ function renderLibrary() {
     row.append(load,good,bad);$('library').append(row);
   }
   $('libraryHint').textContent=savedBrowser.hint();
-  $('savedCount').textContent=String(savedEntries.length);
+  SubtitlePlayerTracks.countBadge($('savedCount'),savedEntries.length);
 }
 async function refreshLibrary(selected) {
   try{activeLibraryId=(await chrome.tabs.sendMessage(tabId,{type:'GET_STATUS'}))?.libraryId || null;}catch{activeLibraryId=null;}

@@ -1,3 +1,13 @@
+## 0.8.14
+
+- Use top navigation in the popup and smaller Saved counts in both interfaces.
+- Rename Player subtitles to Detected Subtitles. Match the Find heading size.
+- Open detected files when available and collapse Find. Keep Find open when no files are detected.
+- Read lazy caption descriptors in supported custom React player menus. Keep files after a menu closes and reset the cache when the page or video source changes.
+- Repair stale header Close handlers and remove the overlay before optional player cleanup.
+- Prefer page fullscreen with browser navigation hidden. Keep the browser-window fallback.
+- Keep the current license while published alternatives are compared.
+
 ## 0.8.13
 
 - Use a project-specific source-available personal-use license: view and run only. No code edits, derivative permission, redistribution, or commercial use without separate permission.

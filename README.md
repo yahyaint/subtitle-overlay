@@ -10,9 +10,9 @@ Add your own subtitles to browser video. Find a subtitle, set its timing, and ch
 
 Saved subtitles has separate Films and Shows views. Shows use show, season, and episode selectors. Older saved episode titles are recognized without changing stored files.
 
-Version 0.8.13 keeps the popup and video controller search fields in sync. Saved searches cannot replace the detected film.
+Version 0.8.14 keeps the popup and video controller search fields in sync. Saved searches cannot replace the detected film.
 
-Version 0.8.13 uses a shared tool rail, fixed popup file actions, and a clearer timing card. See [design notes and research](docs/design/NEW-DESIGN.md).
+Version 0.8.14 uses top navigation in the popup, a tool rail in the video controller, and fixed popup file actions. See [design notes and research](docs/design/NEW-DESIGN.md).
 
 ## Features
 
@@ -29,7 +29,7 @@ Version 0.8.13 uses a shared tool rail, fixed popup file actions, and a clearer 
 
 ## Install
 
-Version 0.8.13 is the current stable release. A Chrome Web Store listing is not available yet.
+Version 0.8.14 is the current stable release. A Chrome Web Store listing is not available yet.
 
 1. Download this repository or a release ZIP. Extract the files.
 2. Open `chrome://extensions`. In Edge, open `edge://extensions`.
@@ -64,11 +64,11 @@ The library stays on this device. Deleting a library item does not delete files 
 - Closed shadow roots and inaccessible frames can prevent player access.
 - ASS and SSA text and timing are supported. Embedded styles and effects are not rendered.
 - Image subtitles, RAR files, encrypted ZIP files, and archives over the 2 MB limit are not supported.
-- Authenticated OpenSubtitles delivery still needs confirmation for version 0.8.13.
+- Authenticated OpenSubtitles delivery still needs confirmation for version 0.8.14.
 
 ## Import player subtitles
 
-Open **Find → Player subtitles**. Select a language. **Import** loads its subtitle file if no lines are readable, or copies loaded text and timing into the overlay. You can then change timing and text style, sync with sentences, and save the result.
+Open **Find → Detected Subtitles**. Select a language. **Import** loads its subtitle file if no lines are readable, or copies loaded text and timing into the overlay. You can then change timing and text style, sync with sentences, and save the result.
 
 Only public subtitle or caption tracks are listed. A track can say **not loaded** until you select **Import**. The extension then requests its file URL through normal browser access. SRT, WebVTT, ASS, and SSA text are supported. A blocked file reports an error; select another track or load a local file. Some players use a separate caption renderer and expose no readable tracks. Select a language in the player, then **Refresh**. Streaming tracks may expose only loaded lines. Import again to make a new copy if more lines load. Import also copies readable player text style and position. In **Text style**, select **Restore player style** to restore the captured appearance without changing timing or sentence-sync points. Save keeps this original style with your settings. Browser-drawn styles, multiple shadows, animations, and per-line effects may not be readable.
 
@@ -98,4 +98,10 @@ The extension is free to use. Select **Tip** in the popup, or visit [the support
 
 Publisher: `yahyaint`. Repository: [`yahyaint/subtitle-overlay`](https://github.com/yahyaint/subtitle-overlay). License: [Source-Available Personal Use](LICENSE). Viewing and running only; no code edits, redistribution, or commercial reuse under this license. See [license scope](docs/LICENSING.md).
 
-Player subtitles is the first panel in Find. Track events and video changes trigger a quick update. Custom caption links and public Video.js, JW Player, and Artplayer caption files are supported. Open shadow roots are included. Files load only after Import. Some players expose no subtitle files; cross-origin frame players require a separate integration.
+Detected Subtitles is the first panel in Find. Track events and video changes trigger a quick update. Custom caption links and public Video.js, JW Player, and Artplayer caption files are supported. Open shadow roots are included. Files load only after Import. Some players expose no subtitle files; cross-origin frame players require a separate integration.
+
+## Detected caption panels
+
+Detected Subtitles opens when tracks are found. Find subtitles then starts collapsed. With no detected tracks, Find stays open. Supported custom React caption menus are included after they expose their file lists. On the supplied Movy movie, an isolated Chromium check detected 89 files and imported 2,673 English lines with film media blocked. Full live playback was not tested.
+
+The popup uses top navigation. The video controller keeps side tools. Both Close buttons remove the overlay. Fullscreen first requests page fullscreen with browser navigation hidden, then falls back to browser-window fullscreen if needed.

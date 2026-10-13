@@ -16,16 +16,20 @@ ASS and SSA files use their text and timing. File styles and effects are not ren
 
 To update: replace these files in the same folder, select **Reload** in the browser's extension page, then refresh the video tab.
 
-In **Find → Player subtitles**, select **Import** to load the selected file or copy readable lines, player style, and position into the overlay. Under **Text style**, **Restore player style** restores the captured appearance and keeps timing and sentence-sync points. Save keeps the original style with your current settings. Some player styles are not readable. Only public tracks are listed; some players expose none.
+In **Find → Detected Subtitles**, select **Import** to load the selected file or copy readable lines, player style, and position into the overlay. Under **Text style**, **Restore player style** restores the captured appearance and keeps timing and sentence-sync points. Save keeps the original style with your current settings. Some player styles are not readable. Only public tracks are listed; some players expose none.
 
-Version 0.8.13 is the current stable release. The publisher confirmed Disney+ playback, seeking, and sentence sync in Vivaldi on Windows with 0.7.10. The new player-subtitle import still needs a live Disney+ check. Authenticated OpenSubtitles delivery still needs confirmation.
+Version 0.8.14 is the current stable release. The publisher confirmed Disney+ playback, seeking, and sentence sync in Vivaldi on Windows with 0.7.10. The new player-subtitle import still needs a live Disney+ check. Authenticated OpenSubtitles delivery still needs confirmation.
 
 ## Languages and series
 
-In Find, select a subtitle language from the list. Open Player subtitles to see tracks grouped by language, with a count for each group. Select a language to filter the track list. Unknown language keeps tracks with no valid language code.
+In Find, select a subtitle language from the list. Open Detected Subtitles to see tracks grouped by language, with a count for each group. Select a language to filter the track list. Unknown language keeps tracks with no valid language code.
 
 Player metadata supplies the current film or show first. Episode suggestions use show name, season, episode number, and a readable episode name, such as The Bear S03E04 - Violet. Website search and API search use the episode numbers. Saved subtitles stay separate for each episode. Edit the suggestion when the page gives incomplete or stale metadata.
 
-Player subtitles is the first panel in Find. Track events and video changes trigger a quick update. Custom caption links and public Video.js, JW Player, and Artplayer caption files are supported. Open shadow roots are included. Files load only after Import. Some players expose no subtitle files; cross-origin frame players require a separate integration.
+Detected Subtitles is the first panel in Find. Track events and video changes trigger a quick update. Custom caption links and public Video.js, JW Player, and Artplayer caption files are supported. Open shadow roots are included. Files load only after Import. Some players expose no subtitle files; cross-origin frame players require a separate integration.
 
 License: Subtitle Overlay Source-Available Personal Use 1.0. Viewing and running only; no code edits, redistribution, or commercial reuse under this license. See LICENSE and NOTICE in the package.
+
+Detected Subtitles opens when files are found. Find subtitles can then be collapsed. With no detected files, Find stays open. Supported custom React caption menus can expose lazy file lists after the player subtitle search. The list stays available when that menu closes and resets when the page or video source changes.
+
+The fullscreen button first requests page fullscreen with browser navigation hidden. If the browser rejects that request, it tries window fullscreen. Both Close buttons remove the overlay.

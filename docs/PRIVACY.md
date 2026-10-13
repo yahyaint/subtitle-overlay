@@ -1,6 +1,6 @@
 # Subtitle Overlay privacy notice
 
-Version: 0.8.13. Updated: October 11, 2026. Publisher: yahyaint.
+Version: 0.8.14. Updated: October 13, 2026. Publisher: yahyaint.
 
 ## Data on this device
 
@@ -60,3 +60,5 @@ Player track language codes supply the language groups and counts. Film and seri
 The app font is bundled with the extension. It loads from a local extension URL, with no external font service. Its static font resource uses a dynamic session URL. This resource contains no user data.
 
 The player subtitle reader checks public track metadata, caption links near the selected video, and public Video.js, JW Player, and Artplayer caption APIs. It does not inspect account state. A selected subtitle file is requested only after Import, with normal page CORS access and no credentials.
+
+Detected captions may come from subtitle descriptors in a supported custom React player near the selected video. Discovery reads labels, language codes, and caption file locations. It does not invoke player callbacks or intercept network responses. These descriptors are kept only for the current page and video source. Only Import fetches a selected caption file.

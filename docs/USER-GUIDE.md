@@ -10,15 +10,19 @@ Select **API** to search in the extension. Add an OpenSubtitles API key in **Set
 
 Use **Load file** for a local subtitle. For frame-based SUB files, enter the FPS shown by the source if the file does not declare it. Do not guess the FPS.
 
-## Player subtitles
+## Detected Subtitles
 
-Open **Find → Player subtitles** in the popup or video controls. The list follows the selected video. It excludes metadata and chapter tracks.
+Open **Find → Detected Subtitles** in the popup or video controls. The list follows the selected video. It excludes metadata and chapter tracks.
 
 Select **Import** to load its file if the track has no readable lines, or to copy loaded lines into the overlay. Import also copies readable font, weight, italic, colors, background opacity, shadow, spacing, and position from the player. Delay, timing scale, sentence sync, text style, and Save are then available.
 
 Importing another file, loading a saved subtitle, changing film, or removing the overlay restores caption modes changed by the extension. Choices made later through the site's caption controls are preserved.
 
 A track can say **not loaded** before Import. The extension requests only the selected file, through normal browser access. It supports SRT, WebVTT, ASS, and SSA text. File imports keep their original film timestamps. Native player cues are mapped to the film clock. A blocked file reports an error. Select another track or load a local file.
+
+Detected Subtitles opens when files are found. Find subtitles then starts collapsed. With no detected files, Find stays open.
+
+For a lazy custom menu, open the player subtitle menu and use its search if needed. The extension can list supported caption descriptors after that menu loads. Files remain available after the menu closes and reset when the page or video source changes.
 
 If no track appears, select a subtitle language in the player and select **Refresh**. A player may expose no readable tracks. Streaming tracks may expose only loaded lines; importing again creates a new copy and resets its timing. If the site uses its own caption renderer and both captions appear, turn off captions in that site's controls.
 

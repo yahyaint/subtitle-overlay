@@ -36,6 +36,8 @@ assert.equal(library.episodeInfo({title:'Film S01E00'}),null);assert.equal(libra
   await popup.waitForFunction(()=>document.querySelector('#savedEpisode').value==='4');
   await film.waitForFunction(()=>document.querySelector('#subtitle-overlay-root')?.shadowRoot.querySelector('#overlaySavedEpisode').value==='4');
   await popup.locator('#tab-saved').click();await ui('toggle').click();await ui('tab-saved').click();
+  for(const badge of [popup.locator('#savedCount'),ui('overlaySavedCount')]){assert.equal(await badge.textContent(),'7');const fit=await badge.evaluate(e=>{const icon=e.parentElement.getBoundingClientRect(),b=e.getBoundingClientRect(),css=getComputedStyle(e);return {h:b.height,font:css.fontSize,overlap:b.left<icon.right && b.bottom>icon.top};});assert.equal(fit.h,12);assert.equal(fit.font,'8px');assert(fit.overlap);}
+
   for(const [page,prefix] of [[popup,'saved'],[film,'overlaySaved']]){
    const loc=suffix=>page.locator((page===film ? '#subtitle-overlay-root ' : '')+'#'+prefix+suffix);
    assert.equal(await loc('Shows').getAttribute('aria-pressed'),'true');assert.equal(await loc('FilmField').isHidden(),true);

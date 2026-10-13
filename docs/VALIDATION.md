@@ -1,3 +1,19 @@
+## Version 0.8.14 - October 13, 2026
+
+All ten local integration suites pass. Static checks and real-UI store asset generation pass.
+
+- Popup navigation is horizontal; controller navigation remains vertical. Keyboard tabs work in both.
+- Saved count badges measure 12 px high with 8 px text and overlap the bookmark corner. Film/show library actions still pass.
+- Detected Subtitles and Find subtitles headings both measure 19 px. Zero/nonzero transitions set the requested default panels. Manual choices survive refresh. Find cannot collapse when no tracks are available.
+- Header X, side Close, and Remove share teardown. A simulated stale hide-only X is repaired by reattachment without losing the loaded subtitle. Close keeps saved files and settings.
+- A trusted button enters page fullscreen with browser navigation hidden and exits. A rejected page request uses window fullscreen and restores its prior state. This was tested in Chromium; Vivaldi native-menu behavior needs publisher confirmation.
+- Lazy React descriptors use the current render. Tests exclude audio, stale render descriptors, and unrelated players; import remains on demand. Files survive a closed caption menu and are cleared on video-source changes.
+- Existing seek, hidden-control, segment-clock, shadow-clock, and one/two/three-sentence sync checks pass. Core clock and sentence-fit code are unchanged.
+
+The supplied Movy movie URL `/movie/969681` was checked in isolated Chromium with film media blocked. After opening the player's subtitle search, the extension detected 89 files, grouped six English choices, and imported 2,673 English lines. Native TextTrack count was zero. This confirms caption discovery and import, not live film playback or the user's Vivaldi window. Other React player structures and cross-origin frames may need an adapter.
+
+The current project license and third-party font license are unchanged while the publisher compares license choices. New archives are checked for manifest placement, CRCs, production-file equality, license/NOTICE equality, SHA-256 hashes, and installed-output equality.
+
 ## Version 0.8.13 - October 13, 2026
 
 Source-Available Personal Use license replaces PolyForm for the current distribution. Viewing and running are allowed. Code edits, derivative creation, redistribution, and commercial use are not licensed. User explicitly selected no private edits. Previous grants and third-party licenses are unchanged.
