@@ -49,11 +49,11 @@ Player-file import requests only the selected public track URL, after Import. It
 
 ## Language groups and episode recognition
 
-Version 0.8.15 groups public player track labels by their language codes. It reads public playback and page metadata to suggest the film or episode. Series searches send the show, season, and episode numbers to the selected provider after the user starts a search. There are no new permissions.
+Version 0.8.16 groups public player track labels by their language codes. It reads public playback and page metadata to suggest the film or episode. Series searches send the show, season, and episode numbers to the selected provider after the user starts a search. There are no new permissions.
 
 
-The Inter font is bundled with 0.8.15. Its single WOFF2 file is web accessible through a dynamic session URL so the controller can load it. No script, account data, or subtitle file is exposed by this rule. The extension does not request a remote font.
+The Inter font is bundled with 0.8.16. Its single WOFF2 file is web accessible through a dynamic session URL so the controller can load it. No script, account data, or subtitle file is exposed by this rule. The extension does not request a remote font.
 
 Public player caption files can also come from custom caption menus, open shadow roots, and Video.js, JW Player, and Artplayer APIs. Files load only after Import through normal page CORS access. This adds no permissions. Track discovery does not request these files.
 
-Version 0.8.15 also reads bounded subtitle descriptor arrays in supported custom React caption menus near the selected video. Only caption labels, language codes, and file locations are retained. It does not invoke remote callbacks, read arbitrary application stores, or intercept network responses. This in-memory list resets with the page or video source. The selected file is fetched only after Import, using normal CORS access without credentials. No new permission is requested.
+Version 0.8.16 also reads bounded subtitle descriptor arrays in supported custom React caption menus near the selected video. Only caption labels, language codes, and file locations are retained. It does not invoke remote callbacks, read arbitrary application stores, or intercept network responses. This in-memory list resets with the page or video source. The selected file is fetched only after Import, using normal CORS access without credentials. No new permission is requested.

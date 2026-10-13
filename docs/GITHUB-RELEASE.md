@@ -1,4 +1,4 @@
-# Subtitle Overlay 0.8 — 0.8.15
+# Subtitle Overlay 0.8 — 0.8.16
 
 One consolidated release for the 0.8 series. This build includes the latest working features and uses PolyForm Perimeter 1.0.1.
 
@@ -8,7 +8,7 @@ One consolidated release for the 0.8 series. This build includes the latest work
 - Detected Subtitles opens when files are found. Find subtitles stays open when no files are found. Both headings use the same size.
 - Browse Saved films and shows, with season and episode selectors. Save keeps timing and text style. Counts fit the bookmark icon.
 - Use one, two, or three sentences to set sync. Seek and segmented-clock regression checks pass.
-- Both Close buttons remove the overlay. Fullscreen prefers page fullscreen with browser navigation hidden, with a window fallback.
+- Header X hides the controls and keeps subtitles and the icon. Side Close removes the overlay. Fullscreen prefers page fullscreen with browser navigation hidden, with a window fallback.
 - External dub-audio features are removed.
 
 The supplied Movy movie was checked in isolated Chromium with film media blocked: 89 caption files detected, six English choices, and 2,673 English lines imported. Vivaldi native-menu behavior still needs confirmation.

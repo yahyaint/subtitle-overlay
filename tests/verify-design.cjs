@@ -70,9 +70,19 @@ const {chromium}=require('playwright');
    assert.equal(await video.locator('#subtitle-overlay-root').count(),1);
   }
   await popup.evaluate(id=>chrome.tabs.sendMessage(id,{type:'LOAD_SUBTITLES',text:'1\n00:00:00,000 --> 00:01:00,000\nPreserved line\n',name:'preserved.srt'}),tabId);
-  await popup.evaluate(id=>chrome.scripting.executeScript({target:{tabId:id},func:()=>{const root=document.querySelector('#subtitle-overlay-root').shadowRoot;delete globalThis.__subtitleOverlay.remove;root.getElementById('close').onclick=()=>root.getElementById('panel').hidden=true;}}),tabId);
+  await popup.evaluate(id=>chrome.scripting.executeScript({target:{tabId:id},func:()=>{const root=document.querySelector('#subtitle-overlay-root').shadowRoot;delete globalThis.__subtitleOverlay.hideControls;root.getElementById('close').onclick=root.getElementById('remove').onclick;}}),tabId);
   await popup.locator('#attach').click();await ui('text').getByText('Preserved line',{exact:true}).waitFor();
-  await ui('close').click();await assertRemovedAndReopen();
+  const beforeHide=await popup.evaluate(id=>chrome.tabs.sendMessage(id,{type:'GET_SUBTITLE_SNAPSHOT'}),tabId);
+  const beforeHideStorage=await worker.evaluate(()=>chrome.storage.local.get(null));
+  await ui('close').click();assert(await ui('panel').isHidden());assert(await ui('toggle').isVisible());assert.equal(await video.locator('#subtitle-overlay-root').count(),1);assert.equal(await ui('text').textContent(),'Preserved line');
+  assert.deepEqual(await popup.evaluate(id=>chrome.tabs.sendMessage(id,{type:'GET_SUBTITLE_SNAPSHOT'}),tabId),beforeHide);assert.deepEqual(await worker.evaluate(()=>chrome.storage.local.get(null)),beforeHideStorage);
+  await ui('toggle').click();assert(await ui('panel').isVisible());
+  // A fresh instance also keeps its icon available beyond fullscreen inactivity.
+  await ui('railClose').click();await assertRemovedAndReopen();
+  await popup.evaluate(id=>chrome.tabs.sendMessage(id,{type:'LOAD_SUBTITLES',text:'1\n00:00:00,000 --> 00:01:00,000\nFullscreen line\n',name:'fullscreen.srt'}),tabId);
+  await video.bringToFront();await ui('fullscreen').click();await video.waitForFunction(()=>!!document.fullscreenElement);await ui('toggle').click();await ui('close').focus();await video.keyboard.press('Enter');assert(await ui('panel').isHidden());
+  await video.waitForTimeout(2100);assert(await ui('toggle').isVisible());assert.equal(await ui('text').textContent(),'Fullscreen line');await ui('toggle').click();assert(await ui('panel').isVisible());await ui('fullscreen').click();await video.waitForFunction(()=>!document.fullscreenElement);
+
   for(const view of ['controls','find','saved']){
    await popup.evaluate(id=>chrome.tabs.sendMessage(id,{type:'LOAD_SUBTITLES',text:'1\n00:00:00,000 --> 00:01:00,000\nClose test\n',name:'close-test.srt'}),tabId);
    await ui('text').getByText('Close test',{exact:true}).waitFor();

@@ -1,6 +1,6 @@
 # Prepare a release
 
-Current version: `0.8.15`. Repository: `yahyaint/subtitle-overlay`.
+Current version: `0.8.16`. Repository: `yahyaint/subtitle-overlay`.
 
 1. Include the official PolyForm Perimeter LICENSE and NOTICE in each archive. Keep third-party licenses.
 2. Run `npm run check` and relevant tests. Run `npm run build`.

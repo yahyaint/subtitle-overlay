@@ -2,10 +2,17 @@
   const startHidden=globalThis.__subtitleOverlayStartHidden===true;delete globalThis.__subtitleOverlayStartHidden;
   if (globalThis.__subtitleOverlay) {
     const existing=globalThis.__subtitleOverlay,root=document.getElementById('subtitle-overlay-root')?.shadowRoot;
-    // An already-open controller can keep an older X handler after extension
-    // reload. Repair both Close actions without discarding its loaded settings.
+    // Repair older controls without discarding the loaded subtitle or settings.
     const remove=existing.remove || (event=>root?.getElementById('remove')?.onclick?.(event));
-    for(const id of ['close','railClose'])if(root?.getElementById(id))root.getElementById(id).onclick=remove;
+    const hide=existing.hideControls || (event=>{
+      event?.preventDefault();event?.stopPropagation();
+      const panel=root?.getElementById('panel'),icon=root?.getElementById('toggle');
+      if(panel)panel.hidden=true;
+      if(icon){icon.hidden=false;icon.style.setProperty('display','grid','important');}
+    });
+    const close=root?.getElementById('close');
+    if(close){close.onclick=hide;close.title='Hide controls';close.setAttribute('aria-label','Hide subtitle controls');}
+    if(root?.getElementById('railClose'))root.getElementById('railClose').onclick=remove;
     if(!startHidden)existing.show();return;
   }
   const core = globalThis.SubtitleCore;
@@ -43,7 +50,7 @@ nav .count{position:absolute;right:-4px;top:-4px;min-width:12px;height:12px;line
   <div id="captions" aria-hidden="true"><div id="text"></div></div>
   <button id="toggle" title="Subtitle controls (Alt+Shift+O)" aria-label="Toggle subtitle controls"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" aria-hidden="true" viewBox="0 0 128 128"><rect width="128" height="128" rx="30" fill="#274c73"/><path d="M34 32h60a10 10 0 0 1 10 10v40a10 10 0 0 1-10 10H62L38 106V92h-4a10 10 0 0 1-10-10V42a10 10 0 0 1 10-10Z" fill="#f2f8fc"/><path d="M43 52h42M43 70h26" fill="none" stroke="#274c73" stroke-width="9" stroke-linecap="round"/></svg></button>
   <section id="panel" dir="ltr" lang="en" aria-label="Subtitle controls">
-    <header><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" aria-hidden="true" viewBox="0 0 128 128"><rect width="128" height="128" rx="30" fill="#274c73"/><path d="M34 32h60a10 10 0 0 1 10 10v40a10 10 0 0 1-10 10H62L38 106V92h-4a10 10 0 0 1-10-10V42a10 10 0 0 1 10-10Z" fill="#f2f8fc"/><path d="M43 52h42M43 70h26" fill="none" stroke="#274c73" stroke-width="9" stroke-linecap="round"/></svg><h2>Subtitle Overlay</h2><button id="fullscreen" title="Full screen (hide browser menus)" aria-label="Toggle fullscreen"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M8 4H4v4m12-4h4v4M4 16v4h4m12-4v4h-4"/></svg></button><button id="close" title="Remove overlay" aria-label="Remove subtitle overlay"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="m4 4 16 16M20 4 4 20"/></svg></button></header>
+    <header><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" aria-hidden="true" viewBox="0 0 128 128"><rect width="128" height="128" rx="30" fill="#274c73"/><path d="M34 32h60a10 10 0 0 1 10 10v40a10 10 0 0 1-10 10H62L38 106V92h-4a10 10 0 0 1-10-10V42a10 10 0 0 1 10-10Z" fill="#f2f8fc"/><path d="M43 52h42M43 70h26" fill="none" stroke="#274c73" stroke-width="9" stroke-linecap="round"/></svg><h2>Subtitle Overlay</h2><button id="fullscreen" title="Full screen (hide browser menus)" aria-label="Toggle fullscreen"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M8 4H4v4m12-4h4v4M4 16v4h4m12-4v4h-4"/></svg></button><button id="close" title="Hide controls" aria-label="Hide subtitle controls"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="m4 4 16 16M20 4 4 20"/></svg></button></header>
     <div class="panel-workspace"><div class="tool-rail"><nav role="tablist" aria-label="Overlay tools" aria-orientation="vertical"><button id="tab-controls" role="tab" aria-controls="view-controls" aria-selected="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M4 17h16"/><circle cx="9" cy="7" r="3"/><circle cx="15" cy="17" r="3"/></svg><span>Controls</span></button><button id="tab-find" role="tab" aria-controls="view-find" aria-selected="false" tabindex="-1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg><span>Find</span></button><button id="tab-saved" role="tab" aria-controls="view-saved" aria-selected="false" tabindex="-1"><span class="tab-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 3h14v18l-7-4-7 4Z"/><path d="M9 7h6"/></svg><span id="overlaySavedCount" class="count" hidden>0</span></span><span>Saved</span></button></nav><button id="railClose" type="button" title="Remove overlay" aria-label="Remove subtitle overlay"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="m5 5 14 14M19 5 5 19"/></svg><span>Close</span></button></div><div class="workspace-content">
     <div id="view-controls" role="tabpanel" aria-labelledby="tab-controls">
     <div class="meta"><p id="videoStatus" class="hint">Find video…</p><span id="time">00:00:00</span></div>
@@ -253,16 +260,17 @@ nav .count{position:absolute;right:-4px;top:-4px;min-width:12px;height:12px;line
     syncMode();message('New video. Find subtitles or load a saved file.');
   }
 
-  let idleTimer;
+  let idleTimer,keepIcon=false;
   function fullScreen() { return Boolean(document.fullscreenElement || state.browserFullscreen); }
   function wakeControls() {
     $('toggle').hidden=false; clearTimeout(idleTimer);
-    if (fullScreen()) idleTimer=setTimeout(()=>{if($('panel').hidden) $('toggle').hidden=true;},1800);
+    if (fullScreen() && !keepIcon) idleTimer=setTimeout(()=>{if($('panel').hidden && !keepIcon) $('toggle').hidden=true;},1800);
   }
-  function show() { $('panel').hidden = false; wakeControls(); }
-  function toggle() { $('panel').hidden = !$('panel').hidden; wakeControls(); }
+  function show() { keepIcon=false;$('panel').hidden = false; wakeControls(); }
+  function hideControls(event) { event?.preventDefault();event?.stopPropagation();keepIcon=true;$('panel').hidden=true;wakeControls(); }
+  function toggle() { if($('panel').hidden)show();else{$('panel').hidden=true;wakeControls();} }
   $('toggle').onclick = toggle;
-  $('close').onclick=removeOverlay;$('railClose').onclick=removeOverlay;
+  $('close').onclick=hideControls;$('railClose').onclick=removeOverlay;
   function fullscreenChanged() { mount(); if(fullScreen()) $('panel').hidden=true; wakeControls(); }
   async function browserFullscreenStatus() {
     try {
@@ -795,5 +803,5 @@ nav .count{position:absolute;right:-4px;top:-4px;min-width:12px;height:12px;line
     document.dispatchEvent(new Event('subtitle-overlay-sources-stop'));document.dispatchEvent(new Event('subtitle-overlay-clock-stop'));
   }
   $('remove').onclick=removeOverlay;
-  globalThis.__subtitleOverlay = {show,remove:removeOverlay}; mount(); renderCues(); discover();browserFullscreenStatus();
+  globalThis.__subtitleOverlay = {show,hideControls,remove:removeOverlay}; mount(); renderCues(); discover();browserFullscreenStatus();
 })();

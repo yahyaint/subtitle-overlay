@@ -10,9 +10,9 @@ Add your own subtitles to browser video. Find a subtitle, set its timing, and ch
 
 Saved subtitles has separate Films and Shows views. Shows use show, season, and episode selectors. Older saved episode titles are recognized without changing stored files.
 
-Version 0.8.15 keeps the popup and video controller search fields in sync. Saved searches cannot replace the detected film.
+Version 0.8.16 keeps the popup and video controller search fields in sync. Saved searches cannot replace the detected film.
 
-Version 0.8.15 uses top navigation in the popup, a tool rail in the video controller, and fixed popup file actions. See [design notes and research](docs/design/NEW-DESIGN.md).
+Version 0.8.16 uses top navigation in the popup, a tool rail in the video controller, and fixed popup file actions. See [design notes and research](docs/design/NEW-DESIGN.md).
 
 ## Features
 
@@ -29,7 +29,7 @@ Version 0.8.15 uses top navigation in the popup, a tool rail in the video contro
 
 ## Install
 
-Version 0.8.15 is the current stable release.
+Version 0.8.16 is the current stable release.
 
 1. Download this repository or a release ZIP. Extract the files.
 2. Open `chrome://extensions`. In Edge, open `edge://extensions`.
@@ -64,7 +64,7 @@ The library stays on this device. Deleting a library item does not delete files 
 - Closed shadow roots and inaccessible frames can prevent player access.
 - ASS and SSA text and timing are supported. Embedded styles and effects are not rendered.
 - Image subtitles, RAR files, encrypted ZIP files, and archives over the 2 MB limit are not supported.
-- Authenticated OpenSubtitles delivery still needs confirmation for version 0.8.15.
+- Authenticated OpenSubtitles delivery still needs confirmation for version 0.8.16.
 
 ## Import player subtitles
 
@@ -104,4 +104,4 @@ Detected Subtitles is the first panel in Find. Track events and video changes tr
 
 Detected Subtitles opens when tracks are found. Find subtitles then starts collapsed. With no detected tracks, Find stays open. Supported custom React caption menus are included after they expose their file lists. On the supplied Movy movie, an isolated Chromium check detected 89 files and imported 2,673 English lines with film media blocked. Full live playback was not tested.
 
-The popup uses top navigation. The video controller keeps side tools. Both Close buttons remove the overlay. Fullscreen first requests page fullscreen with browser navigation hidden, then falls back to browser-window fullscreen if needed.
+The popup uses top navigation. The video controller keeps side tools. Header X hides the controls and keeps subtitles and the icon. Side Close removes the overlay. Fullscreen first requests page fullscreen with browser navigation hidden, then falls back to browser-window fullscreen if needed.

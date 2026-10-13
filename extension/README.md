@@ -18,7 +18,7 @@ To update: replace these files in the same folder, select **Reload** in the brow
 
 In **Find → Detected Subtitles**, select **Import** to load the selected file or copy readable lines, player style, and position into the overlay. Under **Text style**, **Restore player style** restores the captured appearance and keeps timing and sentence-sync points. Save keeps the original style with your current settings. Some player styles are not readable. Only public tracks are listed; some players expose none.
 
-Version 0.8.15 is the current stable release. The publisher confirmed Disney+ playback, seeking, and sentence sync in Vivaldi on Windows with 0.7.10. The new player-subtitle import still needs a live Disney+ check. Authenticated OpenSubtitles delivery still needs confirmation.
+Version 0.8.16 is the current stable release. The publisher confirmed Disney+ playback, seeking, and sentence sync in Vivaldi on Windows with 0.7.10. The new player-subtitle import still needs a live Disney+ check. Authenticated OpenSubtitles delivery still needs confirmation.
 
 ## Languages and series
 
@@ -32,4 +32,6 @@ License: PolyForm Perimeter 1.0.1. Reuse is permitted for noncompeting purposes;
 
 Detected Subtitles opens when files are found. Find subtitles can then be collapsed. With no detected files, Find stays open. Supported custom React caption menus can expose lazy file lists after the player subtitle search. The list stays available when that menu closes and resets when the page or video source changes.
 
-The fullscreen button first requests page fullscreen with browser navigation hidden. If the browser rejects that request, it tries window fullscreen. Both Close buttons remove the overlay.
+The fullscreen button first requests page fullscreen with browser navigation hidden. If the browser rejects that request, it tries window fullscreen. Header X hides the controls and keeps subtitles and the icon. Side Close removes the overlay.
+
+Header X hides the controls. Subtitles and current settings stay loaded. The icon stays available to reopen the controls, including in fullscreen. Side Close and Remove overlay remove the overlay.

@@ -1,3 +1,9 @@
+## Version 0.8.16 - October 13, 2026
+
+Header X now hides only the controller. Loaded subtitles, settings, and the runtime remain active. The reopen icon stays visible after header X, including beyond fullscreen inactivity. Side Close and Remove overlay still remove the overlay and restore owned player state.
+
+Focused browser regressions check hiding, reopening, unchanged subtitle snapshots and saved storage, repair of stale remove-only X handlers, keyboard activation, fullscreen icon persistence, and side removal from all three views. Core timing and sentence-sync algorithms are unchanged. Focused design and core integration suites pass. Preview image generation also passes.
+
 ## Version 0.8.15 - October 13, 2026
 
 Licensing and release organization update. The official PolyForm Perimeter 1.0.1 text is included unchanged. Current docs permit noncompeting reuse and no longer require separate permission for private edits. Earlier grants and third-party licenses remain valid.
