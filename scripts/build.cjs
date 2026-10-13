@@ -24,7 +24,6 @@ function verifiedZip(filename,entries){
  fs.writeFileSync(path.join(out,filename),bytes);return [filename,bytes];
 }
 const packages=[];
-packages.push(verifiedZip('subtitle-overlay-'+version+'-chrome-web-store.zip',[...source,...licenses]));
 packages.push(verifiedZip('subtitle-overlay-'+version+'-release.zip',[
  ...source.map(([name,data])=>['extension/'+name,data]),
  ['extension/README.md',fs.readFileSync(path.join(root,'README.md'))],
@@ -44,5 +43,5 @@ packages.push(verifiedZip('subtitle-overlay-'+version+'-source.zip',publicFiles.
 fs.writeFileSync(path.join(out,'SHA256SUMS.txt'),packages.map(([name,data])=>crypto.createHash('sha256').update(data).digest('hex')+'  '+name).join('\n')+'\n');
 const manifest={version,extensionFiles:[...include,...licenseFiles],packages:packages.map(([name,bytes])=>({name,bytes:bytes.length,sha256:crypto.createHash('sha256').update(bytes).digest('hex')}))};
 fs.writeFileSync(path.join(out,'build-report.json'),JSON.stringify(manifest,null,2)+'\n');
-console.log('PASS verified packages, manifest at store ZIP root, and SHA-256 hashes.');
+console.log('PASS verified packages, install/source ZIPs and SHA-256 hashes.');
 for(const [name,bytes] of packages)console.log(name+' ('+bytes.length+' bytes)');

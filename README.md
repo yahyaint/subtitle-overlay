@@ -4,15 +4,15 @@ Read. Sync. Watch.
 
 Add your own subtitles to browser video. Find a subtitle, set its timing, and change how it looks. Save the file and its settings for the next viewing.
 
-![Subtitle controls on a local demo player](docs/store/assets/01-controls.png)
+![Subtitle controls on a local demo player](docs/images/01-controls.png)
 
 ## New Design
 
 Saved subtitles has separate Films and Shows views. Shows use show, season, and episode selectors. Older saved episode titles are recognized without changing stored files.
 
-Version 0.8.14 keeps the popup and video controller search fields in sync. Saved searches cannot replace the detected film.
+Version 0.8.15 keeps the popup and video controller search fields in sync. Saved searches cannot replace the detected film.
 
-Version 0.8.14 uses top navigation in the popup, a tool rail in the video controller, and fixed popup file actions. See [design notes and research](docs/design/NEW-DESIGN.md).
+Version 0.8.15 uses top navigation in the popup, a tool rail in the video controller, and fixed popup file actions. See [design notes and research](docs/design/NEW-DESIGN.md).
 
 ## Features
 
@@ -29,7 +29,7 @@ Version 0.8.14 uses top navigation in the popup, a tool rail in the video contro
 
 ## Install
 
-Version 0.8.14 is the current stable release. A Chrome Web Store listing is not available yet.
+Version 0.8.15 is the current stable release.
 
 1. Download this repository or a release ZIP. Extract the files.
 2. Open `chrome://extensions`. In Edge, open `edge://extensions`.
@@ -64,7 +64,7 @@ The library stays on this device. Deleting a library item does not delete files 
 - Closed shadow roots and inaccessible frames can prevent player access.
 - ASS and SSA text and timing are supported. Embedded styles and effects are not rendered.
 - Image subtitles, RAR files, encrypted ZIP files, and archives over the 2 MB limit are not supported.
-- Authenticated OpenSubtitles delivery still needs confirmation for version 0.8.14.
+- Authenticated OpenSubtitles delivery still needs confirmation for version 0.8.15.
 
 ## Import player subtitles
 
@@ -86,7 +86,7 @@ npm test
 npm run build
 ```
 
-The extension has no runtime npm dependencies. Tests use Playwright and local fixtures. The build creates a Chrome Web Store ZIP with `manifest.json` at its root. See [development](docs/DEVELOPMENT.md) and [release preparation](docs/RELEASE.md).
+The extension has no runtime npm dependencies. Tests use Playwright and local fixtures. The build creates an install ZIP and a source ZIP. See [development](docs/DEVELOPMENT.md) and [release preparation](docs/RELEASE.md).
 
 ## Support development
 
@@ -96,7 +96,7 @@ The extension is free to use. Select **Tip** in the popup, or visit [the support
 
 [Privacy](docs/PRIVACY.md) · [Support](SUPPORT.md) · [Changes](CHANGELOG.md) · [Contribute](CONTRIBUTING.md)
 
-Publisher: `yahyaint`. Repository: [`yahyaint/subtitle-overlay`](https://github.com/yahyaint/subtitle-overlay). License: [Source-Available Personal Use](LICENSE). Viewing and running only; no code edits, redistribution, or commercial reuse under this license. See [license scope](docs/LICENSING.md).
+Publisher: `yahyaint`. Repository: [`yahyaint/subtitle-overlay`](https://github.com/yahyaint/subtitle-overlay). License: [PolyForm Perimeter 1.0.1](LICENSE). Reuse is permitted for noncompeting purposes. Providing competing products to others is prohibited. See [license scope](docs/LICENSING.md).
 
 Detected Subtitles is the first panel in Find. Track events and video changes trigger a quick update. Custom caption links and public Video.js, JW Player, and Artplayer caption files are supported. Open shadow roots are included. Files load only after Import. Some players expose no subtitle files; cross-origin frame players require a separate integration.
 

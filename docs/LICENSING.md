@@ -1,29 +1,25 @@
 # License and reuse
 
-The current distribution uses the project-specific [Subtitle Overlay Source-Available Personal Use License 1.0](../LICENSE). It is a proprietary source-available license, not an open-source license. It is not a standard PolyForm, MIT, Apache, or GPL license. The custom text has not been reviewed by a lawyer; enforceability is not verified for every jurisdiction.
+The project uses [PolyForm Perimeter 1.0.1](../LICENSE). The official license text is copied without changes from [PolyForm](https://polyformproject.org/licenses/perimeter/1.0.1).
 
-## Permitted use
+## Permitted purposes
 
-You may view the source and run unmodified software for private, personal, noncommercial use. You may make the unmodified copies needed to install, run, build, view, or back it up for that use. Changing settings through the extension's controls is allowed.
+You may use, study, change, and distribute the software for purposes allowed by the license, including noncompeting commercial uses. Keep the license or its URL and the Required Notice with distributed copies.
 
-## Restrictions
+## Competing products
 
-The license grants no permission to edit the code, including a private copy, or to create derivatives. It grants no permission to share, publish, mirror, rehost, redistribute, or sell the software. Commercial use and monetized copies or derivatives require separate written permission, except where another valid grant or applicable law permits them.
+You may not use the software to provide a competing product to others. This includes a competing subtitle extension, a free competitor, or a competing product on another platform. An unrelated extension is not prohibited merely because it is an extension. Private edits are permitted.
 
-Sharing a link to the official repository or download page is allowed. Sharing your own copy is not licensed. Ask through [the support page](https://yahyanabil.com/support) if you need other permissions.
+This is a source-available license with a competition restriction. It is not an open-source license. GitHub's automatic license label does not change its permissions.
 
-The copyright holder may offer their own paid build or ad-funded distribution. The restriction on recipients does not remove the holder's rights to their own work.
+## Earlier grants and older downloads
 
-## Existing permissions and public source
+Previously granted permissions remain valid. In particular, earlier MIT grants are not revoked. Updated older downloads offer Perimeter as an additional license; their original grants and historical Git tags remain valid. Choose the applicable grant before reusing older code.
 
-Previously granted permissions remain valid. Earlier releases already gave permissions under earlier licenses. This license cannot withdraw those grants, including permissions covering code already published in those releases. Original Git tags and historical source are unchanged.
-
-The source is publicly readable. A license sets permitted uses; it cannot technically prevent someone downloading public files. GitHub may identify this project-specific license as Other. That label is a detection result, not an additional grant of rights.
+The 0.8 series has one consolidated release. Previous 0.8 release and source packages are in its history archive. The 0.7 entries remain old releases.
 
 ## Bundled materials
 
-The Inter font keeps its separate upstream license in `extension/INTER-LICENSE.txt`. Build and test dependencies keep their own licenses. This license does not replace them or claim ownership of user subtitle files.
+Where bundled, Inter keeps its upstream license in `extension/INTER-LICENSE.txt`. Dependencies keep their own licenses. These notices do not claim ownership of user subtitle files.
 
-## Payment and ads
-
-The code license does not add checkout, verify purchases, or create advertising revenue. This build has no payment gate or ad network integration. Those features need separate implementation and provider setup.
+For separate permissions, contact [the publisher](https://yahyanabil.com/support).

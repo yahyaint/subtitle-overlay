@@ -1,51 +1,14 @@
 # Prepare a release
 
-Prepared project: `yahyaint/subtitle-overlay`. Current version: `0.8.14` stable.
+Current version: `0.8.15`. Repository: `yahyaint/subtitle-overlay`.
 
-## Files prepared
+1. Include the official PolyForm Perimeter LICENSE and NOTICE in each archive. Keep third-party licenses.
+2. Run `npm run check` and relevant tests. Run `npm run build`.
+3. Verify archive contents, checksums, and install files.
+4. Push the tested commit. Publish one stable release for the 0.8 series using [the release notes](GITHUB-RELEASE.md).
+5. Attach the install ZIP, source ZIP, previous-builds archive, and SHA256SUMS.txt.
+6. Verify the tag, latest status, and uploaded digests before removing superseded release pages.
 
-- STE-style README, user guide, privacy notice, and support guide.
-- Portable tests and a GitHub Actions check job.
-- Store listing, permission explanations, and reviewer steps.
-- Store icon, four screenshots, and a small promotional tile.
-- Store upload ZIP, GitHub release ZIP, source ZIP, and SHA-256 file.
+Old 0.7 releases keep their own entries. Updated downloads offer Perimeter as an additional license; earlier grants and original Git tags remain valid. Prior 0.8 install and source packages are grouped in the consolidated release's history archive.
 
-## Before public release
-
-1. Include LICENSE and NOTICE in each release archive. Keep the Inter font license.
-2. Confirm publisher identity and a private security contact.
-3. Check version 0.8.14 in the existing signed-in player. Test pause, forward seek, backward seek, hidden controls, and all three sentence-sync modes.
-4. Test a live OpenSubtitles download through its follow-up page. Confirm Save, ZIP import, load, and reload.
-5. Run `npm ci`, `npm run check`, `npm test`, and `npm run build` from a fresh checkout.
-6. Push the release commit to the public GitHub repository.
-7. Enable Issues. Enable private vulnerability reporting or add a private contact.
-8. Host `site/` for the public privacy URL. Confirm that the URL works before store submission.
-9. Review the store disclosure answers against the current code. Complete account and dashboard fields.
-
-The source repository is public at `https://github.com/yahyaint/subtitle-overlay`. Website hosting and Chrome Web Store submission remain separate steps.
-
-## GitHub setup
-
-The public repository is `yahyaint/subtitle-overlay`. From the prepared local repository, push a new release commit with:
-
-```sh
-git push -u origin main
-```
-
-Check `git remote -v` first. Its origin should point to `https://github.com/yahyaint/subtitle-overlay.git`.
-
-Use [the release draft](GITHUB-RELEASE.md) for a stable release. Upload the generated release ZIP and SHA-256 file.
-
-## Chrome Web Store setup
-
-Upload `dist/subtitle-overlay-0.8.14-chrome-web-store.zip`. Its manifest is at the ZIP root. This follows Google's [package preparation instructions](https://developer.chrome.com/docs/webstore/prepare).
-
-Copy the [listing text](store/LISTING.md). Use the images in `docs/store/assets`. The prepared screenshots are 1280 × 800. The tile is 440 × 280. See Google's [listing image fields](https://developer.chrome.com/docs/webstore/cws-dashboard-listing).
-
-Planned privacy URL: `https://yahyaint.github.io/subtitle-overlay/privacy.html`. This is a target URL, not an active published page. GitHub Pages must use the `site/` files. Publishing this page is a separate action.
-
-Use [reviewer steps](store/REVIEWER-STEPS.md) and [data and permissions](store/DATA-AND-PERMISSIONS.md). Do not provide real credentials in the review notes.
-
-Service-governing terms and acceptable-use material were not reviewed. Technical preparation does not establish store acceptance.
-
-Service terms review was excluded during technical preparation.
+For an update, replace files in the same installed folder, select Reload in the browser's extension page, then refresh the video tab.

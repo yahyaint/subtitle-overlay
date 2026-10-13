@@ -1,97 +1,18 @@
-## 0.8.14
-
-- Use top navigation in the popup and smaller Saved counts in both interfaces.
-- Rename Player subtitles to Detected Subtitles. Match the Find heading size.
-- Open detected files when available and collapse Find. Keep Find open when no files are detected.
-- Read lazy caption descriptors in supported custom React player menus. Keep files after a menu closes and reset the cache when the page or video source changes.
-- Repair stale header Close handlers and remove the overlay before optional player cleanup.
-- Prefer page fullscreen with browser navigation hidden. Keep the browser-window fallback.
-- Keep the current license while published alternatives are compared.
-
-## 0.8.13
-
-- Use a project-specific source-available personal-use license: view and run only. No code edits, derivative permission, redistribution, or commercial use without separate permission.
-- Keep existing grants and third-party licenses unchanged. No feature changes.
-
-## 0.8.12
-
-- Remove the bundled legacy license file. Package the current PolyForm license and NOTICE.
-- Keep prior permissions and third-party font licensing unchanged. No feature changes.
-
-## 0.8.11
-
-- Use PolyForm Noncommercial 1.0.0 for new original additions after v0.8.10.
-- Preserve MIT permissions for earlier code and the separate Inter font license.
-- Package LICENSE, NOTICE, and the legacy MIT notice. No payment gate or feature changes.
-
-## 0.8.10
-
-- Close now removes the overlay, captions, and icon. Both Close buttons use the same cleanup as Remove overlay.
-- Saved files and saved settings are kept. Show overlay starts the overlay again.
-
-## Version 0.8.9 - October 11, 2026
-
-- Added Close to the controller rail. Hiding the controls keeps subtitles and saved settings in place.
-- Renamed the extension action to Show overlay.
-- Marked the release stable after the publisher reported that the current build works in their setup.
-
-## Version 0.8.8 - October 11, 2026
-
-- Added separate Films and Shows views to Saved in the popup and controller.
-- Added show, season, and episode selectors, episode names, and Specials.
-- Recognized older saved episode titles without changing stored subtitles or settings.
-- Grouped subtitle languages and release variants for the same episode.
-
-## Version 0.8.7 - October 11, 2026
-
-- Fixed the delayed settings response that replaced the detected film with a saved search.
-- Shared search fields between the popup and controller for the active tab. Manual edits remain until the film changes.
-- Added space between Player subtitles and online search. Moved the detected title source below the title field.
-
-## 0.8.6 - 2026-10-11
-
-- Put Player subtitles first in both Find views.
-- React to native track events, video changes, and caption source changes.
-- Read custom caption links in open shadow roots and public Video.js, JW Player, and Artplayer caption files.
-- Recognize season and episode numbers from compatible TV routes.
-- Keep subtitle downloads on demand and retain current permissions.
-
 # Changelog
 
-## 0.8.5 - October 11, 2026
+## 0.8 — 0.8.15 (consolidated)
 
-- Align the Tip browser fixture with the popup's intrinsic 440 px width.
-- Keep the new soft-white accents and marine surfaces.
-
-## 0.8.4 - October 11, 2026
-
-- Replace gold UI accents with soft white. Keep the marine background and user-selected caption colors.
-
-## 0.8.3 - October 11, 2026
-
-- Fix popup sizing with an intrinsic 440 px document and body width. Do not cap it to the browser's initial popup viewport.
-- Remove the decorative three-bar header mark.
-
-## 0.8.2 - October 11, 2026
-
-- Increase the popup width from 392 px to 440 px. Keep access on narrow screens.
-- Show player status and film-source hints as plain helper text.
-- Reduce saturation in the marine surfaces, action colors, gold accents, and logo.
-
-## 0.8.1 - Remove dub audio
-
-- Remove external audio discovery, pages, sources, catalogs, and downloads.
-- Clear retired audio preferences and tokens on update.
-- Keep subtitle setup, film matching, and saved subtitle settings.
-
-## 0.8.0 - New Design
-
-- Add a shared tool rail with marine blue, amber, and silver.
-- Bundle Inter for app controls. Keep the selected caption font.
-- Keep file actions in a fixed popup dock.
-- Make the clock and delay easier to read. Group sync and text controls.
-- Add clear vector Save and Delete icons and vertical arrow-key navigation.
-- Preserve playback, subtitle import, search, downloads, and saved settings. Add no permissions.
+- Adopt PolyForm Perimeter 1.0.1 for noncompeting reuse. Keep earlier grants and third-party licenses valid.
+- Use marine blue, soft-white accents, and bundled Inter. Add wider popup top navigation, fixed file actions, and side tools in the controller.
+- Improve film and episode recognition. Keep popup and controller search fields in sync without stale saved searches replacing the detected title.
+- Put Detected Subtitles first. Match heading sizes; open detected files when available and keep Find open when none are available.
+- Detect native, custom-link, open-shadow, supported player API, and lazy React caption sources. Group tracks by language and import files on demand.
+- Keep detected files after the player menu closes. Reset them when the page or video source changes.
+- Separate Saved films and shows, with season/episode names, Specials, language variants, and smaller count badges.
+- Save imported appearance and timing. Keep one-, two-, and three-sentence sync and seek recovery.
+- Make header X and side Close remove the overlay. Repair stale Close handlers after updates. Prefer page fullscreen with browser navigation hidden.
+- Remove dub-audio features and retired preferences.
+- Remove dedicated upload packages and instructions. Consolidate earlier 0.8 packages in one history archive; keep 0.7 as old releases.
 
 ## 0.7.17 - October 11, 2026
 
@@ -116,7 +37,7 @@
 - Search episodes with season and episode filters. Keep Saved entries separate for each episode.
 - Keep loaded subtitles and sync settings when only episode names or optional metadata change.
 
-## 0.7.13 � October 11, 2026
+## 0.7.13 � October 11, 2026
 
 - Import readable player caption appearance and position with subtitle lines.
 - Add Restore player style inside Text style. Keep timing and sentence-sync points.
@@ -144,7 +65,7 @@
 
 - Add a Tip link in the popup. It opens `https://yahyanabil.com/support`.
 - Keep all extension features available without a tip.
-- Update the store and release packages.
+- Update the release packages.
 - Add the MIT license to the repository and release packages.
 
 ## 0.7.9 — preview

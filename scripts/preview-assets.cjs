@@ -1,8 +1,8 @@
 const fs=require('node:fs'),path=require('node:path'),http=require('node:http'),assert=require('node:assert/strict');
 const {chromium}=require('playwright');
-const project=path.resolve(__dirname,'..'),root=path.join(project,'extension'),artifacts=path.join(project,'.test-artifacts'),assets=path.join(project,'docs/store/assets');
+const project=path.resolve(__dirname,'..'),root=path.join(project,'extension'),artifacts=path.join(project,'.test-artifacts'),assets=path.join(project,'docs/images');
 fs.mkdirSync(artifacts,{recursive:true});fs.mkdirSync(assets,{recursive:true});
-const testRoot=path.join(artifacts,'store-extension');fs.mkdirSync(testRoot,{recursive:true});
+const testRoot=path.join(artifacts,'preview-extension');fs.mkdirSync(testRoot,{recursive:true});
 for(const name of fs.readdirSync(root))fs.copyFileSync(path.join(root,name),path.join(testRoot,name));
 const manifest=JSON.parse(fs.readFileSync(path.join(root,'manifest.json')));manifest.host_permissions=['http://127.0.0.1/*'];fs.writeFileSync(path.join(testRoot,'manifest.json'),JSON.stringify(manifest));
 const fixture=`<!doctype html><html lang="en"><meta charset="utf-8"><title>Harbor Lights — local demo</title><style>
@@ -16,14 +16,14 @@ const privacy=fs.readFileSync(path.join(project,'docs/PRIVACY.md'),'utf8').repla
 }).join('\n');
 const siteStyle='body{font:17px/1.65 system-ui,sans-serif;color:#173148;background:#f6f9fc;margin:0}main{max-width:800px;margin:0 auto;padding:48px 24px}h1{font-size:36px;line-height:1.2}h2{font-size:23px;margin-top:34px}a{color:#216aa3}code{font-size:.9em;background:#e8eff5;padding:2px 4px;border-radius:3px}';
 fs.writeFileSync(path.join(project,'site/privacy.html'),'<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Subtitle Overlay privacy</title><style>'+siteStyle+'</style></head><body><main>'+privacy+'</main></body></html>\n');
-fs.writeFileSync(path.join(project,'site/index.html'),'<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Subtitle Overlay</title><style>'+siteStyle+'</style></head><body><main><h1>Subtitle Overlay</h1><p>Read. Sync. Watch.</p><p>Find, save, style, and sync external subtitles over browser video.</p><p>Version 0.8.14.</p><p><a href="privacy.html">Privacy notice</a> · <a href="https://github.com/yahyaint/subtitle-overlay">Source code</a> · <a href="https://github.com/yahyaint/subtitle-overlay/issues">Support</a></p></main></body></html>\n');
+fs.writeFileSync(path.join(project,'site/index.html'),'<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Subtitle Overlay</title><style>'+siteStyle+'</style></head><body><main><h1>Subtitle Overlay</h1><p>Read. Sync. Watch.</p><p>Find, save, style, and sync external subtitles over browser video.</p><p>Version 0.8.15.</p><p><a href="privacy.html">Privacy notice</a> · <a href="https://github.com/yahyaint/subtitle-overlay">Source code</a> · <a href="https://github.com/yahyaint/subtitle-overlay/issues">Support</a></p></main></body></html>\n');
 fs.writeFileSync(path.join(project,'site/.nojekyll'),'');
-fs.copyFileSync(path.join(root,'icon-128.png'),path.join(assets,'store-icon-128.png'));
+fs.copyFileSync(path.join(root,'icon-128.png'),path.join(assets,'icon-128.png'));
 (async()=>{
  let context;
  try{
   await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
-  context=await chromium.launchPersistentContext(path.join(artifacts,'store-profile-'+Date.now()),{channel:'chromium',headless:true,args:[`--disable-extensions-except=${testRoot}`,`--load-extension=${testRoot}`],viewport:{width:1280,height:800},deviceScaleFactor:1});
+  context=await chromium.launchPersistentContext(path.join(artifacts,'preview-profile-'+Date.now()),{channel:'chromium',headless:true,args:[`--disable-extensions-except=${testRoot}`,`--load-extension=${testRoot}`],viewport:{width:1280,height:800},deviceScaleFactor:1});
   const worker=context.serviceWorkers()[0]||await context.waitForEvent('serviceworker'),id=new URL(worker.url()).hostname,page=await context.newPage(),errors=[];
   page.on('pageerror',error=>errors.push(error.message));await page.goto('http://127.0.0.1:'+server.address().port);
   // Render original geometric scenery into a real browser-decodable local video.
@@ -64,7 +64,7 @@ fs.copyFileSync(path.join(root,'icon-128.png'),path.join(assets,'store-icon-128.
   await tile.setContent('<!doctype html><html lang="en"><style>*{box-sizing:border-box}body{margin:0;width:440px;height:280px;background:linear-gradient(130deg,#08121e,#153b5b);color:#f2f8fc;font-family:system-ui,sans-serif;padding:29px 30px}svg{width:55px;height:55px}h1{font-size:29px;line-height:1.15;letter-spacing:-.7px;margin:18px 0 10px}p{font-size:16px;color:#bad6e9;margin:0}small{display:block;font-size:12px;color:#79bce9;margin-top:21px;letter-spacing:.2px}</style>'+logo+'<h1>Subtitle Overlay</h1><p>Read. Sync. Watch.</p><small>Find • Save • Set your text style</small></html>');
   await tile.screenshot({path:path.join(assets,'small-promo-440x280.png')});
   for(const name of ['01-controls.png','02-text-style.png','03-saved.png','04-player-languages.png']){const bytes=fs.readFileSync(path.join(assets,name));assert.equal(bytes.readUInt32BE(16),1280);assert.equal(bytes.readUInt32BE(20),800);}
-  fs.writeFileSync(path.join(assets,'README.md'),'# Store images\n\nFour 1280 × 800 screenshots show the real version 0.8.14 extension on an original local demo video. The scene, film title, and subtitle lines are samples. No streaming footage or user report is included.\n\n`small-promo-440x280.png` is the promotional tile. `store-icon-128.png` is the extension icon. Rebuild with `npm run store:assets`.\n');
+  fs.writeFileSync(path.join(assets,'README.md'),'# Preview images\n\nFour 1280 × 800 screenshots show the real version 0.8.15 extension on an original local demo video. The scene, film title, and subtitle lines are samples. No streaming footage or user report is included.\n\n`small-promo-440x280.png` is the promotional tile. `icon-128.png` is the extension icon. Rebuild with `npm run preview:assets`.\n');
   console.log('PASS four real-UI screenshots, 440x280 promotional tile, icon, and privacy HTML.');
  }finally{if(context)await context.close();server.close();}
 })().catch(error=>{console.error(error);process.exitCode=1;});

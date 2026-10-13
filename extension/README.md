@@ -18,7 +18,7 @@ To update: replace these files in the same folder, select **Reload** in the brow
 
 In **Find → Detected Subtitles**, select **Import** to load the selected file or copy readable lines, player style, and position into the overlay. Under **Text style**, **Restore player style** restores the captured appearance and keeps timing and sentence-sync points. Save keeps the original style with your current settings. Some player styles are not readable. Only public tracks are listed; some players expose none.
 
-Version 0.8.14 is the current stable release. The publisher confirmed Disney+ playback, seeking, and sentence sync in Vivaldi on Windows with 0.7.10. The new player-subtitle import still needs a live Disney+ check. Authenticated OpenSubtitles delivery still needs confirmation.
+Version 0.8.15 is the current stable release. The publisher confirmed Disney+ playback, seeking, and sentence sync in Vivaldi on Windows with 0.7.10. The new player-subtitle import still needs a live Disney+ check. Authenticated OpenSubtitles delivery still needs confirmation.
 
 ## Languages and series
 
@@ -28,7 +28,7 @@ Player metadata supplies the current film or show first. Episode suggestions use
 
 Detected Subtitles is the first panel in Find. Track events and video changes trigger a quick update. Custom caption links and public Video.js, JW Player, and Artplayer caption files are supported. Open shadow roots are included. Files load only after Import. Some players expose no subtitle files; cross-origin frame players require a separate integration.
 
-License: Subtitle Overlay Source-Available Personal Use 1.0. Viewing and running only; no code edits, redistribution, or commercial reuse under this license. See LICENSE and NOTICE in the package.
+License: PolyForm Perimeter 1.0.1. Reuse is permitted for noncompeting purposes; providing a competing product to others is prohibited. See LICENSE and NOTICE in the package.
 
 Detected Subtitles opens when files are found. Find subtitles can then be collapsed. With no detected files, Find stays open. Supported custom React caption menus can expose lazy file lists after the player subtitle search. The list stays available when that menu closes and resets when the page or video source changes.
 

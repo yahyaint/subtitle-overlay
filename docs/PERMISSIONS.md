@@ -1,6 +1,5 @@
 # Data and permission notes
 
-These notes describe version 0.8.14 from its source. They are inputs for the publisher's dashboard answers. They do not claim store acceptance or assign dashboard data categories.
 
 ## Purpose
 
@@ -45,17 +44,16 @@ All extension JavaScript is packaged. The clock bridge runs a packaged file in t
 
 ## Final disclosure task
 
-The publisher must map these facts to the current dashboard questions, confirm the published privacy URL, and complete the required attestations. Service-governing policy and terms review is excluded under the active Terms Privacy Guard.
 
 Player-file import requests only the selected public track URL, after Import. It uses normal page CORS access and sends no cookies or authorization headers. Parsed text stays in page memory until saved. This adds no permission and does not intercept network traffic.
 
 ## Language groups and episode recognition
 
-Version 0.8.14 groups public player track labels by their language codes. It reads public playback and page metadata to suggest the film or episode. Series searches send the show, season, and episode numbers to the selected provider after the user starts a search. There are no new permissions.
+Version 0.8.15 groups public player track labels by their language codes. It reads public playback and page metadata to suggest the film or episode. Series searches send the show, season, and episode numbers to the selected provider after the user starts a search. There are no new permissions.
 
 
-The Inter font is bundled with 0.8.14. Its single WOFF2 file is web accessible through a dynamic session URL so the controller can load it. No script, account data, or subtitle file is exposed by this rule. The extension does not request a remote font.
+The Inter font is bundled with 0.8.15. Its single WOFF2 file is web accessible through a dynamic session URL so the controller can load it. No script, account data, or subtitle file is exposed by this rule. The extension does not request a remote font.
 
 Public player caption files can also come from custom caption menus, open shadow roots, and Video.js, JW Player, and Artplayer APIs. Files load only after Import through normal page CORS access. This adds no permissions. Track discovery does not request these files.
 
-Version 0.8.14 also reads bounded subtitle descriptor arrays in supported custom React caption menus near the selected video. Only caption labels, language codes, and file locations are retained. It does not invoke remote callbacks, read arbitrary application stores, or intercept network responses. This in-memory list resets with the page or video source. The selected file is fetched only after Import, using normal CORS access without credentials. No new permission is requested.
+Version 0.8.15 also reads bounded subtitle descriptor arrays in supported custom React caption menus near the selected video. Only caption labels, language codes, and file locations are retained. It does not invoke remote callbacks, read arbitrary application stores, or intercept network responses. This in-memory list resets with the page or video source. The selected file is fetched only after Import, using normal CORS access without credentials. No new permission is requested.

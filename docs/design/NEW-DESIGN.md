@@ -82,9 +82,9 @@ The controller font is the only web-accessible resource. It uses a dynamic sessi
 
 The behavior contract covers B1-B12. All 12 outcomes are retained. The nine-suite regression run passed, including file formats, search, downloads, recognition, imported styles, saved presets, all sentence-sync modes, segmented clocks, seeking, fullscreen, and caption clearance. After the font and final palette changes, focused UI/font and core overlay checks cover the changed paths. The font test confirms a loaded Inter face in both popup and video document, plus removal of the controller registration on cleanup.
 
-Commands: `npm run check`, `npm test`, `node tests/verify-design.cjs`, `node tests/verify-tip.cjs`, `node tests/verify.cjs`, `npm run store:assets`, and `npm run build`. Screenshot review covers desktop controls and text style, popup at 440px, popup sizing from a 200px initial viewport, and controller at 390x600. Store screenshots use local sample video.
+Commands: `npm run check`, `npm test`, `node tests/verify-design.cjs`, `node tests/verify-tip.cjs`, `node tests/verify.cjs`, `npm run preview:assets`, and `npm run build`. Screenshot review covers desktop controls and text style, popup at 440px, popup sizing from a 200px initial viewport, and controller at 390x600. demo screenshots use local sample video.
 
-Remaining checks: the final design still needs a live signed-in player check and store review. Browser-native HUD clearance remains an interaction estimate. No new extension permissions, playback algorithms, provider endpoints, or credential operations are added. The one web-accessible font resource is a presentation asset.
+Remaining checks: the final design still needs a live signed-in player check. Browser-native HUD clearance remains an interaction estimate. No new extension permissions, playback algorithms, provider endpoints, or credential operations are added. The one web-accessible font resource is a presentation asset.
 
 The 0.8.2 refinement widens the popup to 440 px, reduces saturation across the app theme and logo, and removes side rules from player status and film-source helper text. Caption appearance and timing remain user settings.
 

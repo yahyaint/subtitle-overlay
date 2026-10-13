@@ -1,89 +1,71 @@
-Subtitle Overlay Source-Available Personal Use License 1.0
+# PolyForm Perimeter License 1.0.1
 
-Copyright (c) 2026 yahyaint. All rights reserved, except as expressly granted below.
+<https://polyformproject.org/licenses/perimeter/1.0.1>
 
-1. Scope
+## Acceptance
 
-The Licensor is yahyaint. The Software is the original Subtitle Overlay source
-code, documentation, and assets offered by the Licensor under this license.
-Separately licensed third-party materials are excluded and keep their own
-licenses. This license grants copyright permissions only to the extent the
-Licensor holds the relevant rights.
+In order to get any license under these terms, you must agree to them as both strict obligations and conditions to all your licenses.
 
-2. Limited personal-use permission
+## Copyright License
 
-You may view the source code and run the unmodified Software for your own
-private, personal, noncommercial use. You may download and keep unmodified
-copies only as reasonably needed for viewing, installation, running, and
-personal backup. You may build unmodified source using the provided build
-scripts for that same personal use. Normal configuration through the Software's
-provided controls is permitted; it does not grant permission to edit its code.
+The licensor grants you a copyright license for the software to do everything you might do with the software that would otherwise infringe the licensor's copyright in it for any permitted purpose.  However, you may only distribute the software according to [Distribution License](#distribution-license) and make changes or new works based on the software according to [Changes and New Works License](#changes-and-new-works-license).
 
-This permission is granted to an individual for their own use. It does not
-grant permission to use the Software for a business, an organization, customers,
-or a commercial service. Such use requires the Licensor's separate written
-permission.
+## Distribution License
 
-3. No modification or derivative permission
+The licensor grants you an additional copyright license to distribute copies of the software.  Your license to distribute covers distributing the software with changes and new works permitted by [Changes and New Works License](#changes-and-new-works-license).
 
-Except where another valid permission or applicable law allows it, you may not
-modify, adapt, translate, or create derivative works of the Software. You may
-not incorporate its protected code or assets into another product or service.
-No permission to edit a private copy is granted. Normal user settings and
-user-supplied subtitle files are not modifications to the Software's code.
+## Notices
 
-4. No redistribution
+You must ensure that anyone who gets a copy of any part of the software from you also gets a copy of these terms or the URL for them above, as well as copies of any plain-text lines beginning with `Required Notice:` that the licensor provided with the software.  For example:
 
-Except where another valid permission or applicable law allows it, you may not
-publish, distribute, share, rehost, mirror, sublicense, or transfer the Software
-or copies of it to another person. This restriction includes unchanged copies,
-modified copies, derivative works, source files, and packaged builds.
+> Required Notice: Copyright Yoyodyne, Inc. (http://example.com)
 
-You may share a link to the Licensor's official repository or official download
-page. Sharing that link does not authorize you to provide a copy yourself.
+## Changes and New Works License
 
-5. No commercial use or monetization
+The licensor grants you an additional copyright license to make changes and new works based on the software for any permitted purpose.
 
-Without the Licensor's separate written permission, you may not sell, rent,
-license for a fee, or otherwise monetize the Software or a copy or derivative
-of it. You may not use it in a paid product or service, offer paid access to it,
-or earn advertising or sponsorship revenue from its distribution or from a
-copy or derivative. Commercial use of the Software requires separate written
-permission even if the Software itself is provided without a charge.
+## Patent License
 
-These restrictions apply to recipients, not to the Licensor's exercise of their
-own rights. The Licensor may distribute, modify, or monetize their own Software
-and may grant separate permissions. Contact: https://yahyanabil.com/support
+The licensor grants you a patent license for the software that covers patent claims the licensor can license, or becomes able to license, that you would infringe by using the software.
 
-6. Reserved and earlier rights
+## Noncompete
 
-All rights not expressly granted are reserved. No trademark, branding,
-sublicensing, or other implied rights are granted. This license does not limit
-mandatory statutory rights, fair use where applicable, or independent work that
-does not copy protected material from the Software.
+Any purpose is a permitted purpose, except for providing to others any product that competes with the software.
 
-Previously granted permissions remain valid. This license does not withdraw
-permissions granted under an earlier license or a separate written permission.
-It applies to the permissions offered under this license and must not be read
-as a retroactive restriction on earlier grants.
+## Competition
 
-7. Notices
+If you use this software to market a product as a substitute for the functionality or value of the software, it competes with the software. A product may compete regardless how it is designed or deployed. For example, a product may compete even if it provides its functionality via any kind of interface (including services, libraries or plug-ins), even if it is ported to a different platform or programming language, and even if it is provided free of charge.
 
-Keep this license and the Licensor's copyright notice with every permitted
-copy. Keep all separate third-party notices with their respective materials.
+## Fair Use
 
-8. Termination
+You may have "fair use" rights for the software under the law. These terms do not limit them.
 
-The permissions granted by this license terminate if you breach its conditions.
-You must then stop uses and copying that relied on these permissions. This does
-not terminate rights supplied by applicable law or by a separate valid grant.
+## No Other Rights
 
-9. Warranty and liability
+These terms do not allow you to sublicense or transfer any of your licenses to anyone else, or prevent the licensor from granting licenses to anyone else.  These terms do not imply any other licenses.
 
-To the extent permitted by applicable law, the Software is provided as is,
-without warranties or conditions of any kind, including merchantability,
-fitness for a particular purpose, and noninfringement. The Licensor has no
-obligation to provide support or updates. To the extent permitted by applicable
-law, the Licensor is not liable for damages arising from use of the Software.
-Nothing in this section excludes or limits liability that cannot lawfully be
-excluded or limited.
+## Patent Defense
+
+If you make any written claim that the software infringes or contributes to infringement of any patent, your patent license for the software granted under these terms ends immediately. If your company makes such a claim, your patent license ends immediately for work on behalf of your company.
+
+## Violations
+
+The first time you are notified in writing that you have violated any of these terms, or done anything with the software not covered by your licenses, your licenses can nonetheless continue if you come into full compliance with these terms, and take practical steps to correct past violations, within 32 days of receiving notice.  Otherwise, all your licenses end immediately.
+
+## No Liability
+
+***As far as the law allows, the software comes as is, without any warranty or condition, and the licensor will not be liable to you for any damages arising out of these terms or the use or nature of the software, under any kind of legal claim.***
+
+## Definitions
+
+The **licensor** is the individual or entity offering these terms, and the **software** is the software the licensor makes available under these terms.
+
+A **product** can be a good or service, or a combination of them.
+
+**You** refers to the individual or entity agreeing to these terms.
+
+**Your company** is any legal entity, sole proprietorship, or other kind of organization that you work for, plus all organizations that have control over, are under the control of, or are under common control with that organization.  **Control** means ownership of substantially all the assets of an entity, or the power to direct its management and policies by vote, contract, or otherwise.  Control can be direct or indirect.
+
+**Your licenses** are all the licenses granted to you for the software under these terms.
+
+**Use** means anything you do with the software requiring one of your licenses.

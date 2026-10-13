@@ -1,13 +1,14 @@
-Copyright (c) 2026 yahyaint (https://github.com/yahyaint/subtitle-overlay)
+Required Notice: Copyright (c) 2026 yahyaint (https://github.com/yahyaint/subtitle-overlay)
 
-Current distribution: Subtitle Overlay Source-Available Personal Use License 1.0.
-See LICENSE. Viewing and running unmodified copies for private personal use are
-permitted. Code edits, redistribution, commercial use, and monetized derivatives
-require separate written permission, except where another valid grant or law
-permits them. Contact: https://yahyanabil.com/support
+Current distribution: PolyForm Perimeter License 1.0.1. See LICENSE.
+Use, changes, and distribution are permitted for purposes covered by that license.
+Providing a competing product to others is not a permitted purpose, including
+free competitors and competitors on other platforms.
 
 Previously granted permissions remain valid. This notice does not withdraw
-those permissions. Original Git tags and historical source remain unchanged.
+MIT or other earlier grants. Updated older downloads offer Perimeter as an
+additional license; their original grants and Git tags remain valid.
 
-Bundled Inter font: its separate license is in INTER-LICENSE.txt. This project
-license does not replace third-party licenses or govern user subtitle files.
+Third-party materials, including Inter where bundled, keep their separate licenses.
+This project license does not govern user subtitle files.
+Contact: https://yahyanabil.com/support
