@@ -1,14 +1,14 @@
 # Subtitle Overlay privacy notice
 
-Version: 0.8.16. Updated: October 13, 2026. Publisher: yahyaint.
+Version: 0.8.17. Updated: October 13, 2026. Publisher: yahyaint.
 
 ## Data on this device
 
 The extension stores saved subtitle text, film labels, language choices, rejected subtitle IDs, search preferences, source URLs, and timing and text settings in extension-local browser storage. The library does not use browser sync.
 
-An OpenSubtitles API key stays in local extension storage. Login tokens stay in browser-session storage. The extension sends a password to OpenSubtitles only when you log in. It does not save the password to extension storage. Browser password-manager behavior is separate.
+An OpenSubtitles API key stays in local extension storage restricted to extension pages. Firefox and Safari use background-only IndexedDB because their local storage cannot be restricted in the same way. Login tokens stay in browser-session storage. The extension sends a password to OpenSubtitles only when you log in. It does not save the password to extension storage. Browser password-manager behavior is separate.
 
-Provider credentials and saved subtitle storage are restricted to trusted extension contexts. The film page does not receive the provider API key or account token.
+Provider credentials are restricted to trusted extension contexts. Chromium also restricts saved subtitle storage; Firefox and Safari keep library data in extension-local storage without credentials. The film page does not receive the provider API key or account token.
 
 ## Data used on a video page
 
@@ -34,7 +34,7 @@ The **Tip** link opens `https://yahyanabil.com/support` in a new browser tab. It
 
 The extension uses browser download events and matching download records to find the subtitle you select in its managed search window. It keeps the search window, selected link, download ID, and film-tab association in session storage. It does not upload download history to a developer server.
 
-Subtitle copies go to `Subtitle Overlay` inside the browser's download folder. Browser settings can also cause subtitle Save dialogs.
+On Chromium and Firefox, extension-written subtitle copies go to `Subtitle Overlay` inside the browser's download folder. Safari source builds use manual website file import and do not track browser downloads. Browser settings can also cause subtitle Save dialogs.
 
 A player report is created only when you select its report button. It contains public player clocks, playback state, control labels and attributes, and layout measurements. It excludes stream URLs, subtitle text, and extension credentials. It is saved locally. It is not sent automatically. Check it before sharing it.
 

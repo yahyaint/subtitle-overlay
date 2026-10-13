@@ -10,9 +10,9 @@ Add your own subtitles to browser video. Find a subtitle, set its timing, and ch
 
 Saved subtitles has separate Films and Shows views. Shows use show, season, and episode selectors. Older saved episode titles are recognized without changing stored files.
 
-Version 0.8.16 keeps the popup and video controller search fields in sync. Saved searches cannot replace the detected film.
+Version 0.8.17 keeps the popup and video controller search fields in sync. Saved searches cannot replace the detected film.
 
-Version 0.8.16 uses top navigation in the popup, a tool rail in the video controller, and fixed popup file actions. See [design notes and research](docs/design/NEW-DESIGN.md).
+Version 0.8.17 uses top navigation in the popup, a tool rail in the video controller, and fixed popup file actions. See [design notes and research](docs/design/NEW-DESIGN.md).
 
 ## Features
 
@@ -29,7 +29,9 @@ Version 0.8.16 uses top navigation in the popup, a tool rail in the video contro
 
 ## Install
 
-Version 0.8.16 is the current stable release.
+Chromium: use the release ZIP. Firefox: use the unsigned XPI for temporary testing. Safari: use the Safari source ZIP for conversion; it is not an installable Apple app.
+
+Version 0.8.17 is the current stable release.
 
 1. Download this repository or a release ZIP. Extract the files.
 2. Open `chrome://extensions`. In Edge, open `edge://extensions`.
@@ -38,7 +40,7 @@ Version 0.8.16 is the current stable release.
 5. Open a video page. Select the extension, then **Show overlay**.
 6. Select **Load file**, or use **Find** to search for a subtitle.
 
-Chrome is the main target. Edge and Vivaldi use the same extension format. The publisher confirmed Disney+ playback, seeking, and sentence sync in Vivaldi on Windows with version 0.7.10. Other player and browser combinations still need testing.
+Chrome, Edge, Brave, Vivaldi, Opera, and other current Chromium desktop browsers use the same build. Firefox desktop 140+ has its own build. Safari has experimental conversion source with manual website file loading. See [browser builds and installation](docs/BROWSERS.md). The publisher confirmed Disney+ playback, seeking, and sentence sync in Vivaldi on Windows with version 0.7.10. Other live player and browser combinations still need testing. Firefox and Edge have local extension integration checks.
 
 ## Sync a subtitle
 
@@ -64,7 +66,7 @@ The library stays on this device. Deleting a library item does not delete files 
 - Closed shadow roots and inaccessible frames can prevent player access.
 - ASS and SSA text and timing are supported. Embedded styles and effects are not rendered.
 - Image subtitles, RAR files, encrypted ZIP files, and archives over the 2 MB limit are not supported.
-- Authenticated OpenSubtitles delivery still needs confirmation for version 0.8.16.
+- Authenticated OpenSubtitles delivery still needs confirmation for version 0.8.17.
 
 ## Import player subtitles
 

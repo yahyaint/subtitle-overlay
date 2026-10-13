@@ -1,7 +1,8 @@
 # Changelog
 
-## 0.8 — 0.8.16 (consolidated)
+## 0.8 — 0.8.17 (consolidated)
 
+- Add Firefox desktop builds, browser API compatibility, private credential storage, Blob downloads, browser installation notes, and experimental Safari conversion source. Keep one shared Chromium build for Chrome, Edge, Brave, Vivaldi, and Opera.
 - Adopt PolyForm Perimeter 1.0.1 for noncompeting reuse. Keep earlier grants and third-party licenses valid.
 - Use marine blue, soft-white accents, and bundled Inter. Add wider popup top navigation, fixed file actions, and side tools in the controller.
 - Improve film and episode recognition. Keep popup and controller search fields in sync without stale saved searches replacing the detected title.

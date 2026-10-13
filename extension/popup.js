@@ -1,5 +1,7 @@
+const extensionApi=globalThis.browser || globalThis.chrome;
 function setLanguage(value){const select=document.getElementById('language'),code=String(value || 'en').toLowerCase();if(/^[a-z]{2,3}(?:-[a-z0-9]{2,8})*$/.test(code) && !Array.from(select.options).some(item=>item.value===code)){const option=document.createElement('option');option.value=code;option.textContent=code;select.append(option);}select.value=code;if(!select.value)select.value='en';}
 const $ = id => document.getElementById(id);
+if(!extensionApi.downloads){$('playerCheck').querySelector('.hint').textContent='Save a timing report using your browser download prompt.';}
 let tabId, lastDownload;
 let savedEntries=[];
 let activeLibraryId=null;
@@ -22,7 +24,7 @@ function shareSearch(patch){
   if(!tabId || !searchHref)return;
   const href=searchHref;++searchEditRevision;
   searchWrite=searchWrite.catch(()=>{}).then(async()=>{
-    const reply=await chrome.tabs.sendMessage(tabId,{type:'SET_SEARCH_STATE',href,patch});
+    const reply=await extensionApi.tabs.sendMessage(tabId,{type:'SET_SEARCH_STATE',href,patch});
     if(!reply?.ok)throw new Error(reply?.error || 'Could not update video controls.');
   });
   searchWrite.catch(error=>status(error.message,true));
@@ -62,18 +64,18 @@ for (const [index, view] of views.entries()) {
   };
 }
 $('setupLink').onclick = () => { showView('settings'); $('providerSetup').open = true; $('key').focus(); };
-$('savePlayerReport').onclick=()=>task($('savePlayerReport'),async()=>{await attach();await provider({type:'EXPORT_PLAYER_REPORT',tabId});status('Report download started. Save the file if your browser asks.');});
+$('savePlayerReport').onclick=()=>task($('savePlayerReport'),async()=>{await attach();const report=await provider({type:'EXPORT_PLAYER_REPORT',tabId});if(report.text){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([report.text],{type:'application/json'}));a.download=report.name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);}status('Report download started. Save the file if your browser asks.');});
 function status(text, error = false) { $('status').textContent = text; $('status').classList.toggle('error', error); }
 async function provider(message) {
-  const reply = await chrome.runtime.sendMessage(message);
+  const reply = await extensionApi.runtime.sendMessage(message);
   if (!reply?.ok) throw new Error(reply?.error || 'Extension unavailable. Reload the extension.');
   return reply;
 }
 async function attach(show=true) {
   if (!tabId) throw new Error('Open a film in a normal browser tab first.');
-  await chrome.scripting.executeScript({target:{tabId},func:hidden=>{globalThis.__subtitleOverlayStartHidden=hidden;},args:[!show]});
-  await chrome.scripting.executeScript({target: {tabId}, files: ['subtitles.js','subtitle-settings.js','film-detection.js','player-subtitles.js','saved-library.js', 'content.js']});
-  const reply = await chrome.tabs.sendMessage(tabId, {type: show ? 'SHOW_PANEL' : 'GET_STATUS'});
+  await extensionApi.scripting.executeScript({target:{tabId},func:hidden=>{globalThis.__subtitleOverlayStartHidden=hidden;},args:[!show]});
+  await extensionApi.scripting.executeScript({target: {tabId}, files: ['subtitles.js','subtitle-settings.js','film-detection.js','player-subtitles.js','saved-library.js', 'content.js']});
+  const reply = await extensionApi.tabs.sendMessage(tabId, {type: show ? 'SHOW_PANEL' : 'GET_STATUS'});
   if (!reply?.ok) throw new Error('Could not attach overlay.');
   $('player').textContent = reply.player ? 'Video connected. Controls are on the video.' : 'Start the film to connect the video.';
   return reply;
@@ -81,7 +83,7 @@ async function attach(show=true) {
 async function refreshPlayerTracks() {
   if(playerTrackBusy)return;
   const revision=searchEditRevision;await searchWrite;
-  const reply=await chrome.tabs.sendMessage(tabId,{type:'GET_PLAYER_TRACKS'});
+  const reply=await extensionApi.tabs.sendMessage(tabId,{type:'GET_PLAYER_TRACKS'});
   if(!reply?.ok)throw new Error(reply?.error || 'Show overlay to connect the video.');
   renderPlayerTracks(reply.tracks);
   if(revision===searchEditRevision)applySearchState(reply.search);
@@ -94,7 +96,7 @@ function renderPlayerTracks(tracks) {
 }
 for(const [id,action] of [['importPlayerTrack','import']])$(id).onclick=()=>task($(id),async()=>{
   playerTrackBusy=true;
-  try{await attach(false);const reply=await chrome.tabs.sendMessage(tabId,{type:'PLAYER_TRACK_ACTION',action,id:$('playerTracks').value});if(!reply?.ok)throw new Error(reply?.error || 'Track load failed.');status(reply.count+' loaded lines imported. Use video controls for timing, style, and Save.');}
+  try{await attach(false);const reply=await extensionApi.tabs.sendMessage(tabId,{type:'PLAYER_TRACK_ACTION',action,id:$('playerTracks').value});if(!reply?.ok)throw new Error(reply?.error || 'Track load failed.');status(reply.count+' loaded lines imported. Use video controls for timing, style, and Save.');}
   finally{playerTrackBusy=false;await refreshPlayerTracks();}
 });
 $('playerLanguage').onchange=()=>renderPlayerTracks(knownPlayerTracks);
@@ -126,11 +128,11 @@ function renderLibrary() {
   SubtitlePlayerTracks.countBadge($('savedCount'),savedEntries.length);
 }
 async function refreshLibrary(selected) {
-  try{activeLibraryId=(await chrome.tabs.sendMessage(tabId,{type:'GET_STATUS'}))?.libraryId || null;}catch{activeLibraryId=null;}
+  try{activeLibraryId=(await extensionApi.tabs.sendMessage(tabId,{type:'GET_STATUS'}))?.libraryId || null;}catch{activeLibraryId=null;}
   savedEntries=(await provider({type:'LIBRARY_LIST'})).entries;
   savedBrowser.update(savedEntries,selected,$('query').value);renderLibrary();
 }
-chrome.storage.onChanged.addListener((changes,area)=>{if(area==='local' && changes.subtitleLibrary) refreshLibrary().catch(error=>status(error.message,true));});
+extensionApi.storage.onChanged.addListener((changes,area)=>{if(area==='local' && changes.subtitleLibrary) refreshLibrary().catch(error=>status(error.message,true));});
 $('attach').onclick = () => task($('attach'), async () => { await attach(); status('Overlay shown on the video.'); });
 $('file').onchange = async () => {
   const file = $('file').files[0]; if (!file) return;
@@ -143,10 +145,10 @@ $('file').onchange = async () => {
     status(`${reply.count} lines loaded.${localChoices.length>1 ? ' Select an archive file above.' : ' Adjust timing on the video.'}`+(reply.note ? ' '+reply.note : ''));
   } catch (error) { status(error.message, true); }finally{$('file').value='';}
 };
-$('localTracks').onchange=async()=>{try{const choice=localChoices[Number($('localTracks').value)];if(!choice)return;await attach();const result=await chrome.tabs.sendMessage(tabId,{type:'LOAD_SUBTITLES',...choice});if(!result?.ok)throw new Error(result?.error || 'Load failed.');status(result.count+' lines loaded.'+(choice.note ? ' '+choice.note : ''));}catch(error){status(error.message,true);}};
+$('localTracks').onchange=async()=>{try{const choice=localChoices[Number($('localTracks').value)];if(!choice)return;await attach();const result=await extensionApi.tabs.sendMessage(tabId,{type:'LOAD_SUBTITLES',...choice});if(!result?.ok)throw new Error(result?.error || 'Load failed.');status(result.count+' lines loaded.'+(choice.note ? ' '+choice.note : ''));}catch(error){status(error.message,true);}};
 $('saveKey').onclick = () => task($('saveKey'), async () => {
   if (!$('key').value.trim()) throw new Error('Enter your API key.');
-  const enabled = await chrome.permissions.request({origins: ['https://*.opensubtitles.com/*']});
+  const enabled = await extensionApi.permissions.request({origins: ['https://*.opensubtitles.com/*']});
   if (!enabled) throw new Error('Provider access was not enabled. Local file import remains available.');
   await provider({type: 'SAVE_KEY', apiKey: $('key').value}); status('Key saved. Log in if a download requires it.');
 });
@@ -159,7 +161,7 @@ $('login').onsubmit = event => {
   });
 };
 $('forget').onclick = () => task($('forget'), async () => {
-  await provider({type: 'FORGET'}); await chrome.permissions.remove({origins: ['https://*.opensubtitles.com/*']});
+  await provider({type: 'FORGET'}); await extensionApi.permissions.remove({origins: ['https://*.opensubtitles.com/*']});
   $('key').value = ''; $('username').value = ''; $('password').value = ''; $('results').replaceChildren(); status('Account access removed. Saved subtitles are kept.');
 });
 $('search').onsubmit = event => {
@@ -167,8 +169,8 @@ $('search').onsubmit = event => {
     const current={query:$('query').value,language:$('language').value.trim(),year:$('year').value,mode:$('searchMode').value};
     await provider({type:'SAVE_SUBTITLE_SEARCH',...current});
     if (current.mode==='website') {
-      await attach();await provider({type:'OPEN_SUBTITLE_WEBSITE',...current,tabId});
-      status('Search window opened. Subtitle downloads load automatically.');return;
+      await attach();const opened=await provider({type:'OPEN_SUBTITLE_WEBSITE',...current,tabId});
+      status(opened.automatic===false ? 'Download a subtitle, then choose Load file here.' : 'Search window opened. Subtitle downloads load automatically.');return;
     }
     status('Searching…'); $('results').replaceChildren();
     const {results} = await provider({type: 'SEARCH', query: $('query').value, language: $('language').value.trim(), year: $('year').value});
@@ -195,7 +197,7 @@ $('saveFile').onclick = () => {
   setTimeout(() => URL.revokeObjectURL(url), 10000);
 };
 (async () => {
-  const [tab] = await chrome.tabs.query({active: true, currentWindow: true}); tabId = tab?.id;
+  const [tab] = await extensionApi.tabs.query({active: true, currentWindow: true}); tabId = tab?.id;
   const settings = await provider({type: 'GET_SETTINGS'}); $('key').value = settings.apiKey;
   const searchSettings=await provider({type:'SUBTITLE_SEARCH_SETTINGS'});
   const prefs=searchSettings.preferences;
@@ -204,8 +206,8 @@ $('saveFile').onclick = () => {
   $('searchMode').value=prefs.mode;$('searchUrl').value=prefs.urlTemplate;searchMode();
   try{
     const previousTitle=$('query').value;
-    await chrome.scripting.executeScript({target:{tabId},files:['film-detection.js']});
-    const [suggestion]=await chrome.scripting.executeScript({target:{tabId},func:()=>globalThis.SubtitleFilm?.detect()});
+    await extensionApi.scripting.executeScript({target:{tabId},files:['film-detection.js']});
+    const [suggestion]=await extensionApi.scripting.executeScript({target:{tabId},func:()=>globalThis.SubtitleFilm?.detect()});
     if(suggestion?.result){
       const film=suggestion.result;
       if($('query').value===previousTitle){$('query').value=film.title;$('year').value=film.year;}
@@ -218,6 +220,6 @@ $('saveFile').onclick = () => {
     const reply = await attach(false);await refreshPlayerTracks();
     if (reply?.ok) $('player').textContent = `${reply.player ? 'Video found' : 'Waiting for video'}${reply.name ? ` · ${reply.name}` : ''}`;
   } catch { /* Browser pages may not allow video access. */ }
-  chrome.runtime.onMessage.addListener((message,sender)=>{if(message?.type==='PLAYER_TRACKS_CHANGED' && sender.tab?.id===tabId)refreshPlayerTracks().catch(()=>{});});
+  extensionApi.runtime.onMessage.addListener((message,sender)=>{if(message?.type==='PLAYER_TRACKS_CHANGED' && sender.tab?.id===tabId)refreshPlayerTracks().catch(()=>{});});
   setInterval(()=>refreshPlayerTracks().catch(()=>{}),1000);
 })().catch(error => status(error.message, true));

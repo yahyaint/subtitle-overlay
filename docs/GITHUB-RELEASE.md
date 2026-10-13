@@ -1,7 +1,8 @@
-# Subtitle Overlay 0.8 — 0.8.16
+# Subtitle Overlay 0.8 — 0.8.17
 
 One consolidated release for the 0.8 series. This build includes the latest working features and uses PolyForm Perimeter 1.0.1.
 
+- Add Firefox desktop 140+ builds with private credential storage and Blob downloads. Chrome and Edge integration checks pass. Brave, Vivaldi and Opera share the Chromium build. Safari conversion source is experimental and uses manual website file import.
 - Use the marine-blue design and bundled Inter font. The popup has top navigation and fixed file actions; the video controller has side tools.
 - Find subtitles by film or show, season, and episode. Player metadata is used first. Popup and controller search fields stay in sync.
 - Open Detected Subtitles to import native or supported custom player captions, readable appearance, and position. Tracks are grouped by language. Lazy custom React menus are supported.
@@ -22,3 +23,7 @@ The supplied Movy movie was checked in isolated Chromium with film media blocked
 Use the release ZIP for installation. The source ZIP contains the project. The previous-builds ZIP contains older 0.8 install and source packages with updated license notices. Old 0.7 entries remain separate old releases.
 
 To update, replace files in the same installed folder, select Reload, then refresh video tabs.
+
+## Browser packages
+
+The release ZIP installs unpacked in Chromium desktop browsers. `firefox-unsigned.xpi` supports temporary Firefox installs; permanent installs need Mozilla signing. `safari-source.zip` is experimental conversion source, not a signed Apple app. The source ZIP contains all browser build scripts. See [browser instructions](https://github.com/yahyaint/subtitle-overlay/blob/main/docs/BROWSERS.md).

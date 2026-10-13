@@ -1,4 +1,5 @@
 (() => {
+  const extensionApi=globalThis.browser || globalThis.chrome;
   const startHidden=globalThis.__subtitleOverlayStartHidden===true;delete globalThis.__subtitleOverlayStartHidden;
   if (globalThis.__subtitleOverlay) {
     const existing=globalThis.__subtitleOverlay,root=document.getElementById('subtitle-overlay-root')?.shadowRoot;
@@ -77,7 +78,7 @@ nav .count{position:absolute;right:-4px;top:-4px;min-width:12px;height:12px;line
   let uiFont=null;
   (async()=>{
     try{
-      const response=await fetch(chrome.runtime.getURL('inter-variable.woff2'));
+      const response=await fetch(extensionApi.runtime.getURL('inter-variable.woff2'));
       if(!response.ok)return;
       const face=await new FontFace('SubtitleOverlayInter',await response.arrayBuffer(),{weight:'100 900',style:'normal',display:'swap'}).load();
       if(!host.isConnected)return;
@@ -91,7 +92,7 @@ nav .count{position:absolute;right:-4px;top:-4px;min-width:12px;height:12px;line
   function refreshPlayerTracks(force=false) {
     const tracks=playerTracks?.list() || [],signature=JSON.stringify(tracks);
     if(!force && signature===playerTracksSignature)return tracks;
-    const changed=signature!==playerTracksSignature;playerTracksSignature=signature;if(changed)chrome.runtime.sendMessage({type:'PLAYER_TRACKS_CHANGED'}).catch(()=>{});const grouped=globalThis.SubtitlePlayerTracks.renderOptions(tracks,$('playerTracks'),$('playerLanguage'));
+    const changed=signature!==playerTracksSignature;playerTracksSignature=signature;if(changed)extensionApi.runtime.sendMessage({type:'PLAYER_TRACKS_CHANGED'}).catch(()=>{});const grouped=globalThis.SubtitlePlayerTracks.renderOptions(tracks,$('playerTracks'),$('playerLanguage'));
     $('playerTrackCount').textContent=String(tracks.length);findPanels?.update(tracks.length);$('playerTracks').disabled=!tracks.length;
     $('importPlayerTrack').disabled=playerTrackBusy || !grouped.visible.length;
     $('playerTracksHint').textContent=tracks.length ? grouped.languages+' languages. Select a track, then Import.' : 'No tracks exposed yet. Open the player subtitle menu. Tracks update automatically.';
@@ -132,7 +133,7 @@ nav .count{position:absolute;right:-4px;top:-4px;min-width:12px;height:12px;line
   function currentFilmIdentity(){return identityOf(location.href===state.href ? retainFilm(globalThis.SubtitleFilm?.detect()) : globalThis.SubtitleFilm?.detect());}
   const views=['controls','find','saved'];
   async function rpc(type, data={}) {
-    const result=await chrome.runtime.sendMessage({type,...data});
+    const result=await extensionApi.runtime.sendMessage({type,...data});
     if(!result?.ok) throw new Error(result?.error || 'Reload the extension and the film tab.');
     return result;
   }
@@ -201,7 +202,7 @@ nav .count{position:absolute;right:-4px;top:-4px;min-width:12px;height:12px;line
     event.preventDefault();if(!event.isTrusted)return;
     task($('overlaySearchButton'),async()=>{
       const current=query();await rpc('OVERLAY_PREFERENCES',current);$('overlayResults').replaceChildren();
-      if(current.mode==='website'){await rpc('OVERLAY_WEBSITE',current);message('Search window opened. Subtitle downloads load automatically.');return;}
+      if(current.mode==='website'){const opened=await rpc('OVERLAY_WEBSITE',current);message(opened.automatic===false ? 'Download a subtitle, then choose Load file.' : 'Search window opened. Subtitle downloads load automatically.');return;}
       message('Search in progress…');
       const result=await rpc('OVERLAY_SEARCH',current);
       for(const entry of result.results) {
@@ -274,7 +275,7 @@ nav .count{position:absolute;right:-4px;top:-4px;min-width:12px;height:12px;line
   function fullscreenChanged() { mount(); if(fullScreen()) $('panel').hidden=true; wakeControls(); }
   async function browserFullscreenStatus() {
     try {
-      const reply=await chrome.runtime.sendMessage({type:'FULLSCREEN_STATUS'});
+      const reply=await extensionApi.runtime.sendMessage({type:'FULLSCREEN_STATUS'});
       if(reply?.ok && state.browserFullscreen!==reply.fullscreen) { state.browserFullscreen=reply.fullscreen;fullscreenChanged(); }
     } catch { /* Extension can be reloaded while a page remains open. */ }
   }
@@ -285,7 +286,7 @@ nav .count{position:absolute;right:-4px;top:-4px;min-width:12px;height:12px;line
       if(!state.browserFullscreen && document.fullscreenEnabled && document.documentElement.requestFullscreen){
         try{await document.documentElement.requestFullscreen({navigationUI:'hide'});return;}catch{/* Try the window API when page fullscreen is denied. */}
       }
-      const reply=await chrome.runtime.sendMessage({type:'TOGGLE_FULLSCREEN'});
+      const reply=await extensionApi.runtime.sendMessage({type:'TOGGLE_FULLSCREEN'});
       if(!reply?.ok)throw new Error(reply?.error || 'Use F11 for fullscreen.');
       state.browserFullscreen=reply.fullscreen;fullscreenChanged();
     }catch(error){message(error.message,true);}
@@ -433,14 +434,14 @@ nav .count{position:absolute;right:-4px;top:-4px;min-width:12px;height:12px;line
   }
   function playerReport(){
     const items=videos(document),clock=playbackClock();
-    const info={version:chrome.runtime.getManifest().version,selectedVideo:items.indexOf(state.video),clockSource:clock.source,filmTime:clock.time,pageClock:pageClock ? {time:pageClock.time,duration:pageClock.duration,durationKind:pageClock.durationKind,mediaTime:pageClock.mediaTime,ageMs:Math.round(performance.now()-pageClock.at)} : null,clockBridgeError,videos:items.map(video=>{const item=videoInfo(video);return {time:video.currentTime,duration:video.duration,durationKind:Number.isFinite(video.duration) ? 'finite' : video.duration===Infinity ? 'infinite' : 'unknown',paused:video.paused,seeking:video.seeking,readyState:video.readyState,controls:video.controls,root:video.getRootNode().host ? {tag:video.getRootNode().host.tagName} : 'document',visible:item.visible,painted:item.painted,width:Math.round(video.getBoundingClientRect().width),height:Math.round(video.getBoundingClientRect().height)};}),timelines:timelineElements.slice(0,20).map(element=>({label:element.getAttribute('aria-label'),text:element.getAttribute('aria-valuetext'),value:element.getAttribute('aria-valuenow') ?? element.value,max:element.getAttribute('aria-valuemax') ?? element.max,testId:element.getAttribute('data-testid')}))};
+    const info={version:extensionApi.runtime.getManifest().version,selectedVideo:items.indexOf(state.video),clockSource:clock.source,filmTime:clock.time,pageClock:pageClock ? {time:pageClock.time,duration:pageClock.duration,durationKind:pageClock.durationKind,mediaTime:pageClock.mediaTime,ageMs:Math.round(performance.now()-pageClock.at)} : null,clockBridgeError,videos:items.map(video=>{const item=videoInfo(video);return {time:video.currentTime,duration:video.duration,durationKind:Number.isFinite(video.duration) ? 'finite' : video.duration===Infinity ? 'infinite' : 'unknown',paused:video.paused,seeking:video.seeking,readyState:video.readyState,controls:video.controls,root:video.getRootNode().host ? {tag:video.getRootNode().host.tagName} : 'document',visible:item.visible,painted:item.painted,width:Math.round(video.getBoundingClientRect().width),height:Math.round(video.getBoundingClientRect().height)};}),timelines:timelineElements.slice(0,20).map(element=>({label:element.getAttribute('aria-label'),text:element.getAttribute('aria-valuetext'),value:element.getAttribute('aria-valuenow') ?? element.value,max:element.getAttribute('aria-valuemax') ?? element.max,testId:element.getAttribute('data-testid')}))};
     const controls=publicClockControls();info.filmClockAnchor=clockSample ? {filmTime:clockSample.position,nativeTime:clockSample.native} : null;info.needsPlayerClock=clockNeedsPosition;info.playerControls=controls.items;info.controlScan={scanned:controls.scanned,shadowRoots:controls.shadowRoots,iframeCount:controls.iframeCount};
     if(lastControlSnapshot && performance.now()-lastControlSnapshot.at<60000)info.recentControls={ageMs:Math.round(performance.now()-lastControlSnapshot.at),items:lastControlSnapshot.items};
     return info;
   }
   const playerInfo=document.createElement('button');playerInfo.id='copyPlayerInfo';playerInfo.textContent='Copy player info';playerInfo.style.cssText='width:100%;margin-top:12px';$('remove').before(playerInfo);
   const saveReport=document.createElement('button');saveReport.id='savePlayerReport';saveReport.textContent='Save player report';saveReport.style.cssText='width:100%;margin-top:8px';playerInfo.after(saveReport);
-  saveReport.onclick=event=>{if(event.isTrusted)task(saveReport,async()=>{await rpc('OVERLAY_EXPORT_REPORT');message('Report download started. Save the file if your browser asks.');});};
+  saveReport.onclick=event=>{if(event.isTrusted)task(saveReport,async()=>{const report=await rpc('OVERLAY_EXPORT_REPORT');if(report.text){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([report.text],{type:'application/json'}));a.download=report.name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);}message('Report download started. Save the file if your browser asks.');});};
   playerInfo.onclick=async()=>{
     const text=JSON.stringify(playerReport(),null,2);
     try{await navigator.clipboard.writeText(text);message('Player info copied. Paste it in the support chat.');}
@@ -720,7 +721,7 @@ nav .count{position:absolute;right:-4px;top:-4px;min-width:12px;height:12px;line
   // Prevent host player shortcuts from hijacking edits in the subtitle panel.
   for (const type of ['keydown', 'keyup', 'keypress']) $('panel').addEventListener(type, event => event.stopPropagation());
   function receive(request, sender, reply) {
-    if (!sender.url?.startsWith(chrome.runtime.getURL(''))) return;
+    if (!sender.url?.startsWith(extensionApi.runtime.getURL(''))) return;
     try {
       if(request.type==='GET_PLAYER_TRACKS'){
         searchReady.then(()=>{discover();reply({ok:true,tracks:refreshPlayerTracks(true),search:searchSnapshot()});}).catch(error=>reply({ok:false,error:error.message}));return true;
@@ -760,7 +761,7 @@ nav .count{position:absolute;right:-4px;top:-4px;min-width:12px;height:12px;line
       else if (request.type === 'GET_STATUS') reply({ok: true, player: Boolean(state.video), name: state.name,libraryId:state.libraryId,href:location.href,filmIdentity:currentFilmIdentity()});
     } catch (error) { reply({ok: false, error: error.message}); }
   }
-  chrome.runtime.onMessage.addListener(receive);
+  extensionApi.runtime.onMessage.addListener(receive);
   document.addEventListener('fullscreenchange', fullscreenChanged);
   document.addEventListener('pointermove',wakeControls);
   document.addEventListener('pointermove',captureControls);
@@ -783,7 +784,7 @@ nav .count{position:absolute;right:-4px;top:-4px;min-width:12px;height:12px;line
   }
   const discoveryTimer=setInterval(discover,1000),drawTimer=setInterval(draw,80);
   for(const name of ['loadedmetadata','loadeddata','emptied','load','error'])document.addEventListener(name,scheduleDiscovery,true);
-  chrome.runtime.sendMessage({type:'INSTALL_PLAYER_SOURCES'}).catch(()=>{});
+  extensionApi.runtime.sendMessage({type:'INSTALL_PLAYER_SOURCES'}).catch(()=>{});
   function removeOverlay(event) {
     event?.preventDefault();event?.stopPropagation();
     if(removed)return;removed=true;
@@ -798,7 +799,7 @@ nav .count{position:absolute;right:-4px;top:-4px;min-width:12px;height:12px;line
     document.removeEventListener('pointermove',captureControls);document.removeEventListener('fullscreenchange',fullscreenChanged);document.removeEventListener('keydown',keydown);document.removeEventListener('pointermove',wakeControls);window.removeEventListener('resize',browserFullscreenStatus);
     for(const name of ['pointermove','pointerdown','pointerout','keydown','focusin'])document.removeEventListener(name,nativeControlsActivity);
     if(uiFont)document.fonts.delete(uiFont);
-    try{chrome.runtime.onMessage.removeListener(receive);}catch{/* Context may already be gone after an extension update. */}
+    try{extensionApi.runtime.onMessage.removeListener(receive);}catch{/* Context may already be gone after an extension update. */}
     try{playerTracks?.dispose();}catch{/* Detached players cannot prevent removal. */}
     document.dispatchEvent(new Event('subtitle-overlay-sources-stop'));document.dispatchEvent(new Event('subtitle-overlay-clock-stop'));
   }

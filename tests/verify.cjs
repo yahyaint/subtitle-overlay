@@ -63,7 +63,7 @@ const server = http.createServer((req, res) => {res.writeHead(200, {'Content-Typ
   await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
   const port = server.address().port;
   const context = await chromium.launchPersistentContext(path.resolve(__dirname, '../.test-artifacts/browser-test-profile-'+Date.now()), {
-    channel: 'chromium', headless: true, args: [`--disable-extensions-except=${testRoot}`, `--load-extension=${testRoot}`],
+    ...(process.env.SUBTITLE_TEST_BROWSER ? {executablePath:process.env.SUBTITLE_TEST_BROWSER} : {channel:'chromium'}), headless: true, args: [`--disable-extensions-except=${testRoot}`, `--load-extension=${testRoot}`],
     viewport: {width: 1360, height: 900}
   });
   try {

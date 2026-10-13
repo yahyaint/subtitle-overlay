@@ -1,3 +1,12 @@
+# Browser compatibility validation: 0.8.17
+
+- Headless Chromium: all ten existing integration suites passed after the API namespace change. Report-export and automatic-download suites were repeated after the Blob download change.
+- Installed Microsoft Edge on Windows: core extension suite passed, including file import, playback, seeking, sentence sync, saving/reloading, credentials, fullscreen and removal. This uses an isolated profile.
+- Firefox 153.0 (Playwright runtime), Windows: real temporary MV3 add-on installed without manifest warnings. An extension-owned test page exercised actual browser APIs. Passed event background, Promise messaging, background-only key storage and migration, content-script credential isolation, DEFLATE ZIP/SRT import, native tracks, MAIN-world clocks, three-sentence sync, seek recovery, saved timing reload, header hide/reopen, report downloads and account removal. Test video clocks were simulated in both execution worlds. No live streaming account was used.
+- Firefox test-only HTTP fixture grant and test scripts are absent from installable packages. The Firefox minimum is 140; this older baseline was checked against API compatibility data, not run as a separate Firefox runtime.
+- Safari source profile checked statically. Unsupported download APIs are guarded; website files use manual import. Apple packaging, signing and runtime tests remain outstanding.
+- Brave and Opera use the Chromium package; their native UI was not tested in this task. Vivaldi playback was previously confirmed by the publisher. Mobile releases are not supported.
+
 ## Version 0.8.16 - October 13, 2026
 
 Header X now hides only the controller. Loaded subtitles, settings, and the runtime remain active. The reopen icon stays visible after header X, including beyond fullscreen inactivity. Side Close and Remove overlay still remove the overlay and restore owned player state.

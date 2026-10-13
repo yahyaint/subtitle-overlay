@@ -1,6 +1,6 @@
 {
   "name": "subtitle-overlay",
-  "version": "0.8.16",
+  "version": "0.8.17",
   "private": true,
   "description": "Find, save, style, and sync subtitles over browser video.",
   "author": "yahyaint",
@@ -15,6 +15,7 @@
   "scripts": {
     "check": "node scripts/check.cjs",
     "test": "node scripts/test.cjs",
+    "test:firefox": "node tests/verify-firefox.cjs",
     "build": "node scripts/build.cjs",
     "preview:assets": "node scripts/preview-assets.cjs"
   },

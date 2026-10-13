@@ -1,7 +1,8 @@
 {
   "manifest_version": 3,
+  "minimum_chrome_version": "132",
   "name": "Subtitle Overlay",
-  "version": "0.8.16",
+  "version": "0.8.17",
   "description": "Find, save, and sync subtitles over browser video. Change the font, color, size, background, and shadow.",
   "permissions": [
     "activeTab",

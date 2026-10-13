@@ -32,4 +32,19 @@ for(const size of [16,32,48,128]){
 }
 assert(fs.existsSync(path.join(root,manifest.background.service_worker)));
 assert(fs.existsSync(path.join(root,manifest.action.default_popup)));
+const {browserManifest,BACKGROUND_SCRIPTS}=require('./browser-targets.cjs');
+for(const target of ['firefox','safari']){
+ const generated=browserManifest(manifest,target);
+ assert.equal(generated.version,pkg.version);
+ assert.deepEqual(generated.background,{scripts:BACKGROUND_SCRIPTS});
+ for(const name of generated.background.scripts)assert(fs.existsSync(path.join(root,name)));
+ assert.equal(generated.host_permissions,undefined);
+ assert(!JSON.stringify(generated.web_accessible_resources).includes('private-storage'));
+ assert.equal(generated.web_accessible_resources[0].use_dynamic_url,undefined);
+ if(target==='firefox'){
+  assert.equal(generated.browser_specific_settings.gecko.strict_min_version,'140.0');
+  assert.equal(generated.browser_specific_settings.gecko.id,'subtitle-overlay@yahyanabil.com');
+  assert(generated.permissions.includes('downloads'));
+ }else assert(!generated.permissions.includes('downloads'));
+}
 console.log('PASS manifest, version, local resources, JavaScript syntax, packaged-code checks, and icon dimensions.');
