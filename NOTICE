@@ -1,13 +1,13 @@
-Required Notice: Copyright (c) 2026 yahyaint (https://github.com/yahyaint/subtitle-overlay)
+Copyright (c) 2026 yahyaint (https://github.com/yahyaint/subtitle-overlay)
 
-Current distribution: PolyForm Noncommercial License 1.0.0. See LICENSE.
-Original additions first published after version 0.8.10 use this license.
-Commercial reuse or resale of those additions needs separate written permission
-unless another valid license permits it. Contact: https://yahyanabil.com/support
+Current distribution: Subtitle Overlay Source-Available Personal Use License 1.0.
+See LICENSE. Viewing and running unmodified copies for private personal use are
+permitted. Code edits, redistribution, commercial use, and monetized derivatives
+require separate written permission, except where another valid grant or law
+permits them. Contact: https://yahyanabil.com/support
 
-Previously granted permissions remain valid. Removing a bundled notice or
-changing the current distribution license does not withdraw earlier grants.
-Original Git tags and historical source remain unchanged.
+Previously granted permissions remain valid. This notice does not withdraw
+those permissions. Original Git tags and historical source remain unchanged.
 
-Bundled Inter font: its separate license is in INTER-LICENSE.txt. Project license
-changes do not change third-party licenses.
+Bundled Inter font: its separate license is in INTER-LICENSE.txt. This project
+license does not replace third-party licenses or govern user subtitle files.

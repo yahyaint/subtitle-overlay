@@ -1,3 +1,9 @@
+## Version 0.8.13 - October 13, 2026
+
+Source-Available Personal Use license replaces PolyForm for the current distribution. Viewing and running are allowed. Code edits, derivative creation, redistribution, and commercial use are not licensed. User explicitly selected no private edits. Previous grants and third-party licenses are unchanged.
+
+Static/build/package checks verify current license and notices in every ZIP, no bundled legacy license file, package metadata, digests, and unchanged extension code apart from version strings. These are technical checks, not legal review or a guarantee of enforceability.
+
 ## Version 0.8.12 - October 11, 2026
 
 Remove the bundled legacy license file and references to it in current documentation and packaging. The official PolyForm license and Inter font license are unchanged. Previously granted permissions remain valid.

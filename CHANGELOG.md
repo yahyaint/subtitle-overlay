@@ -1,3 +1,8 @@
+## 0.8.13
+
+- Use a project-specific source-available personal-use license: view and run only. No code edits, derivative permission, redistribution, or commercial use without separate permission.
+- Keep existing grants and third-party licenses unchanged. No feature changes.
+
 ## 0.8.12
 
 - Remove the bundled legacy license file. Package the current PolyForm license and NOTICE.

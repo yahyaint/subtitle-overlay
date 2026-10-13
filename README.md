@@ -10,9 +10,9 @@ Add your own subtitles to browser video. Find a subtitle, set its timing, and ch
 
 Saved subtitles has separate Films and Shows views. Shows use show, season, and episode selectors. Older saved episode titles are recognized without changing stored files.
 
-Version 0.8.12 keeps the popup and video controller search fields in sync. Saved searches cannot replace the detected film.
+Version 0.8.13 keeps the popup and video controller search fields in sync. Saved searches cannot replace the detected film.
 
-Version 0.8.12 uses a shared tool rail, fixed popup file actions, and a clearer timing card. See [design notes and research](docs/design/NEW-DESIGN.md).
+Version 0.8.13 uses a shared tool rail, fixed popup file actions, and a clearer timing card. See [design notes and research](docs/design/NEW-DESIGN.md).
 
 ## Features
 
@@ -29,7 +29,7 @@ Version 0.8.12 uses a shared tool rail, fixed popup file actions, and a clearer 
 
 ## Install
 
-Version 0.8.12 is the current stable release. A Chrome Web Store listing is not available yet.
+Version 0.8.13 is the current stable release. A Chrome Web Store listing is not available yet.
 
 1. Download this repository or a release ZIP. Extract the files.
 2. Open `chrome://extensions`. In Edge, open `edge://extensions`.
@@ -64,7 +64,7 @@ The library stays on this device. Deleting a library item does not delete files 
 - Closed shadow roots and inaccessible frames can prevent player access.
 - ASS and SSA text and timing are supported. Embedded styles and effects are not rendered.
 - Image subtitles, RAR files, encrypted ZIP files, and archives over the 2 MB limit are not supported.
-- Authenticated OpenSubtitles delivery still needs confirmation for version 0.8.12.
+- Authenticated OpenSubtitles delivery still needs confirmation for version 0.8.13.
 
 ## Import player subtitles
 
@@ -96,6 +96,6 @@ The extension is free to use. Select **Tip** in the popup, or visit [the support
 
 [Privacy](docs/PRIVACY.md) · [Support](SUPPORT.md) · [Changes](CHANGELOG.md) · [Contribute](CONTRIBUTING.md)
 
-Publisher: `yahyaint`. Repository: [`yahyaint/subtitle-overlay`](https://github.com/yahyaint/subtitle-overlay). License: [PolyForm Noncommercial 1.0.0](LICENSE). See [license scope](docs/LICENSING.md).
+Publisher: `yahyaint`. Repository: [`yahyaint/subtitle-overlay`](https://github.com/yahyaint/subtitle-overlay). License: [Source-Available Personal Use](LICENSE). Viewing and running only; no code edits, redistribution, or commercial reuse under this license. See [license scope](docs/LICENSING.md).
 
 Player subtitles is the first panel in Find. Track events and video changes trigger a quick update. Custom caption links and public Video.js, JW Player, and Artplayer caption files are supported. Open shadow roots are included. Files load only after Import. Some players expose no subtitle files; cross-origin frame players require a separate integration.

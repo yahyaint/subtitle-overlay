@@ -1,5 +1,7 @@
 # Development
 
+These editing instructions are for the publisher or contributors with separate written permission. The public personal-use license permits viewing and running, not code edits or redistribution. See [license scope](LICENSING.md).
+
 Use Node.js 22 or later. The extension runs plain JavaScript. npm packages are used only for development.
 
 ```sh
