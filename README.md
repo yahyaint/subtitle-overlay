@@ -29,18 +29,9 @@ Version 0.8.17 uses top navigation in the popup, a tool rail in the video contro
 
 ## Install
 
-Chromium: use the repository's `extension/` folder and [manual installation guide](INSTALL.md), or download the release ZIP. Firefox: download the unsigned XPI from GitHub Releases for temporary testing. Safari: download the Safari source ZIP from GitHub Releases for conversion; it is not an installable Apple app.
+Use `extension/` for Chromium desktop browsers: Chrome, Edge, Brave, Vivaldi, and Opera. Follow the [manual installation guide](INSTALL.md). It is the repository's only unpacked installation folder.
 
-Version 0.8.17 is the current stable release.
-
-1. Download this repository or a release ZIP. Extract the files.
-2. Open `chrome://extensions`. In Edge, open `edge://extensions`.
-3. Turn on **Developer mode**.
-4. Select **Load unpacked**. Select the `extension` folder.
-5. Open a video page. Select the extension, then **Show overlay**.
-6. Select **Load file**, or use **Find** to search for a subtitle.
-
-Chrome, Edge, Brave, Vivaldi, Opera, and other current Chromium desktop browsers use the same build. Firefox desktop 140+ has its own build. Safari has experimental conversion source with manual website file loading. See [browser builds and installation](docs/BROWSERS.md). The publisher confirmed Disney+ playback, seeking, and sentence sync in Vivaldi on Windows with version 0.7.10. Other live player and browser combinations still need testing. Firefox and Edge have local extension integration checks.
+Version 0.8.17 is the current stable release. Uploaded release packages are kept outside GitHub. Firefox and Safari build support remains available for local preparation; no public packages are attached. See [browser compatibility](docs/BROWSERS.md).
 
 ## Sync a subtitle
 
@@ -74,10 +65,6 @@ Open **Find → Detected Subtitles**. Select a language. **Import** loads its su
 
 Only public subtitle or caption tracks are listed. A track can say **not loaded** until you select **Import**. The extension then requests its file URL through normal browser access. SRT, WebVTT, ASS, and SSA text are supported. A blocked file reports an error; select another track or load a local file. Some players use a separate caption renderer and expose no readable tracks. Select a language in the player, then **Refresh**. Streaming tracks may expose only loaded lines. Import again to make a new copy if more lines load. Import also copies readable player text style and position. In **Text style**, select **Restore player style** to restore the captured appearance without changing timing or sentence-sync points. Save keeps this original style with your settings. Browser-drawn styles, multiple shadows, animations, and per-line effects may not be readable.
 
-## Update an unpacked install
-
-Replace the files in the same extension folder. Select **Reload** on its browser extension card. Refresh the film tab. Keep the same folder to retain the extension's local library.
-
 ## Development
 
 ```sh
@@ -88,7 +75,7 @@ npm test
 npm run build
 ```
 
-The extension has no runtime npm dependencies. Tests use Playwright and local fixtures. The build creates an install ZIP and a source ZIP. See [development](docs/DEVELOPMENT.md) and [release preparation](docs/RELEASE.md).
+The extension has no runtime npm dependencies. Tests use Playwright and local fixtures. The build writes browser packages to an external local folder; they are not attached to GitHub Releases. See [development](docs/DEVELOPMENT.md) and [release preparation](docs/RELEASE.md).
 
 ## Support development
 

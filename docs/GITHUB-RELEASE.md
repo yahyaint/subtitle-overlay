@@ -18,12 +18,10 @@ The supplied Movy movie was checked in isolated Chromium with film media blocked
 
 [PolyForm Perimeter 1.0.1](https://polyformproject.org/licenses/perimeter/1.0.1) permits use, changes, distribution, and commercial reuse for noncompeting purposes. Providing a competing product to others is prohibited, including free competitors. Earlier grants remain valid; the new license does not revoke prior MIT permissions. Inter keeps its separate license.
 
-## Downloads
+## Installation
 
-Use the release ZIP for installation. The source ZIP contains the project. The previous-builds ZIP contains older 0.8 install and source packages with updated license notices. Old 0.7 entries remain separate old releases.
+Use the repository's `extension/` folder for Chromium desktop browsers. Follow the [manual installation guide](https://github.com/yahyaint/subtitle-overlay/blob/main/INSTALL.md).
 
-To update, replace files in the same installed folder, select Reload, then refresh video tabs.
+Uploaded ZIP/XPI packages and their checksums have been removed from GitHub Releases and retained in the publisher's local archive. The repository's only unpacked manual installation is Chromium. Firefox and Safari preparation remains in the local build tools, without public package attachments.
 
-## Browser packages
-
-The release ZIP installs unpacked in Chromium desktop browsers. `firefox-unsigned.xpi` supports temporary Firefox installs; permanent installs need Mozilla signing. `safari-source.zip` is experimental conversion source, not a signed Apple app. The source ZIP contains all browser build scripts. See [browser instructions](https://github.com/yahyaint/subtitle-overlay/blob/main/docs/BROWSERS.md).
+Old release entries and original tags remain. GitHub may show automatically generated Source code downloads for those tags; these are separate from uploaded assets.

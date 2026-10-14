@@ -38,7 +38,7 @@ Test output stays outside Git and release ZIPs. Test failure stops the runner. I
 
 ## Build
 
-`npm run build` runs static checks first. It verifies each ZIP entry against the source bytes. Packages go to `../releases/builds/<version>/`, outside the repository. No generated browser folders are written into the repository.
+`npm run build` runs static checks first. It verifies each ZIP entry against the source bytes. Packages go to `../releases/builds/<version>/`, outside the repository. Keep these packages local; do not attach them to GitHub Releases. No generated browser folders are written into the repository.
 
 To choose another external folder, use `npm run build -- --out "../my-release-files"`. Paths resolve from your working directory. Output inside the repository is rejected. Firefox and Safari manifests are generated directly into their packages. The Chromium `extension/` folder is the only unpacked manual install in the repository.
 

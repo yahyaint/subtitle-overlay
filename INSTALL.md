@@ -11,4 +11,4 @@ The repository's `extension/` folder is the unpacked Chromium extension. No buil
 
 For an update, replace files in the same installed folder, select Reload on the extension card, then refresh video tabs. Keep the same folder to preserve the extension ID and local subtitle library. Moving an existing unpacked installation to a different folder can change that ID.
 
-Firefox and Safari do not use this unpacked folder. Their packages are attached to [GitHub Releases](https://github.com/yahyaint/subtitle-overlay/releases/latest). See [browser instructions](docs/BROWSERS.md).
+This guide covers Chromium only. Firefox and Safari are not supplied as public installation packages. Their build compatibility is documented for developers in [browser compatibility](docs/BROWSERS.md).
