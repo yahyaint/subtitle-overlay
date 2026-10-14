@@ -1,23 +1,23 @@
 # Browser builds
 
-Run `npm ci`, then `npm run build`. All browser targets use the same bundled code, font, and license. Generated manifests contain no permanent website access. Grant website access only when needed.
+Run `npm ci`, then `npm run build`. All browser targets use the same bundled code, font, and license. Release packages are written outside the repository, to `../releases/builds/<version>/`. The only unpacked installation folder in the repository is `extension/`, for Chromium. Generated manifests contain no permanent website access. Grant website access only when needed.
 
 | Browser | Build | Status |
 | --- | --- | --- |
-| Chrome, Edge 132+ | `dist/chromium/extension` or the release ZIP | Desktop integration tests |
+| Chrome, Edge 132+ | `extension/` or the release ZIP | Desktop integration tests |
 | Brave, Vivaldi, Opera and other current Chromium desktop browsers | Same Chromium build | Same extension APIs; Vivaldi playback previously confirmed by publisher; other browsers need a smoke test |
-| Firefox desktop 140 or later | `dist/firefox/extension` or `firefox-unsigned.xpi` | Separate Manifest V3 event background and Promise APIs; real Firefox extension-context integration checks |
+| Firefox desktop 140 or later | `firefox-unsigned.xpi` from GitHub Releases | Separate Manifest V3 event background and Promise APIs; real Firefox extension-context integration checks |
 | Current Firefox-based desktop browsers (LibreWolf, Waterfox, Zen) | Firefox build, with a 140+ Firefox engine | Expected compatibility; not separately tested; fork signing requirements may differ |
-| Safari desktop | `dist/safari/extension` or `safari-source.zip` | Experimental conversion source; Apple packaging and Safari testing still required |
+| Safari desktop | `safari-source.zip` from GitHub Releases | Experimental conversion source; Apple packaging and Safari testing still required |
 | Firefox Android / mobile Safari | No supported mobile release | Desktop search windows, fullscreen controls and download tracking require mobile-specific work |
 
 ## Chromium desktop
 
-Extract the release ZIP. Open the browser's Extensions page. Turn on Developer mode. Select Load unpacked and choose `extension`. Keep the same folder when updating to preserve the local library.
+Use the repository's `extension/` folder, or extract the release ZIP. Follow [manual installation](../INSTALL.md). Open the browser's Extensions page. Turn on Developer mode. Select Load unpacked and choose `extension`. Keep the same folder when updating to preserve the local library.
 
 ## Firefox desktop
 
-Open `about:debugging#/runtime/this-firefox`. Select Load Temporary Add-on. Choose `manifest.json` inside `dist/firefox/extension`, or the unsigned XPI. Temporary installations end when Firefox restarts. Normal permanent installation in standard Firefox requires Mozilla signing. This repository does not contain signing credentials or a signed XPI.
+Open `about:debugging#/runtime/this-firefox`. Select Load Temporary Add-on. Download the Firefox unsigned XPI from GitHub Releases and select it. If needed, extract that XPI outside the repository and select its `manifest.json`. Temporary installations end when Firefox restarts. Normal permanent installation in standard Firefox requires Mozilla signing. This repository does not contain signing credentials or a signed XPI.
 
 The stable extension ID is `subtitle-overlay@yahyanabil.com`. Keep it for subsequent signed updates. Firefox uses an event background because it does not support extension service workers. Its manifest declares search terms, website content and authentication information transmitted by user-initiated provider actions; no developer analytics are added. The minimum version includes Firefox's built-in data consent interface.
 

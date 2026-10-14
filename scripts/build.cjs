@@ -1,7 +1,15 @@
 const fs=require('node:fs'),path=require('node:path'),zlib=require('node:zlib'),crypto=require('node:crypto'),assert=require('node:assert/strict');
 const {zipFiles}=require('./zip-tools.cjs');require('./check.cjs');
-const project=path.resolve(__dirname,'..'),root=path.join(project,'extension'),out=path.join(project,'dist');fs.mkdirSync(out,{recursive:true});
+const project=path.resolve(__dirname,'..'),root=path.join(project,'extension');
 const version=JSON.parse(fs.readFileSync(path.join(root,'manifest.json'))).version;
+const args=process.argv.slice(2);
+assert(args.length===0 || args.length===2 && args[0]==='--out','Usage: npm run build -- --out <folder>');
+const out=args.length ? path.resolve(args[1]) : path.resolve(project,'../releases/builds',version);
+function outsideRepo(directory){const relative=path.relative(fs.realpathSync(project),directory);return relative==='..' || relative.startsWith('..'+path.sep) || path.isAbsolute(relative);}
+assert(outsideRepo(out),'Release packages must be written outside the repository.');
+let existing=out;while(!fs.existsSync(existing))existing=path.dirname(existing);
+assert(outsideRepo(fs.realpathSync(existing)),'Release output resolves inside the repository.');
+fs.mkdirSync(out,{recursive:true});
 // Keep packaging independent of local files and browser-generated artifacts.
 const include=['background.js','content.js','download-folder.js','film-detection.js','icon-128.png','icon-16.png','icon-32.png','icon-48.png','logo.svg','manifest.json','player-clock-bridge.js','popup.css','popup.html','popup.js','sample.srt','subtitle-download.js','subtitle-search.js','subtitle-settings.js','subtitles.js','website-bridge.js','website-permission.css','website-permission.html','website-permission.js'];
 include.push('private-storage.js','saved-library.js','player-sources-bridge.js','player-subtitles.js','app-font.css','inter-variable.woff2','INTER-LICENSE.txt');
@@ -25,11 +33,8 @@ function verifiedZip(filename,entries){
 }
 const {browserManifest}=require('./browser-targets.cjs');
 const packages=[];
-for(const target of ['chromium','firefox','safari']){
+for(const target of ['firefox','safari']){
  const targetSource=source.map(([name,data])=>[name,name==='manifest.json' ? Buffer.from(JSON.stringify(browserManifest(JSON.parse(data),target),null,2)+'\n') : data]);
- const directory=path.join(out,target,'extension');fs.mkdirSync(directory,{recursive:true});
- for(const [name,data] of targetSource)fs.writeFileSync(path.join(directory,name),data);
- for(const [name,data] of licenses)fs.writeFileSync(path.join(directory,name),data);
  if(target==='firefox')packages.push(verifiedZip('subtitle-overlay-'+version+'-firefox-unsigned.xpi',[...targetSource,...licenses]));
  if(target==='safari')packages.push(verifiedZip('subtitle-overlay-'+version+'-safari-source.zip',[
   ...targetSource.map(([name,data])=>['extension/'+name,data]),...licenses,
@@ -45,7 +50,7 @@ packages.push(verifiedZip('subtitle-overlay-'+version+'-release.zip',[
  ['PRIVACY.md',fs.readFileSync(path.join(project,'docs/PRIVACY.md'))]
 ]));
 const allowedRoots=['extension','scripts','tests','docs','site','.github'];
-const rootFiles=['.gitignore','.gitattributes','.editorconfig','package.json','package-lock.json','README.md',...licenseFiles,'CHANGELOG.md','CONTRIBUTING.md','SECURITY.md','SUPPORT.md'];
+const rootFiles=['.gitignore','.gitattributes','.editorconfig','package.json','package-lock.json','README.md','INSTALL.md',...licenseFiles,'CHANGELOG.md','CONTRIBUTING.md','SECURITY.md','SUPPORT.md'];
 function walk(relative){
  return fs.readdirSync(path.join(project,relative),{withFileTypes:true}).sort((a,b)=>a.name.localeCompare(b.name)).flatMap(entry=>{
   const name=relative+'/'+entry.name;return entry.isDirectory()?walk(name):[[name,fs.readFileSync(path.join(project,name))]];
@@ -57,4 +62,5 @@ fs.writeFileSync(path.join(out,'SHA256SUMS.txt'),packages.map(([name,data])=>cry
 const manifest={version,extensionFiles:[...include,...licenseFiles],packages:packages.map(([name,bytes])=>({name,bytes:bytes.length,sha256:crypto.createHash('sha256').update(bytes).digest('hex')}))};
 fs.writeFileSync(path.join(out,'build-report.json'),JSON.stringify(manifest,null,2)+'\n');
 console.log('PASS verified packages, Chromium, Firefox, Safari source and source ZIPs and SHA-256 hashes.');
+console.log('Output: '+out);
 for(const [name,bytes] of packages)console.log(name+' ('+bytes.length+' bytes)');

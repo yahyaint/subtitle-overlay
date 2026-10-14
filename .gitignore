@@ -6,6 +6,8 @@ dist/
 *.pem
 *.key
 *.crx
+*.zip
+*.xpi
 *.log
 download.json
 player-info.json

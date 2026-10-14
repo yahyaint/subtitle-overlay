@@ -29,7 +29,7 @@ Version 0.8.17 uses top navigation in the popup, a tool rail in the video contro
 
 ## Install
 
-Chromium: use the release ZIP. Firefox: use the unsigned XPI for temporary testing. Safari: use the Safari source ZIP for conversion; it is not an installable Apple app.
+Chromium: use the repository's `extension/` folder and [manual installation guide](INSTALL.md), or download the release ZIP. Firefox: download the unsigned XPI from GitHub Releases for temporary testing. Safari: download the Safari source ZIP from GitHub Releases for conversion; it is not an installable Apple app.
 
 Version 0.8.17 is the current stable release.
 

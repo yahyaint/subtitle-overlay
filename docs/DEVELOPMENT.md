@@ -18,12 +18,12 @@ On a new Linux system, use `npx playwright install --with-deps chromium` to inst
 
 | Path | Use |
 | --- | --- |
-| `extension/` | Unpacked extension source |
+| `extension/` | Chromium source and manual unpacked installation |
 | `scripts/` | Checks, tests, build, and demo asset tools |
 | `tests/` | Local integration tests and fixtures |
 | `docs/images/` | Local demo images |
 | `site/` | Static privacy page for later hosting |
-| `dist/` | Generated ZIP files and checksums |
+| `../releases/builds/<version>/` | Generated packages and checksums, outside the repository |
 | `.test-artifacts/` | Local test profiles, reports, and screenshots |
 
 ## Tests
@@ -38,7 +38,9 @@ Test output stays outside Git and release ZIPs. Test failure stops the runner. I
 
 ## Build
 
-`npm run build` runs static checks first. It verifies each ZIP entry against the source bytes.
+`npm run build` runs static checks first. It verifies each ZIP entry against the source bytes. Packages go to `../releases/builds/<version>/`, outside the repository. No generated browser folders are written into the repository.
+
+To choose another external folder, use `npm run build -- --out "../my-release-files"`. Paths resolve from your working directory. Output inside the repository is rejected. Firefox and Safari manifests are generated directly into their packages. The Chromium `extension/` folder is the only unpacked manual install in the repository.
 
 - The install ZIP contains an `extension/` folder and install guide.
 - The source ZIP contains the project, tests, documentation, and build tools.

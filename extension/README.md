@@ -36,4 +36,4 @@ The fullscreen button first requests page fullscreen with browser navigation hid
 
 Header X hides the controls. Subtitles and current settings stay loaded. The icon stays available to reopen the controls, including in fullscreen. Side Close and Remove overlay remove the overlay.
 
-Firefox and Safari have separate generated manifests. Use their browser-specific release files; this folder is the Chromium build. See the repository browser guide.
+Firefox and Safari have separate generated manifests. Use their browser-specific release files; this folder is the Chromium build. See ../INSTALL.md for manual Chromium installation and the repository browser guide for other packages.
