@@ -42,7 +42,7 @@ Test output stays outside Git and release ZIPs. Test failure stops the runner. I
 
 To choose another external folder, use `npm run build -- --out "../my-release-files"`. Paths resolve from your working directory. Output inside the repository is rejected. Firefox and Safari manifests are generated directly into their packages. The Chromium `extension/` folder is the only unpacked manual install in the repository.
 
-- The install ZIP contains an `extension/` folder and install guide.
+- The Chromium package puts `manifest.json`, bundled extension files, LICENSE and NOTICE directly at the ZIP root. It has no outer `extension/` folder or sibling installation documents.
 - The source ZIP contains the project, tests, documentation, and build tools.
 
 Set the same version in `package.json`, `extension/manifest.json`, and the background User-Agent before a new release. The build rejects a mismatch.

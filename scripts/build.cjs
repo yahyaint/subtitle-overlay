@@ -41,14 +41,12 @@ for(const target of ['firefox','safari']){
   ['BROWSERS.md',fs.readFileSync(path.join(project,'docs/BROWSERS.md'))]
  ]));
 }
-packages.push(verifiedZip('subtitle-overlay-'+version+'-release.zip',[
- ...source.map(([name,data])=>['extension/'+name,data]),
- ['extension/README.md',fs.readFileSync(path.join(root,'README.md'))],
- ...licenses,
- ['INSTALL.md',Buffer.from('# Subtitle Overlay '+version+'\n\nExtract this ZIP. For Chrome, Edge, Brave, Vivaldi, Opera and other Chromium desktop browsers, open their extensions page (chrome://extensions or edge://extensions). Turn on Developer mode. Select Load unpacked, then select the extension folder.\n\nFor an update, replace files in the same installed folder, select Reload, then refresh the film tab.\n')],
- ['BROWSERS.md',fs.readFileSync(path.join(project,'docs/BROWSERS.md'))],
- ['PRIVACY.md',fs.readFileSync(path.join(project,'docs/PRIVACY.md'))]
-]));
+// Chromium distributable: manifest and every included file share the archive root.
+// Wrapping extension/ with sibling documents causes package-upload rejection.
+const chromiumFiles=[...source,...licenses];
+assert(chromiumFiles.some(([name])=>name==='manifest.json'),'Missing root manifest');
+assert(chromiumFiles.every(([name])=>!name.includes('/')),'Chromium files must share the manifest root');
+packages.push(verifiedZip('subtitle-overlay-'+version+'-release.zip',chromiumFiles));
 const allowedRoots=['extension','scripts','tests','docs','site','.github'];
 const rootFiles=['.gitignore','.gitattributes','.editorconfig','package.json','package-lock.json','README.md','INSTALL.md',...licenseFiles,'CHANGELOG.md','CONTRIBUTING.md','SECURITY.md','SUPPORT.md'];
 function walk(relative){
