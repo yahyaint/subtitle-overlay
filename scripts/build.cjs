@@ -2,9 +2,14 @@ const fs=require('node:fs'),path=require('node:path'),zlib=require('node:zlib'),
 const {zipFiles}=require('./zip-tools.cjs');require('./check.cjs');
 const project=path.resolve(__dirname,'..'),root=path.join(project,'extension');
 const version=JSON.parse(fs.readFileSync(path.join(root,'manifest.json'))).version;
-const args=process.argv.slice(2);
-assert(args.length===0 || args.length===2 && args[0]==='--out','Usage: npm run build -- --out <folder>');
-const out=args.length ? path.resolve(args[1]) : path.resolve(project,'../releases/builds',version);
+const args=process.argv.slice(2);let outputFolder,chromeOnly=false;
+while(args.length){
+ const option=args.shift(),value=args.shift();
+ if(option==='--out' && value)outputFolder=value;
+ else if(option==='--target' && value==='chrome-web-store')chromeOnly=true;
+ else throw new Error('Usage: node scripts/build.cjs [--target chrome-web-store] [--out <folder>]');
+}
+const out=outputFolder ? path.resolve(outputFolder) : path.resolve(project,'../releases',chromeOnly ? 'chrome-web-store' : 'builds',version);
 function outsideRepo(directory){const relative=path.relative(fs.realpathSync(project),directory);return relative==='..' || relative.startsWith('..'+path.sep) || path.isAbsolute(relative);}
 assert(outsideRepo(out),'Release packages must be written outside the repository.');
 let existing=out;while(!fs.existsSync(existing))existing=path.dirname(existing);
@@ -33,7 +38,7 @@ function verifiedZip(filename,entries){
 }
 const {browserManifest}=require('./browser-targets.cjs');
 const packages=[];
-for(const target of ['firefox','safari']){
+for(const target of chromeOnly ? [] : ['firefox','safari']){
  const targetSource=source.map(([name,data])=>[name,name==='manifest.json' ? Buffer.from(JSON.stringify(browserManifest(JSON.parse(data),target),null,2)+'\n') : data]);
  if(target==='firefox')packages.push(verifiedZip('subtitle-overlay-'+version+'-firefox-unsigned.xpi',[...targetSource,...licenses]));
  if(target==='safari')packages.push(verifiedZip('subtitle-overlay-'+version+'-safari-source.zip',[
@@ -43,10 +48,11 @@ for(const target of ['firefox','safari']){
 }
 // Chromium distributable: manifest and every included file share the archive root.
 // Wrapping extension/ with sibling documents causes package-upload rejection.
-const chromiumFiles=[...source,...licenses];
+const chromiumFiles=[...source.filter(([name])=>name!=='sample.srt'),...licenses];
 assert(chromiumFiles.some(([name])=>name==='manifest.json'),'Missing root manifest');
 assert(chromiumFiles.every(([name])=>!name.includes('/')),'Chromium files must share the manifest root');
-packages.push(verifiedZip('subtitle-overlay-'+version+'-release.zip',chromiumFiles));
+packages.push(verifiedZip('subtitle-overlay-'+version+(chromeOnly ? '-chrome-web-store.zip' : '-release.zip'),chromiumFiles));
+if(!chromeOnly){
 const allowedRoots=['extension','scripts','tests','docs','site','.github'];
 const rootFiles=['.gitignore','.gitattributes','.editorconfig','package.json','package-lock.json','README.md','INSTALL.md',...licenseFiles,'CHANGELOG.md','CONTRIBUTING.md','SECURITY.md','SUPPORT.md'];
 function walk(relative){
@@ -56,9 +62,10 @@ function walk(relative){
 }
 const publicFiles=[...rootFiles.map(name=>[name,fs.readFileSync(path.join(project,name))]),...allowedRoots.flatMap(walk)].sort(([a],[b])=>a.localeCompare(b));
 packages.push(verifiedZip('subtitle-overlay-'+version+'-source.zip',publicFiles.map(([name,data])=>['subtitle-overlay/'+name,data])));
+}
 fs.writeFileSync(path.join(out,'SHA256SUMS.txt'),packages.map(([name,data])=>crypto.createHash('sha256').update(data).digest('hex')+'  '+name).join('\n')+'\n');
-const manifest={version,extensionFiles:[...include,...licenseFiles],packages:packages.map(([name,bytes])=>({name,bytes:bytes.length,sha256:crypto.createHash('sha256').update(bytes).digest('hex')}))};
+const manifest={version,extensionFiles:[...include.filter(name=>!chromeOnly || name!=='sample.srt'),...licenseFiles],packages:packages.map(([name,bytes])=>({name,bytes:bytes.length,sha256:crypto.createHash('sha256').update(bytes).digest('hex')}))};
 fs.writeFileSync(path.join(out,'build-report.json'),JSON.stringify(manifest,null,2)+'\n');
-console.log('PASS verified packages, Chromium, Firefox, Safari source and source ZIPs and SHA-256 hashes.');
+console.log(chromeOnly ? 'PASS Chrome Web Store ZIP: root manifest, runtime files, license notices, verified bytes and SHA-256.' : 'PASS verified browser/source packages and SHA-256 hashes.');
 console.log('Output: '+out);
 for(const [name,bytes] of packages)console.log(name+' ('+bytes.length+' bytes)');

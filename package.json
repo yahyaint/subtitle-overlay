@@ -17,6 +17,7 @@
     "test": "node scripts/test.cjs",
     "test:firefox": "node tests/verify-firefox.cjs",
     "build": "node scripts/build.cjs",
+    "build:chrome-web-store": "node scripts/build.cjs --target chrome-web-store",
     "preview:assets": "node scripts/preview-assets.cjs"
   },
   "devDependencies": {

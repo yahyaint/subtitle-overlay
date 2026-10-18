@@ -47,6 +47,8 @@ To choose another external folder, use `npm run build -- --out "../my-release-fi
 
 Set the same version in `package.json`, `extension/manifest.json`, and the background User-Agent before a new release. The build rejects a mismatch.
 
+For the Chrome Web Store package alone, run `npm run build:chrome-web-store`. It writes one clearly named `*-chrome-web-store.zip` plus local checksums/build report to `../releases/chrome-web-store/<version>/`. This package contains runtime files and license notices; it excludes sample subtitles, guides, screenshots, tests and project source archives. Keep these artifacts local.
+
 ## Preview images
 
 `npm run preview:assets` renders the real extension UI on a local demo video. It writes four 1280 × 800 screenshots, one 440 × 280 tile, and the 128 × 128 icon. It uses no film footage or remote media. It also regenerates the privacy HTML from the notice.
