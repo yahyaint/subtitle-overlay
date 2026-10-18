@@ -1,6 +1,6 @@
 # Prepare a release
 
-Current version: `0.8.17`. Repository: `yahyaint/subtitle-overlay`.
+Current local package: `0.8.18`. The latest published GitHub release remains `v0.8.17`. Repository: `yahyaint/subtitle-overlay`.
 
 1. Include the official PolyForm Perimeter LICENSE and NOTICE in each archive. Keep third-party licenses.
 2. Run `npm run check` and relevant tests. Run `npm run build`. Packages go to `../releases/builds/<version>/`, outside the repository.

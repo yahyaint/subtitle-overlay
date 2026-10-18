@@ -1,9 +1,9 @@
 {
   "manifest_version": 3,
   "minimum_chrome_version": "132",
-  "name": "Subtitle Overlay",
-  "version": "0.8.17",
-  "description": "Find, save, and sync subtitles over browser video. Change the font, color, size, background, and shadow.",
+  "name": "Subtitles Overlay: Add Subtitles anywhere.",
+  "version": "0.8.18",
+  "description": "Add subtitles to browser videos. Import player captions, sync dialogue, customize text, and save your settings.",
   "permissions": [
     "activeTab",
     "scripting",
@@ -15,7 +15,7 @@
     "https://*/*"
   ],
   "action": {
-    "default_title": "Subtitle Overlay",
+    "default_title": "Subtitles Overlay",
     "default_popup": "popup.html",
     "default_icon": {
       "16": "icon-16.png",
